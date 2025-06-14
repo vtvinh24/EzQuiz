@@ -3,7 +3,6 @@ package dev.vtvinh24.ezquiz.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,69 +14,50 @@ import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 
 public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHolder> {
-  private final List<QuizSetEntity> quizSets; // Đổi từ collections thành quizSets cho rõ ràng
-  private final OnItemClickListener itemClickListener;
-  private final OnPlayFlashcardClickListener playFlashcardClickListener; // NEW: Listener cho nút Play
 
-  // Thay đổi constructor để nhận listener mới
-  public QuizSetAdapter(List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener, OnPlayFlashcardClickListener playFlashcardClickListener) {
-    this.quizSets = quizSets;
-    this.itemClickListener = itemClickListener;
-    this.playFlashcardClickListener = playFlashcardClickListener;
+  private final List<QuizSetEntity> sets;
+  private final OnItemClickListener listener;
+
+  public QuizSetAdapter(List<QuizSetEntity> sets, OnItemClickListener listener) {
+    this.sets = sets;
+    this.listener = listener;
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_set, parent, false); // Đảm bảo đúng tên layout item
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_set, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    QuizSetEntity quizSet = quizSets.get(position); // Đổi từ collection thành quizSet
-    holder.textName.setText(quizSet.name);
-    holder.textDescription.setText(quizSet.description);
+    QuizSetEntity set = sets.get(position);
 
-    // Xử lý click cho toàn bộ item (nếu có)
-    holder.itemView.setOnClickListener(v -> {
-      if (itemClickListener != null) {
-        itemClickListener.onItemClick(quizSet);
-      }
-    });
+    // Gán dữ liệu vào các TextView
+    holder.textTitle.setText(set.name); // tên bộ đề
 
-    // NEW: Xử lý click cho nút "Play Flashcards"
-    holder.btnPlayFlashcard.setOnClickListener(v -> {
-      if (playFlashcardClickListener != null) {
-        playFlashcardClickListener.onPlayFlashcardClick(quizSet.id); // Truyền ID của Quiz Set
-      }
-    });
+    // Gắn sự kiện click
+    holder.itemView.setOnClickListener(v -> listener.onItemClick(set));
   }
 
   @Override
   public int getItemCount() {
-    return quizSets.size();
+    return sets.size();
   }
 
-  // Interface cho click vào toàn bộ item (nếu có)
   public interface OnItemClickListener {
-    void onItemClick(QuizSetEntity quizSet); // Đổi từ QuizCollectionEntity thành QuizSetEntity
-  }
-
-  // NEW: Interface cho click vào nút "Play Flashcards"
-  public interface OnPlayFlashcardClickListener {
-    void onPlayFlashcardClick(long quizSetId);
+    void onItemClick(QuizSetEntity set);
   }
 
   static class ViewHolder extends RecyclerView.ViewHolder {
-    TextView textName, textDescription;
-    Button btnPlayFlashcard; // NEW: Ánh xạ nút
+    TextView textTitle, textQuestionCount, textDuration;
 
     ViewHolder(View itemView) {
       super(itemView);
-      textName = itemView.findViewById(R.id.text_set_name); // Đảm bảo đúng ID
-      textDescription = itemView.findViewById(R.id.text_set_description); // Đảm bảo đúng ID
-      btnPlayFlashcard = itemView.findViewById(R.id.btn_play_flashcard); // NEW: Ánh xạ nút
+      textTitle = itemView.findViewById(R.id.text_title);
+      textQuestionCount = itemView.findViewById(R.id.text_question_count);
+      textDuration = itemView.findViewById(R.id.text_duration);
     }
   }
 }

@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="bg_quiz_1">#D2E3FC</color>
+    <color name="bg_quiz_2">#FFE0B2</color>
+    <color name="bg_quiz_3">#E1BEE7</color>
+    <color name="bg_quiz_4">#FFCCBC</color>
+    <color name="bg_quiz_5">#B3E5FC</color>
+    <color name="bg_quiz_6">#F8BBD0</color>
+
 </resources>

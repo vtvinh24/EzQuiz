@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -9,31 +11,58 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <EditText
-            android:id="@+id/edit_quiz_question"
+        <!-- Câu hỏi -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_question" />
+            android:hint="@string/hint_question">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_quiz_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:inputType="textMultiLine" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Spinner kiểu câu hỏi -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary" />
 
         <Spinner
             android:id="@+id/spinner_quiz_type"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_spinner_rounded"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:gravity="center_vertical"
             android:entries="@array/quiz_type_entries" />
 
+        <!-- Container đáp án -->
         <LinearLayout
             android:id="@+id/answers_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical" />
 
-        <Button
+        <!-- Nút thêm đáp án -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_answer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:text="@string/btn_add_answer" />
+            android:layout_marginTop="12dp"
+            android:text="@string/btn_add_answer"
+            app:iconPadding="8dp"
+            app:cornerRadius="12dp"
+            style="@style/Widget.Material3.Button.TonalButton" />
+
     </LinearLayout>
 </ScrollView>

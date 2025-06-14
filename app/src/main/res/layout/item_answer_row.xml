@@ -4,21 +4,31 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="16dp"
+    android:background="?attr/selectableItemBackground">
 
-    <EditText
-        android:id="@+id/edit_answer_text"
+    <!-- Đáp án -->
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:hint="@string/hint_answer"
-        android:inputType="text" />
+        android:layout_marginEnd="8dp"
+        android:hint="@string/hint_answer">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_answer_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Checkbox đúng sai -->
     <CheckBox
         android:id="@+id/checkbox_correct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_correct" />
+        android:text="@string/label_correct"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorPrimary" />
 </LinearLayout>
-

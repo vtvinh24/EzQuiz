@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#2196F3" /> <!-- Màu xanh (ví dụ cho số 1, 5) -->
+</shape>
