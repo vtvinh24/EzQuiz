@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">EzQuiz</string>
+    <string name="dialog_add_quiz_title">Add Quiz</string>
+    <string name="dialog_edit_quiz_title">Edit Quiz</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_add_answer">Add Answer</string>
+    <string name="hint_question">Question</string>
+    <string name="hint_answer">Answer</string>
+    <string name="label_correct">Correct</string>
+    <string name="hint_set_name">Name of this Set</string>
+    <string name="hint_set_description">Description of this Set</string>
+    <string-array name="quiz_type_entries">
+        <item>SINGLE</item>
+        <item>MULTIPLE</item>
+    </string-array>
+</resources>
