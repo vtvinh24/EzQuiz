@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/collectionsFragment">
+
+    <!-- Collections section -->
+    <fragment
+        android:id="@+id/collectionsFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.collections.CollectionsFragment"
+        android:label="Quiz Collections"
+        tools:layout="@layout/fragment_collections">
+        <action
+            android:id="@+id/action_collections_to_editor"
+            app:destination="@id/editorFragment" />
+        <action
+            android:id="@+id/action_collections_to_play"
+            app:destination="@id/playFragment">
+            <argument
+                android:name="quiz_id"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_collections_to_import"
+            app:destination="@id/importQuizFragment" />
+    </fragment>
+
+    <!-- Quiz editor section -->
+    <fragment
+        android:id="@+id/editorFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.editor.EditorFragment"
+        android:label="Edit Quiz"
+        tools:layout="@layout/fragment_editor">
+        <argument
+            android:name="quiz_id"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_editor_to_collections"
+            app:destination="@id/collectionsFragment"
+            app:popUpTo="@id/collectionsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Quiz play section -->
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.play.PlayFragment"
+        android:label="Play Quiz"
+        tools:layout="@layout/fragment_play">
+        <argument
+            android:name="quiz_id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_play_to_results"
+            app:destination="@id/quizResultsFragment" />
+    </fragment>
+
+    <!-- Quiz results section (placeholder) -->
+    <fragment
+        android:id="@+id/quizResultsFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.play.QuizResultsFragment"
+        android:label="Quiz Results"
+        tools:layout="@layout/fragment_quiz_results">
+        <argument
+            android:name="session_id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_results_to_collections"
+            app:destination="@id/collectionsFragment"
+            app:popUpTo="@id/collectionsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Import quiz section -->
+    <fragment
+        android:id="@+id/importQuizFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.import_quiz.ImportQuizFragment"
+        android:label="Import Quiz"
+        tools:layout="@layout/fragment_import_quiz">
+        <action
+            android:id="@+id/action_import_to_collections"
+            app:destination="@id/collectionsFragment"
+            app:popUpTo="@id/collectionsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

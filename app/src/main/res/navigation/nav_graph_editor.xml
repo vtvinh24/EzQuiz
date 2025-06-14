@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_editor"
+    app:startDestination="@id/quizDetailsFragment">
+
+    <!-- Quiz details screen -->
+    <fragment
+        android:id="@+id/quizDetailsFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.editor.QuizDetailsFragment"
+        android:label="Quiz Details"
+        tools:layout="@layout/fragment_quiz_details">
+        <argument
+            android:name="quiz_id"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_details_to_questions"
+            app:destination="@id/questionsListFragment" />
+    </fragment>
+
+    <!-- Questions list screen -->
+    <fragment
+        android:id="@+id/questionsListFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.editor.QuestionsListFragment"
+        android:label="Questions"
+        tools:layout="@layout/fragment_questions_list">
+        <action
+            android:id="@+id/action_questions_to_edit_question"
+            app:destination="@id/editQuestionFragment" />
+    </fragment>
+
+    <!-- Edit question screen -->
+    <fragment
+        android:id="@+id/editQuestionFragment"
+        android:name="dev.vtvinh24.ezquiz.ui.editor.EditQuestionFragment"
+        android:label="Edit Question"
+        tools:layout="@layout/fragment_edit_question">
+        <argument
+            android:name="question_index"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+</navigation>

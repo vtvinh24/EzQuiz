@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/collectionsFragment"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="Collections" />
+    <item
+        android:id="@+id/editorFragment"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Create Quiz" />
+    <item
+        android:id="@+id/importQuizFragment"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="Import" />
+</menu>
