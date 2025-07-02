@@ -15,11 +15,13 @@ public interface QuizCollectionDao {
   @Insert
   long insert(QuizCollectionEntity collection);
 
-  @Update
-  int update(QuizCollectionEntity collection);
+  // Prevent deleting the Default collection
+  @Query("DELETE FROM quiz_collection WHERE id = :id AND name != 'Default'")
+  int deleteIfNotDefault(long id);
 
-  @Delete
-  int delete(QuizCollectionEntity collection);
+  // Prevent updating the Default collection
+  @Query("UPDATE quiz_collection SET name = :name, description = :description, updatedAt = :updatedAt, archived = :archived, difficulty = :difficulty, `order` = :order WHERE id = :id AND name != 'Default'")
+  int updateIfNotDefault(long id, String name, String description, long updatedAt, boolean archived, int difficulty, int order);
 
   @Query("SELECT * FROM quiz_collection WHERE id = :id")
   QuizCollectionEntity getById(long id);
@@ -29,4 +31,7 @@ public interface QuizCollectionDao {
 
   @Query("SELECT * FROM quiz_collection WHERE archived = 1")
   List<QuizCollectionEntity> getArchived();
+
+  @Query("SELECT * FROM quiz_collection WHERE name = :name LIMIT 1")
+  QuizCollectionEntity getByName(String name);
 }
