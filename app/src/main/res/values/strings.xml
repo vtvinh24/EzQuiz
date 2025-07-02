@@ -11,8 +11,17 @@
     <string name="label_correct">Correct</string>
     <string name="hint_set_name">Name of this Set</string>
     <string name="hint_set_description">Description of this Set</string>
+    <string name="hint_paste_id">Enter Paste ID (e.g. JpOIB)</string>
+    <string name="label_flashcards">Flashcards</string>
+    <string name="label_quizzes">Quizzes</string>
+    <string name="btn_import_paste">Import from Paste ID</string>
     <string-array name="quiz_type_entries">
         <item>SINGLE</item>
         <item>MULTIPLE</item>
     </string-array>
+    <string name="prompt_paste_id">Please enter a Paste ID.</string>
+    <string name="error_no_items_imported">No items imported or invalid format.</string>
+    <string name="imported_set_name">Imported from %1$s</string>
+    <string name="imported_set_description">Imported via Paste ID: %1$s</string>
+    <string name="import_success">Imported %1$d items to new set.</string>
 </resources>

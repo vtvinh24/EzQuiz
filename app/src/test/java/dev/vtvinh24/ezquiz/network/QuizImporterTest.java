@@ -13,7 +13,7 @@ import dev.vtvinh24.ezquiz.data.model.Quiz;
 public class QuizImporterTest {
   @Test
   public void testImportFlashcardsFromPasteRs() {
-    String url = "https://paste.rs/JpOIB";
+    String url = "JpOIB";
     QuizImporter importer = new QuizImporter();
     List<Quiz> quizzes = importer.importFlashcards(url);
     assertNotNull(quizzes);

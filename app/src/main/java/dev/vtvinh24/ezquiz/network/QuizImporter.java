@@ -22,9 +22,9 @@ import retrofit2.Response;
 public class QuizImporter {
   private final Gson gson = new Gson();
 
-  public String getRemoteJSON(String url) {
+  public String getRemoteJSON(String pasteId) {
     PasteService service = RetrofitClient.getPasteService(PasteService.class);
-    Call<ResponseBody> call = service.getRawPaste(url);
+    Call<ResponseBody> call = service.getRawPaste(pasteId);
     try {
       Response<ResponseBody> response = call.execute();
       if (response.isSuccessful() && response.body() != null) {
@@ -36,8 +36,8 @@ public class QuizImporter {
     return null;
   }
 
-  public List<Quiz> importFlashcards(String url) {
-    String json = getRemoteJSON(url);
+  public List<Quiz> importFlashcards(String pasteId) {
+    String json = getRemoteJSON(pasteId);
     if (json == null) return List.of();
     try {
       JsonArray arr = gson.fromJson(json, JsonArray.class);
@@ -70,7 +70,7 @@ public class QuizImporter {
   }
 
   // TODO: Implement quiz importing functionality
-  public List<Quiz> importQuizzes(String url) {
+  public List<Quiz> importQuizzes(String pasteId) {
     // TODO: Add logic to parse the source and convert it into a list of Quiz objects
     return List.of();
   }
