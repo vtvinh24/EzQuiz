@@ -4,7 +4,16 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:background="#FAFAFA">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan QR or Import Manually"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
 
     <FrameLayout
         android:id="@+id/qr_scanner_placeholder"
@@ -12,7 +21,8 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:background="#EEE"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:foreground="@drawable/bg_scanner_border">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,20 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Import Manually"
-        android:layout_marginBottom="8dp" />
-
-    <Spinner
-        android:id="@+id/spinner_collection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
-
-    <EditText
-        android:id="@+id/edit_set_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Set name (optional)"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
     <TextView
@@ -47,7 +46,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text=""
-        android:textColor="#888888" />
+        android:textColor="#888888"
+        android:background="#FFF9C4"
+        android:padding="8dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_import_paste"

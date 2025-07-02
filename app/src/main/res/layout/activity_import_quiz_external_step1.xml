@@ -4,27 +4,49 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="32dp">
+    android:padding="32dp"
+    android:background="#FAFAFA">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Collection"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
 
     <Spinner
         android:id="@+id/spinner_collection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_spinner_border"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Name (optional)"
+        android:textStyle="bold"
+        android:textSize="16sp"
         android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/edit_set_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Set name (optional)"
-        android:layout_marginBottom="8dp" />
+        android:hint="Enter set name"
+        android:background="@drawable/bg_edittext_border"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp" />
 
     <Button
         android:id="@+id/btn_next"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Next" />
+        android:text="Next"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>
-
