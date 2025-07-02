@@ -5,7 +5,7 @@ By default, when user asked to edit a file, make sure to:
   entities, ...
 - Don't write obvious comments, like "This is a variable for ...", or "This is a function to ...".
   Instead, write comments that explain why the code is written in a certain way, or what the
-  implications of the code are.
+  implications of the code are. Also don't write trailing comments, always write comments on a new line before the code.
 - If the user asks to add a new feature, make sure to read the related files and understand the
   context of the feature. Don't just add the feature without understanding how it fits into the
   existing codebase.
@@ -15,4 +15,4 @@ By default, when user asked to edit a file, make sure to:
     3. The files in current package
     4. Global files, such as utilities or notes.
 
-- Data flow: UI > Model > DAO > Entity > Database
+- Data flow: UI > Repository

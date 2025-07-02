@@ -10,11 +10,12 @@ public class UserQuizProgress {
   public boolean archived;
   public String notes;
   public int difficulty;
+  public Quiz.Type type; // Add type to distinguish between quiz and flashcard progress
 
   public UserQuizProgress() {
   }
 
-  public UserQuizProgress(boolean isPinned, boolean isFavorite, long lastAttemptedAt, int attemptCount, int correctAttemptCount, float successRate, boolean archived, String notes, int difficulty) {
+  public UserQuizProgress(boolean isPinned, boolean isFavorite, long lastAttemptedAt, int attemptCount, int correctAttemptCount, float successRate, boolean archived, String notes, int difficulty, Quiz.Type type) {
     this.isPinned = isPinned;
     this.isFavorite = isFavorite;
     this.lastAttemptedAt = lastAttemptedAt;
@@ -24,6 +25,6 @@ public class UserQuizProgress {
     this.archived = archived;
     this.notes = notes;
     this.difficulty = difficulty;
+    this.type = type;
   }
 }
-

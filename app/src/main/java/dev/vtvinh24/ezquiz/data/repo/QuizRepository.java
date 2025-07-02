@@ -53,4 +53,12 @@ public class QuizRepository {
   public List<QuizCollectionEntity> getAllCollections() {
     return db.quizCollectionDao().getAll();
   }
+
+  public List<QuizEntity> getFlashcards() {
+    return db.quizDao().getFlashcards();
+  }
+
+  public List<QuizEntity> getFlashcardsOfSet(long setId) {
+    return db.quizDao().getFlashcardsByQuizSetId(setId);
+  }
 }

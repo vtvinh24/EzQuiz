@@ -26,4 +26,8 @@ public class QuizEntity {
   public boolean archived = false;
   public int difficulty = 0;
   public int order = 0;
+
+  public boolean isFlashcard() {
+      return type == Quiz.Type.FLASHCARD;
+  }
 }
