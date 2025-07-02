@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements QuizCollectionAda
       startActivity(new Intent(this, GenerateQuizAIActivity.class));
     });
     findViewById(R.id.fab_import_external).setOnClickListener(v -> {
-      startActivity(new Intent(this, ImportQuizExternalActivity.class));
+      startActivity(new Intent(this, PostImportActivity.class));
     });
 
     refreshCollections();
