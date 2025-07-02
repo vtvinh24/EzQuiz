@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "Quiz QR Extractor",
+  "version": "1.0.0",
+  "description": "Extracts flashcards and quiz data from popular quiz sites and generates QR codes to send to your app.",
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "64": "icon64.png",
+    "128": "icon128.png",
+    "256": "icon256.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.quizlet.com/*", "*://*.kahoot.it/*", "*://*.socrative.com/*", "*://forms.google.com/*", "*://*.quizziz.com/*", "*://*.blooket.com/*", "*://*.gimkit.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://paste.rs/",
+    "https://0x0.st/",
+    "*://*.quizlet.com/*",
+    "*://*.kahoot.it/*",
+    "*://*.socrative.com/*",
+    "*://forms.google.com/*",
+    "*://*.quizziz.com/*",
+    "*://*.blooket.com/*",
+    "*://*.gimkit.com/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["extractors/*.js", "icon16.png", "icon32.png", "icon48.png", "icon64.png", "icon128.png", "icon256.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
