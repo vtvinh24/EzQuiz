@@ -58,6 +58,7 @@ public class Quiz {
 
   public enum Type {
     SINGLE_CHOICE,
-    MULTIPLE_CHOICE
+    MULTIPLE_CHOICE,
+    FLASHCARD
   }
 }

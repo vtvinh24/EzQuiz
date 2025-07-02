@@ -9,6 +9,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
+import dev.vtvinh24.ezquiz.data.model.Quiz;
 
 @Dao
 public interface QuizDao {
@@ -24,7 +25,7 @@ public interface QuizDao {
   @Query("SELECT * FROM quiz WHERE id = :id")
   QuizEntity getById(long id);
 
-  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId")
+  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type != 'FLASHCARD'")
   List<QuizEntity> getByQuizSetId(long quizSetId);
 
   @Query("SELECT * FROM quiz")
@@ -35,4 +36,13 @@ public interface QuizDao {
 
   @Query("SELECT * FROM quiz WHERE difficulty = :difficulty")
   List<QuizEntity> getByDifficulty(int difficulty);
+
+  @Query("SELECT * FROM quiz WHERE type = :type")
+  List<QuizEntity> getByType(Quiz.Type type);
+
+  @Query("SELECT * FROM quiz WHERE type = 'FLASHCARD'")
+  List<QuizEntity> getFlashcards();
+
+  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type = 'FLASHCARD'")
+  List<QuizEntity> getFlashcardsByQuizSetId(long quizSetId);
 }

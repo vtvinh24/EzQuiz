@@ -1,6 +1,6 @@
 Screen flow:
 
-Splash -> Home -> CRUD sets -> CRUD quiz
+Splash -> Home -> CRUD sets -> CRUD quiz/flashcard
 
 Home -> History
 
@@ -14,9 +14,11 @@ Home -> Performance (collection)
 
 CRUD sets -> Performance (set)
 
-CRUD quiz -> Performance (quiz)
+CRUD quiz/flashcard -> Performance (quiz)
 
-Attempt -> Score
+Attempt (quiz) -> Score
+
+Attempt (flashcard) -> Finish
 
 Assign:
 
