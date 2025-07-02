@@ -14,9 +14,9 @@ import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 
 public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHolder> {
-  private final List<QuizSetEntity> sets;
+  private final List<QuizSetWithCounts> sets;
   private final OnItemClickListener listener;
-  public QuizSetAdapter(List<QuizSetEntity> sets, OnItemClickListener listener) {
+  public QuizSetAdapter(List<QuizSetWithCounts> sets, OnItemClickListener listener) {
     this.sets = sets;
     this.listener = listener;
   }
@@ -30,10 +30,11 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    QuizSetEntity set = sets.get(position);
-    holder.textName.setText(set.name);
-    holder.textDescription.setText(set.description);
-    holder.itemView.setOnClickListener(v -> listener.onItemClick(set));
+    QuizSetWithCounts setWithCounts = sets.get(position);
+    holder.textName.setText(setWithCounts.set.name);
+    holder.textDescription.setText(setWithCounts.set.description);
+    holder.textCounts.setText(setWithCounts.quizCount + " quizzes, " + setWithCounts.flashcardCount + " flashcards");
+    holder.itemView.setOnClickListener(v -> listener.onItemClick(setWithCounts.set));
   }
 
   @Override
@@ -46,13 +47,12 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
   }
 
   static class ViewHolder extends RecyclerView.ViewHolder {
-    TextView textName, textDescription;
-
+    TextView textName, textDescription, textCounts;
     ViewHolder(View itemView) {
       super(itemView);
       textName = itemView.findViewById(R.id.textName);
       textDescription = itemView.findViewById(R.id.textDescription);
+      textCounts = itemView.findViewById(R.id.textCounts);
     }
   }
 }
-

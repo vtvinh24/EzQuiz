@@ -20,6 +20,7 @@ import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
+import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 import dev.vtvinh24.ezquiz.network.QuizImporter;
 
 public class ImportQuizExternalActivity extends AppCompatActivity {
@@ -62,7 +63,11 @@ public class ImportQuizExternalActivity extends AppCompatActivity {
           set.collectionId = 0;
           set.createdAt = System.currentTimeMillis();
           set.updatedAt = System.currentTimeMillis();
-          long setId = db.quizSetDao().insert(set);
+          // Use repository to ensure set is assigned to Default collection if not specified
+          QuizSetRepository setRepo = new QuizSetRepository(db);
+          long setId = setRepo.insertWithDefaultCollectionIfNeeded(set);
+          // Retrieve the set again to ensure collectionId is correct
+          set = setRepo.getSet(setId);
           for (Quiz quiz : quizzes) {
             QuizEntity entity = new QuizEntity();
             entity.question = quiz.getQuestion();

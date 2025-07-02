@@ -82,7 +82,18 @@ public class MainActivity extends AppCompatActivity implements QuizCollectionAda
             .setPositiveButton("Save", (d, w) -> {
               collection.name = nameInput.getText().toString();
               collection.description = descInput.getText().toString();
-              db.quizCollectionDao().update(collection);
+              int updated = db.quizCollectionDao().updateIfNotDefault(
+                      collection.id,
+                      collection.name,
+                      collection.description,
+                      System.currentTimeMillis(),
+                      collection.archived,
+                      collection.difficulty,
+                      collection.order
+              );
+              if (updated == 0) {
+                Toast.makeText(this, "Cannot modify the Default collection", Toast.LENGTH_SHORT).show();
+              }
               refreshCollections();
             })
             .setNegativeButton("Cancel", null)
@@ -117,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements QuizCollectionAda
             .setItems(options, (dialog, which) -> {
               if (which == 0) showEditCollectionDialog(collection);
               else if (which == 1) {
-                db.quizCollectionDao().delete(collection);
+                db.quizCollectionDao().deleteIfNotDefault(
+                        collection.id);
                 refreshCollections();
                 Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
               }

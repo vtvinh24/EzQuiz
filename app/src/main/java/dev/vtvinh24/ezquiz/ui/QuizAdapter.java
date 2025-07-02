@@ -19,6 +19,7 @@ import java.util.Set;
 
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
+import dev.vtvinh24.ezquiz.data.model.Quiz;
 
 public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
   private final List<QuizEntity> quizzes;
@@ -56,8 +57,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
         radioGroup.addView(radioButton);
       }
       holder.answersContainer.addView(radioGroup);
-    } else {
-      // MULTIPLE_CHOICE
+    } else if (quiz.type == Quiz.Type.MULTIPLE_CHOICE) {
       Set<Integer> selectedIndices = new HashSet<>();
       for (int i = 0; i < quiz.answers.size(); i++) {
         CheckBox checkBox = new CheckBox(holder.itemView.getContext());
@@ -69,6 +69,14 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
           listener.onAnswer(quiz, new ArrayList<>(selectedIndices));
         });
         holder.answersContainer.addView(checkBox);
+      }
+    } else if (quiz.type == Quiz.Type.FLASHCARD) {
+      // For flashcards, just show the answer(s) below the question
+      for (String answer : quiz.answers) {
+        TextView answerView = new TextView(holder.itemView.getContext());
+        answerView.setText(answer);
+        answerView.setPadding(16, 8, 16, 8);
+        holder.answersContainer.addView(answerView);
       }
     }
     if (itemClickListener != null) {

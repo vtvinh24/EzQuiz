@@ -1,5 +1,6 @@
 package dev.vtvinh24.ezquiz.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,16 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.db.AppDatabase;
 import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
+import dev.vtvinh24.ezquiz.ui.QuizSetWithCounts;
 
 public class QuizSetListActivity extends AppCompatActivity {
   private RecyclerView recyclerView;
-  private List<QuizSetEntity> sets;
+  private List<QuizSetWithCounts> sets;
+  private QuizSetAdapter adapter;
   private AppDatabase db;
   private long collectionId;
 
@@ -33,7 +37,14 @@ public class QuizSetListActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     collectionId = getIntent().getLongExtra("collectionId", -1);
     db = AppDatabaseProvider.getDatabase(this);
-    sets = db.quizSetDao().getByCollectionId(collectionId);
+    sets = new ArrayList<>();
+    adapter = new QuizSetAdapter(sets, set -> {
+      // Navigate to QuizListActivity for the selected set
+      Intent intent = new Intent(this, QuizListActivity.class);
+      intent.putExtra("quizSetId", set.id);
+      startActivity(intent);
+    });
+    recyclerView.setAdapter(adapter);
     FloatingActionButton fab = findViewById(R.id.fab_add_set);
     fab.setOnClickListener(v -> showAddSetDialog());
     refreshSets();
@@ -81,7 +92,13 @@ public class QuizSetListActivity extends AppCompatActivity {
 
   private void refreshSets() {
     sets.clear();
-    sets.addAll(db.quizSetDao().getByCollectionId(collectionId));
+    List<QuizSetEntity> rawSets = db.quizSetDao().getByCollectionId(collectionId);
+    for (QuizSetEntity set : rawSets) {
+      int quizCount = db.quizDao().getByQuizSetId(set.id).size();
+      int flashcardCount = db.quizDao().getFlashcardsByQuizSetId(set.id).size();
+      sets.add(new QuizSetWithCounts(set, quizCount, flashcardCount));
+    }
+    adapter.notifyDataSetChanged();
     View emptyView = findViewById(R.id.empty_view);
     if (sets.isEmpty()) {
       emptyView.setVisibility(View.VISIBLE);
