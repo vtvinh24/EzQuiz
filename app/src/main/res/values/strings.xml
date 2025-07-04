@@ -27,4 +27,6 @@
     <string name="imported_set_name">Imported from %1$s</string>
     <string name="imported_set_description">Imported via Paste ID: %1$s</string>
     <string name="import_success">Imported %1$d items to new set.</string>
+    <string name="qr_enter_manually">Enter QR Code Manually</string>
+    <string name="qr_submit">Submit</string>
 </resources>
