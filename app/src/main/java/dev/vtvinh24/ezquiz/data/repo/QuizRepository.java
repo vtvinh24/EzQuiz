@@ -1,12 +1,17 @@
 package dev.vtvinh24.ezquiz.data.repo;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dev.vtvinh24.ezquiz.data.db.AppDatabase;
 import dev.vtvinh24.ezquiz.data.entity.QuizCollectionEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
+import dev.vtvinh24.ezquiz.data.model.Quiz;
 
 public class QuizRepository {
   private final AppDatabase db;
@@ -61,4 +66,8 @@ public class QuizRepository {
   public List<QuizEntity> getFlashcardsOfSet(long setId) {
     return db.quizDao().getFlashcardsByQuizSetId(setId);
   }
+
+
+
+
 }
