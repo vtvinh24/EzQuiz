@@ -27,4 +27,10 @@
     <string name="imported_set_name">Imported from %1$s</string>
     <string name="imported_set_description">Imported via Paste ID: %1$s</string>
     <string name="import_success">Imported %1$d items to new set.</string>
+    <string name="review_save_quiz"><![CDATA[Review & Save Quiz]]></string>
+    <string name="save_to_collection">Save to Collection:</string>
+    <string name="new_set_name">New Set Name:</string>
+    <string name="enter_name_for_this_new_set">Enter name for this new set</string>
+    <string name="save_quiz_set">Save Quiz Set</string>
+    <string name="question">Question</string>
 </resources>

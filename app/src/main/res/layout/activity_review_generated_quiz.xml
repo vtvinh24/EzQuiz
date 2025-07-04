@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,7 +13,7 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Generate Quiz with AI"
+            app:title="Review Generated Quiz"
             app:navigationIcon="@drawable/ic_arrow_back"
             style="@style/Widget.Material3.Toolbar.Surface"/>
 
@@ -27,13 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="16dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                style="@style/Widget.Material3.CardView.Elevated">
+                style="@style/Widget.Material3.CardView.Filled">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -44,16 +45,29 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Describe the quiz you want to generate"
+                        android:layout_marginBottom="16dp"
+                        android:hint="@string/new_set_name"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edit_ai_prompt"
+                            android:id="@+id/edit_set_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="top|start"
-                            android:minLines="3"
-                            android:inputType="textMultiLine"/>
+                            android:inputType="textCapWords"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/save_to_collection"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinner_collection"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,33 +75,30 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_generate_quiz"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Generate Quiz"
-                android:padding="12dp"
-                app:icon="@drawable/ic_generate"
-                style="@style/Widget.Material3.Button"/>
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:indeterminate="true"
-                android:visibility="gone"
-                style="@style/Widget.Material3.CircularProgressIndicator"/>
-
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text_ai_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Review Questions"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_generated_quiz"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save_quiz_set"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="?attr/colorOutline"/>
+                android:text="@string/save_quiz_set"
+                android:padding="12dp"
+                app:icon="@drawable/ic_save"
+                style="@style/Widget.Material3.Button"/>
 
         </LinearLayout>
 
