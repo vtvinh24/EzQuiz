@@ -5,13 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -29,20 +31,28 @@ import retrofit2.Response;
 public class GenerateQuizAIActivity extends AppCompatActivity {
   private static final String TAG = "GenerateQuizAIActivity";
 
-  private EditText editAiPrompt;
+  private TextInputEditText editAiPrompt;
   private Button btnGenerateQuiz;
   private ProgressBar progressBar;
   private TextView textAiStatus;
+  private MaterialToolbar toolbar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_generate_quiz_ai);
 
+    // Initialize views
     editAiPrompt = findViewById(R.id.edit_ai_prompt);
     btnGenerateQuiz = findViewById(R.id.btn_generate_quiz);
     progressBar = findViewById(R.id.progress_bar);
     textAiStatus = findViewById(R.id.text_ai_status);
+    toolbar = findViewById(R.id.topAppBar);
+
+    // Setup toolbar
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    toolbar.setNavigationOnClickListener(v -> finish());
 
     btnGenerateQuiz.setOnClickListener(v -> generateQuiz());
   }

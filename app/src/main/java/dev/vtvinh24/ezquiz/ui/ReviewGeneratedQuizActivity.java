@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -54,6 +55,12 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_generated_quiz);
+
+        // Set up toolbar
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         // Khởi tạo database ngay từ đầu
         try {
@@ -94,25 +101,30 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
             loadCollections();
 
         } catch (JsonSyntaxException e) {
-            Log.e(TAG, "JSON parsing error", e);
+            Log.e(TAG, "JSON parsing error: " + e.getMessage(), e);
             Toast.makeText(this, "Error: Invalid data format", Toast.LENGTH_SHORT).show();
             finish();
         } catch (Exception e) {
-            Log.e(TAG, "Unexpected error in onCreate", e);
-            Toast.makeText(this, "An unexpected error occurred: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Unexpected error in onCreate: " + e.getMessage(), e);
+            Toast.makeText(this, "An unexpected error occurred", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
     private void initializeViews() {
-        Log.d(TAG, "initViews: Initializing UI components.");
-        recyclerView = findViewById(R.id.recycler_view_generated_quiz);
-        spinnerCollection = findViewById(R.id.spinner_collection);
-        editSetName = findViewById(R.id.edit_set_name);
-        btnSave = findViewById(R.id.btn_save_quiz_set);
+        Log.d(TAG, "Initializing views");
+        try {
+            recyclerView = findViewById(R.id.recycler_view_generated_quiz);
+            spinnerCollection = findViewById(R.id.spinner_collection);
+            editSetName = findViewById(R.id.edit_set_name);
+            btnSave = findViewById(R.id.btn_save_quiz_set);
 
-        // Set onClick listener for save button
-        btnSave.setOnClickListener(v -> saveQuizSet());
+            btnSave.setOnClickListener(v -> saveQuizSet());
+        } catch (Exception e) {
+            Log.e(TAG, "Error initializing views: " + e.getMessage(), e);
+            Toast.makeText(this, "Error setting up the screen", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void setupRecyclerView() {

@@ -33,4 +33,7 @@
     <string name="enter_name_for_this_new_set">Enter name for this new set</string>
     <string name="save_quiz_set">Save Quiz Set</string>
     <string name="question">Question</string>
+    <string name="hint_ai_prompt">Describe your quiz topic and requirements</string>
+    <string name="cd_ai_prompt">Input field for describing quiz requirements</string>
+    <string name="generate_quiz">Generate Quiz</string>
 </resources>
