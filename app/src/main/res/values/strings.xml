@@ -36,4 +36,5 @@
     <string name="hint_ai_prompt">Describe your quiz topic and requirements</string>
     <string name="cd_ai_prompt">Input field for describing quiz requirements</string>
     <string name="generate_quiz">Generate Quiz</string>
+    <string name="wrong_answer">Wrong Answer</string>
 </resources>

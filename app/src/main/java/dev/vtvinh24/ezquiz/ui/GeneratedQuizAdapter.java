@@ -3,11 +3,10 @@ package dev.vtvinh24.ezquiz.ui;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +14,8 @@ import java.util.List;
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 public class GeneratedQuizAdapter extends RecyclerView.Adapter<GeneratedQuizAdapter.ViewHolder> {
 
@@ -41,78 +42,73 @@ public class GeneratedQuizAdapter extends RecyclerView.Adapter<GeneratedQuizAdap
 
     @Override
     public int getItemCount() {
-        return quizItems.size();
+        return quizItems != null ? quizItems.size() : 0;
     }
 
-    // Phương thức để lấy dữ liệu đã được chỉnh sửa
     public List<GeneratedQuizItem> getUpdatedQuizItems() {
-        return this.quizItems;
+        return quizItems;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        EditText questionEditText;
-        LinearLayout answersContainer;
+        private final MaterialTextView questionTextView;
+        private final TextInputEditText correctAnswerEditText;
+        private final LinearLayout wrongAnswersContainer;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            questionEditText = itemView.findViewById(R.id.edit_quiz_question);
-            answersContainer = itemView.findViewById(R.id.answers_container);
+            questionTextView = itemView.findViewById(R.id.text_question);
+            correctAnswerEditText = itemView.findViewById(R.id.edit_correct_answer);
+            wrongAnswersContainer = itemView.findViewById(R.id.container_wrong_answers);
         }
 
         void bind(GeneratedQuizItem item) {
-            questionEditText.setText(item.question);
-            questionEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    item.question = s.toString();
+            try {
+                // Hiển thị câu hỏi
+                questionTextView.setText(item.question);
+
+                // Xử lý câu trả lời đúng
+                if (item.correctAnswerIndices != null && !item.correctAnswerIndices.isEmpty()
+                    && item.answers != null && !item.answers.isEmpty()) {
+                    int correctIndex = item.correctAnswerIndices.get(0);
+                    if (correctIndex >= 0 && correctIndex < item.answers.size()) {
+                        correctAnswerEditText.setText(item.answers.get(correctIndex));
+                    }
                 }
-                @Override
-                public void afterTextChanged(Editable s) {}
-            });
 
-            answersContainer.removeAllViews();
-            for (int i = 0; i < item.answers.size(); i++) {
-                View answerRow = LayoutInflater.from(context).inflate(R.layout.item_answer_row, answersContainer, false);
-                EditText answerText = answerRow.findViewById(R.id.edit_answer_text);
-                CheckBox correctCheckbox = answerRow.findViewById(R.id.checkbox_correct);
+                // Xử lý các câu trả lời sai
+                wrongAnswersContainer.removeAllViews();
+                if (item.answers != null) {
+                    for (int i = 0; i < item.answers.size(); i++) {
+                        if (!item.correctAnswerIndices.contains(i)) {
+                            View wrongAnswerView = LayoutInflater.from(context)
+                                .inflate(R.layout.item_wrong_answer, wrongAnswersContainer, false);
 
-                answerText.setText(item.answers.get(i));
-                correctCheckbox.setChecked(item.correctAnswerIndices.contains(i));
+                            TextInputEditText wrongAnswerEdit = wrongAnswerView.findViewById(R.id.edit_wrong_answer);
+                            wrongAnswerEdit.setText(item.answers.get(i));
 
-                final int answerIndex = i;
+                            final int answerIndex = i;
+                            wrongAnswerEdit.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                answerText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        item.answers.set(answerIndex, s.toString());
-                    }
-                    @Override
-                    public void afterTextChanged(Editable s) {}
-                });
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    if (answerIndex >= 0 && answerIndex < item.answers.size()) {
+                                        item.answers.set(answerIndex, s.toString());
+                                    }
+                                }
 
-                correctCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (item.type == Quiz.Type.SINGLE_CHOICE) {
-                        item.correctAnswerIndices.clear();
-                        if (isChecked) {
-                            item.correctAnswerIndices.add(answerIndex);
-                        }
-                        // Cần thông báo cho adapter cập nhật lại các view khác
-                        notifyDataSetChanged();
-                    } else { // MULTIPLE_CHOICE
-                        if (isChecked) {
-                            if (!item.correctAnswerIndices.contains(answerIndex)) {
-                                item.correctAnswerIndices.add(answerIndex);
-                            }
-                        } else {
-                            item.correctAnswerIndices.remove(Integer.valueOf(answerIndex));
+                                @Override
+                                public void afterTextChanged(Editable s) {}
+                            });
+
+                            wrongAnswersContainer.addView(wrongAnswerView);
                         }
                     }
-                });
-                answersContainer.addView(answerRow);
+                }
+
+            } catch (Exception e) {
+                Log.e("GeneratedQuizAdapter", "Error binding view holder", e);
             }
         }
     }

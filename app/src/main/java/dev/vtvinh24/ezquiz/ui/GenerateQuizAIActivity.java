@@ -70,46 +70,60 @@ public class GenerateQuizAIActivity extends AppCompatActivity {
     GenerateQuizRequest request = new GenerateQuizRequest(prompt);
 
     aiService.generateQuiz(request).enqueue(new Callback<GenerateQuizResponse>() {
-      // Trong file GenerateQuizAIActivity.java
       @Override
       public void onResponse(Call<GenerateQuizResponse> call, Response<GenerateQuizResponse> response) {
         showLoading(false);
-        if (response.isSuccessful() && response.body() != null) {
-          // << KIỂM TRA NULL CHẶT CHẼ HƠN >>
-          GenerateQuizResponse body = response.body();
-          List<GeneratedQuizItem> quizzes = body.getQuizzes();
+        try {
+          if (response.isSuccessful() && response.body() != null) {
+            GenerateQuizResponse body = response.body();
+            List<GeneratedQuizItem> quizzes = body.getQuizzes();
 
-          if (quizzes != null && !quizzes.isEmpty()) {
-            // Mọi thứ OK, tiếp tục
-            Intent intent = new Intent(GenerateQuizAIActivity.this, ReviewGeneratedQuizActivity.class);
-            String quizzesJson = new Gson().toJson(quizzes);
-            Log.d(TAG, "Success. Sending JSON to ReviewActivity: " + quizzesJson);
-            intent.putExtra(ReviewGeneratedQuizActivity.EXTRA_GENERATED_QUIZZES, quizzesJson);
-            startActivity(intent);
-          } else {
-            // Trường hợp response body OK nhưng không có quizzes nào được parse
-            Log.e(TAG, "Response successful but quizzes list is null or empty. Backend might not be returning the correct JSON format.");
-            textAiStatus.setText("AI generated an invalid response. Please try a different prompt.");
-          }
-        } else {
-          // Log lỗi để dễ debug
-          String errorBody = "";
-          try {
-            if (response.errorBody() != null) {
-              errorBody = response.errorBody().string();
+            if (quizzes != null && !quizzes.isEmpty()) {
+              // Chuyển sang màn review với flags phù hợp
+              Intent intent = new Intent(GenerateQuizAIActivity.this, ReviewGeneratedQuizActivity.class);
+              intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+              String quizzesJson = new Gson().toJson(quizzes);
+              Log.d(TAG, "Success. Sending JSON to ReviewActivity: " + quizzesJson);
+              intent.putExtra(ReviewGeneratedQuizActivity.EXTRA_GENERATED_QUIZZES, quizzesJson);
+              startActivity(intent);
+            } else {
+              Log.e(TAG, "Response successful but quizzes list is null or empty");
+              Toast.makeText(GenerateQuizAIActivity.this,
+                "Could not generate quiz. Please try again.",
+                Toast.LENGTH_SHORT).show();
             }
-          } catch (Exception e) {
-            Log.e(TAG, "Error parsing error body", e);
+          } else {
+            String errorBody = "";
+            try {
+              if (response.errorBody() != null) {
+                errorBody = response.errorBody().string();
+              }
+            } catch (Exception e) {
+              Log.e(TAG, "Error parsing error body", e);
+            }
+            Log.e(TAG, "API call failed. Code: " + response.code()
+              + " | Message: " + response.message()
+              + " | Error Body: " + errorBody);
+
+            Toast.makeText(GenerateQuizAIActivity.this,
+              "Server error: " + response.code(),
+              Toast.LENGTH_SHORT).show();
           }
-          Log.e(TAG, "API call failed. Code: " + response.code() + " | Message: " + response.message() + " | Error Body: " + errorBody);
-          textAiStatus.setText("Error: " + response.code() + ". The server responded with an error.");
+        } catch (Exception e) {
+          Log.e(TAG, "Error processing response", e);
+          Toast.makeText(GenerateQuizAIActivity.this,
+            "Error processing server response",
+            Toast.LENGTH_SHORT).show();
         }
       }
 
       @Override
       public void onFailure(Call<GenerateQuizResponse> call, Throwable t) {
         showLoading(false);
-        textAiStatus.setText("Network Failure: " + t.getMessage());
+        Log.e(TAG, "Network call failed", t);
+        Toast.makeText(GenerateQuizAIActivity.this,
+          "Network error: " + t.getMessage(),
+          Toast.LENGTH_SHORT).show();
       }
     });
   }
