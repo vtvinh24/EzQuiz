@@ -27,6 +27,13 @@
     <string name="imported_set_name">Imported from %1$s</string>
     <string name="imported_set_description">Imported via Paste ID: %1$s</string>
     <string name="import_success">Imported %1$d items to new set.</string>
+    <string name="desc_summary_icon">Summary icon</string>
+    <string name="summary_title">Hoàn thành!</string>
+    <string name="action_study_unknown_again">Học lại các thẻ chưa biết</string>
+    <string name="action_restart_session">Học lại từ đầu</string>
+    <string name="action_done">Hoàn thành</string>
+    <string name="action_dont_know">dont know</string>
+    <string name="action_know">know</string>
     <string name="review_save_quiz"><![CDATA[Review & Save Quiz]]></string>
     <string name="save_to_collection">Save to Collection:</string>
     <string name="new_set_name">New Set Name:</string>

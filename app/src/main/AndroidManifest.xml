@@ -43,6 +43,8 @@
         <activity android:name=".ui.ReviewGeneratedQuizActivity" />
         <activity android:name=".ui.PostImportActivity" />
         <activity android:name=".ui.PreImportActivity" />
+        <activity android:name=".ui.FlashcardActivity" android:exported="false" />
+        <activity android:name=".ui.FlashcardSummaryActivity" android:exported="false" />
     </application>
 
 </manifest>
