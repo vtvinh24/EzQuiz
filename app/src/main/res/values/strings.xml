@@ -34,4 +34,14 @@
     <string name="action_done">Hoàn thành</string>
     <string name="action_dont_know">dont know</string>
     <string name="action_know">know</string>
+    <string name="review_save_quiz"><![CDATA[Review & Save Quiz]]></string>
+    <string name="save_to_collection">Save to Collection:</string>
+    <string name="new_set_name">New Set Name:</string>
+    <string name="enter_name_for_this_new_set">Enter name for this new set</string>
+    <string name="save_quiz_set">Save Quiz Set</string>
+    <string name="question">Question</string>
+    <string name="hint_ai_prompt">Describe your quiz topic and requirements</string>
+    <string name="cd_ai_prompt">Input field for describing quiz requirements</string>
+    <string name="generate_quiz">Generate Quiz</string>
+    <string name="wrong_answer">Wrong Answer</string>
 </resources>

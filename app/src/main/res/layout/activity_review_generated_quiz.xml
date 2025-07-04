@@ -10,7 +10,7 @@
         android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/generate_quiz"
+        app:title="Review Generated Quiz"
         app:navigationIcon="@drawable/ic_arrow_back"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"/>
@@ -24,40 +24,49 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_ai_prompt"
+            android:hint="@string/new_set_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_ai_prompt"
+                android:id="@+id/edit_set_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top|start"
-                android:minLines="3"
-                android:inputType="textMultiLine"/>
+                android:inputType="textCapSentences"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/btn_generate_quiz"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/generate_quiz"/>
+            android:hint="@string/save_to_collection"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            <Spinner
+                android:id="@+id/spinner_collection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_generated_quiz"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="16dp"
-            android:visibility="gone"/>
+            android:clipToPadding="false"/>
 
-        <TextView
-            android:id="@+id/text_ai_status"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_quiz_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:gravity="center"/>
+            android:text="@string/save_quiz_set"
+            android:padding="12dp"
+            app:icon="@drawable/ic_save"
+            style="@style/Widget.MaterialComponents.Button"/>
 
     </LinearLayout>
 
