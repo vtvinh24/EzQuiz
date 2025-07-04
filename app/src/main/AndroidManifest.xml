@@ -39,7 +39,8 @@
         <activity android:name=".ui.QuizSetListActivity" />
         <activity android:name=".ui.QuizListActivity" />
         <activity android:name=".ui.GenerateQuizAIActivity" />
-        <activity android:name=".ui.ImportQuizExternalActivity" />
+        <activity android:name=".ui.PostImportActivity" />
+        <activity android:name=".ui.PreImportActivity" />
     </application>
 
 </manifest>

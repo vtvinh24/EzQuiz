@@ -41,4 +41,14 @@ public class QuizSetRepository {
     }
     return quizzes;
   }
+
+  public long insertWithDefaultCollectionIfNeeded(QuizSetEntity set) {
+    if (set.collectionId == 0) {
+      QuizCollectionEntity defaultCollection = db.quizCollectionDao().getByName("Default");
+      if (defaultCollection != null) {
+        set.collectionId = defaultCollection.id;
+      }
+    }
+    return db.quizSetDao().insert(set);
+  }
 }

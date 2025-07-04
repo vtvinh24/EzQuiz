@@ -36,3 +36,4 @@ public class QuizCollectionRepository {
     return db.quizCollectionDao().getAll();
   }
 }
+
