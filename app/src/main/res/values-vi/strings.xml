@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EzQuiz</string>
+    <string name="dialog_add_quiz_title">Thêm Quiz</string>
+    <string name="dialog_edit_quiz_title">Chỉnh sửa Quiz</string>
+    <string name="btn_add">Thêm</string>
+    <string name="btn_save">Lưu</string>
+    <string name="btn_cancel">Hủy</string>
+    <string name="btn_add_answer">Thêm đáp án</string>
+    <string name="hint_question">Câu hỏi</string>
+    <string name="hint_answer">Đáp án</string>
+    <string name="label_correct">Đúng</string>
+    <string name="hint_set_name">Tên bộ thẻ này</string>
+    <string name="hint_set_description">Mô tả bộ thẻ này</string>
+    <string name="hint_paste_id">Nhập Paste ID (vd: JpOIB)</string>
+    <string name="label_flashcards">Thẻ ghi nhớ</string>
+    <string name="label_quizzes">Quiz</string>
+    <string name="btn_import_paste">Nhập từ Paste ID</string>
+    <string name="title_import_paste">Nhập từ Paste ID</string>
+    <string name="hint_dialog_paste_id">Paste ID</string>
+    <string name="btn_import">Nhập</string>
+    <string-array name="quiz_type_entries">
+        <item>MỘT ĐÁP ÁN</item>
+        <item>NHIỀU ĐÁP ÁN</item>
+    </string-array>
+    <string name="prompt_paste_id">Vui lòng nhập Paste ID.</string>
+    <string name="error_no_items_imported">Không có mục nào được nhập hoặc định dạng không hợp lệ.</string>
+    <string name="imported_set_name">Đã nhập từ %1$s</string>
+    <string name="imported_set_description">Đã nhập qua Paste ID: %1$s</string>
+    <string name="import_success">Đã nhập %1$d mục vào bộ mới.</string>
+    <string name="qr_enter_manually">Nhập mã QR thủ công</string>
+    <string name="qr_submit">Gửi</string>
+    <string name="desc_summary_icon">Biểu tượng tổng kết</string>
+    <string name="summary_title">Hoàn thành!</string>
+    <string name="action_study_unknown_again">Học lại các thẻ chưa biết</string>
+    <string name="action_restart_session">Học lại từ đầu</string>
+    <string name="action_done">Hoàn thành</string>
+    <string name="action_dont_know">không biết</string>
+    <string name="action_know">biết</string>
+    <string name="review_save_quiz"><![CDATA[Xem lại & Lưu Quiz]]></string>
+    <string name="save_to_collection">Lưu vào bộ sưu tập:</string>
+    <string name="new_set_name">Tên bộ mới:</string>
+    <string name="enter_name_for_this_new_set">Nhập tên cho bộ mới này</string>
+    <string name="save_quiz_set">Lưu bộ Quiz</string>
+    <string name="question">Câu hỏi</string>
+    <string name="hint_ai_prompt">Mô tả chủ đề và yêu cầu quiz của bạn</string>
+    <string name="cd_ai_prompt">Trường nhập mô tả yêu cầu quiz</string>
+    <string name="generate_quiz">Tạo Quiz</string>
+    <string name="wrong_answer">Sai</string>
+</resources>
