@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -10,32 +11,33 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scan QR or Import Manually"
+        android:text="@string/scan_qr_or_import_manually"
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginBottom="8dp" />
 
-    <FrameLayout
-        android:id="@+id/qr_scanner_placeholder"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:background="#EEE"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
         android:layout_marginBottom="16dp"
-        android:foreground="@drawable/bg_scanner_border">
+        app:strokeColor="@color/purple_500"
+        app:strokeWidth="2dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="QR Scanner Placeholder"/>
-    </FrameLayout>
+            android:text="@string/qr_scanner_placeholder"/>
+    </com.google.android.material.card.MaterialCardView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_import_manually"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Import Manually"
-        android:backgroundTint="@color/purple_500"
+        android:text="@string/import_manually"
+        app:backgroundTint="@color/purple_500"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
@@ -51,7 +53,7 @@
         android:padding="8dp"
         android:visibility="gone" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_import_paste"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -46,4 +46,11 @@
     <string name="cd_ai_prompt">Input field for describing quiz requirements</string>
     <string name="generate_quiz">Generate Quiz</string>
     <string name="wrong_answer">Wrong Answer</string>
+    <string name="import_manually">Import Manually</string>
+    <string name="qr_scanner_placeholder">[QR Scanner]</string>
+    <string name="scan_qr_or_import_manually">Scan QR or import manually</string>
+    <string name="select_collection">Select Collection</string>
+    <string name="set_name_optional">Set Name (optional)</string>
+    <string name="enter_set_name">Enter set name</string>
+    <string name="next">Next</string>
 </resources>
