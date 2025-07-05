@@ -34,4 +34,6 @@
     <string name="action_done">Hoàn thành</string>
     <string name="action_dont_know">dont know</string>
     <string name="action_know">know</string>
+    <string name="previous_card">Previous Card</string>
+    <string name="next_card">Next Card</string>
 </resources>

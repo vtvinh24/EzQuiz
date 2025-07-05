@@ -45,6 +45,10 @@ public interface QuizDao {
 
 ;
 
+
+  // === THÊM PHƯƠNG THỨC MỚI NÀY VÀO ===
+  @Query("SELECT * FROM quiz WHERE id IN (:quizIds)")
+  List<QuizEntity> getQuizzesByIds(List<Long> quizIds);
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type = 'FLASHCARD'")
   List<QuizEntity> getFlashcardsByQuizSetId(long quizSetId); // Phương thức cũ gây ra lỗi
 

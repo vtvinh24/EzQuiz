@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Căn chỉnh theo layout hiện có của bạn -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground">
 
-    <!-- Các TextView cho tên và mô tả của Quiz Set -->
     <TextView
         android:id="@+id/text_set_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
+        android:text="Tên Bộ Quiz Set"
         android:textSize="18sp"
-        android:text="Tên Bộ Quiz Set" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/text_set_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="#666666"
         android:layout_marginTop="4dp"
-        android:text="Mô tả của bộ quiz set này." />
+        android:text="Mô tả của bộ quiz set này."
+        android:textColor="#666666"
+        android:textSize="14sp" />
 
-    <!-- Nút "Play Flashcards" MỚI -->
-    <Button
-        android:id="@+id/btn_play_flashcard"
-        android:layout_width="wrap_content"
+    <!-- Container cho các nút bấm -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Play Flashcards"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="end"
-        android:drawableStart="@android:drawable/ic_media_play" /> <!-- Bạn có thể thay icon này -->
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="16dp">
+
+        <!-- Nút mới cho chế độ Practice -->
+        <Button
+            android:id="@+id/btn_practice_quiz"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Practice" />
+
+        <!-- Nút Play Flashcards đã có -->
+        <Button
+            android:id="@+id/btn_play_flashcard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flashcards" />
+    </LinearLayout>
 
 </LinearLayout>

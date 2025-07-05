@@ -50,6 +50,11 @@ public class QuizRepository {
     return quizzes;
   }
 
+  // === THÊM PHƯƠNG THỨC MỚI NÀY VÀO ===
+  public List<QuizEntity> getQuizzesByIds(List<Long> ids) {
+    return db.quizDao().getQuizzesByIds(ids);
+  }
+
   public List<QuizCollectionEntity> getAllCollections() {
     return db.quizCollectionDao().getAll();
   }
