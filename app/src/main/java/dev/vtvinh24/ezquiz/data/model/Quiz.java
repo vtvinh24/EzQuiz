@@ -1,8 +1,9 @@
 package dev.vtvinh24.ezquiz.data.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Quiz {
+public class Quiz implements Serializable {
   private final String question;
   private final List<String> answers;
   private final List<Integer> correctAnswerIndices;
