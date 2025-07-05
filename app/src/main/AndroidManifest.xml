@@ -45,6 +45,7 @@
         <activity android:name=".ui.PreImportActivity" />
         <activity android:name=".ui.FlashcardActivity" android:exported="false" />
         <activity android:name=".ui.FlashcardSummaryActivity" android:exported="false" />
+        <activity android:name=".ui.QrScannerActivity" />
     </application>
 
 </manifest>

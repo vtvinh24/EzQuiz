@@ -34,7 +34,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dev.vtvinh24.ezquiz.R;
+import dev.vtvinh24.ezquiz.data.db.AppDatabase;
+import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
+import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
+import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
+import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 import dev.vtvinh24.ezquiz.network.QuizImporter;
 import dev.vtvinh24.ezquiz.util.QRParser;
 
@@ -42,19 +47,36 @@ public class QrScannerActivity extends AppCompatActivity {
   private static final String TAG = "QrScannerActivity";
   private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
 
+  public static final String EXTRA_COLLECTION_ID = "collection_id";
+  public static final String EXTRA_SET_NAME = "set_name";
+
   private ExecutorService cameraExecutor;
   private QRParser qrParser;
   private boolean isProcessing = false;
   private PreviewView previewView;
+
+  private long collectionId;
+  private String setName;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_qr_scanner);
 
+    getIntentData();
     initializeComponents();
     setupClickListeners();
     requestCameraPermission();
+  }
+
+  private void getIntentData() {
+    collectionId = getIntent().getLongExtra(EXTRA_COLLECTION_ID, -1);
+    setName = getIntent().getStringExtra(EXTRA_SET_NAME);
+
+    if (collectionId == -1 || setName == null) {
+      Toast.makeText(this, "Invalid import parameters", Toast.LENGTH_SHORT).show();
+      finish();
+    }
   }
 
   private void initializeComponents() {
@@ -205,7 +227,7 @@ public class QrScannerActivity extends AppCompatActivity {
 
         runOnUiThread(() -> {
           if (!quizzes.isEmpty()) {
-            showImportSuccessDialog(quizzes.size());
+            saveFlashcardsToDatabase(quizzes);
           } else {
             showError(getString(R.string.error_no_items_imported));
           }
@@ -213,6 +235,41 @@ public class QrScannerActivity extends AppCompatActivity {
       } catch (Exception e) {
         Log.e(TAG, "Import failed", e);
         runOnUiThread(() -> showError("Failed to import flashcards"));
+      }
+    }).start();
+  }
+
+  private void saveFlashcardsToDatabase(List<Quiz> quizzes) {
+    new Thread(() -> {
+      try {
+        AppDatabase db = AppDatabaseProvider.getDatabase(this);
+        QuizSetRepository setRepo = new QuizSetRepository(db);
+
+        QuizSetEntity set = new QuizSetEntity();
+        set.name = setName;
+        set.description = "Imported flashcards from QR code";
+        set.collectionId = collectionId;
+        set.createdAt = System.currentTimeMillis();
+        set.updatedAt = System.currentTimeMillis();
+
+        long setId = setRepo.insertWithDefaultCollectionIfNeeded(set);
+
+        for (Quiz quiz : quizzes) {
+          QuizEntity entity = new QuizEntity();
+          entity.question = quiz.getQuestion();
+          entity.answers = quiz.getAnswers();
+          entity.correctAnswerIndices = quiz.getCorrectAnswerIndices();
+          entity.type = quiz.getType();
+          entity.quizSetId = setId;
+          entity.createdAt = System.currentTimeMillis();
+          entity.updatedAt = System.currentTimeMillis();
+          db.quizDao().insert(entity);
+        }
+
+        runOnUiThread(() -> showImportSuccessDialog(quizzes.size()));
+      } catch (Exception e) {
+        Log.e(TAG, "Database save failed", e);
+        runOnUiThread(() -> showError("Failed to save flashcards to database"));
       }
     }).start();
   }
@@ -234,8 +291,11 @@ public class QrScannerActivity extends AppCompatActivity {
   private void showImportSuccessDialog(int count) {
     new AlertDialog.Builder(this)
       .setTitle("Import Successful")
-      .setMessage(getString(R.string.import_success, count))
-      .setPositiveButton(android.R.string.ok, (dialog, which) -> finish())
+      .setMessage("Successfully imported " + count + " flashcards")
+      .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+        setResult(RESULT_OK);
+        finish();
+      })
       .setCancelable(false)
       .show();
   }

@@ -42,13 +42,22 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_next"
+        android:id="@+id/btn_scan_qr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="Scan QR Code"
         app:backgroundTint="@color/purple_500"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:layout_marginTop="8dp" />
+        app:icon="@drawable/ic_qr_code"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manual Import"
+        android:textStyle="bold"
+        style="@style/Widget.Material3.Button.OutlinedButton" />
 
 </LinearLayout>
