@@ -43,7 +43,7 @@ import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.AIService;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
-import dev.vtvinh24.ezquiz.data.model.RetrofitClient;
+import dev.vtvinh24.ezquiz.network.RetrofitClient;
 import dev.vtvinh24.ezquiz.ui.adapter.TopicAdapter;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
