@@ -1,105 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Widget.Material3.CardView.Outlined"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Correct Answer">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_correct_answer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:minLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+        <!-- Question Number and Type Badge -->
         <LinearLayout
-            android:id="@+id/container_wrong_answers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_question_number"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Wrong Answer 1">
+                android:background="@drawable/circle_background"
+                android:text="1"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:textColor="?attr/colorOnPrimary"
+                android:gravity="center"
+                android:minWidth="32dp"
+                android:minHeight="32dp"
+                android:layout_marginEnd="12dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_wrong_answer_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:minLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_question_type"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Wrong Answer 2">
+                android:text="Single Choice"
+                android:textSize="12sp"
+                app:chipBackgroundColor="?attr/colorSecondaryContainer"
+                app:chipStrokeWidth="0dp"
+                android:layout_marginEnd="8dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_wrong_answer_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:minLines="1" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Wrong Answer 3">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_wrong_answer_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:minLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Edit Question Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit_question"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Edit"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_edit"
+                app:iconSize="16dp"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:minWidth="0dp"
+                android:paddingHorizontal="12dp" />
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_edit_quiz"
-            style="@style/Widget.Material3.Button.TextButton"
+        <!-- Question Text -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_question"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Question"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:minLines="2"
+                android:maxLines="5" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Answers Section -->
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:text="Answer Options"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Answer Options Container -->
+        <LinearLayout
+            android:id="@+id/container_answers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <!-- Add Answer Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Edit"
-            app:icon="@drawable/ic_edit" />
+            android:text="Add Option"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_gravity="start" />
+
+        <!-- Question Type Toggle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:background="?attr/colorSurfaceVariant"
+            android:layout_marginHorizontal="-4dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Allow multiple correct answers"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_multiple_choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
