@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="@drawable/gradient_surface_background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,9 +19,9 @@
             android:layout_height="?attr/actionBarSize"
             app:title="AI Quiz Generator"
             app:navigationIcon="@drawable/ic_arrow_back"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="?attr/colorOnPrimary"
-            app:navigationIconTint="?attr/colorOnPrimary" />
+            android:background="@color/gradient_blue_start"
+            app:titleTextColor="@color/white"
+            app:navigationIconTint="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,17 +35,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="16dp">
 
-            <!-- AI Assistant Header -->
+            <!-- AI Assistant Header Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp"
-                android:backgroundTint="?attr/colorPrimaryContainer">
+                app:cardElevation="4dp"
+                android:backgroundTint="@color/white"
+                style="@style/Widget.Material3.CardView.Elevated">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,36 +54,69 @@
                     android:padding="20dp"
                     android:gravity="center_vertical">
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_auto_awesome"
-                        android:background="@drawable/circle_background"
-                        android:backgroundTint="?attr/colorPrimary"
-                        android:padding="12dp"
-                        app:tint="?attr/colorOnPrimary" />
+                    <!-- AI Icon with Gradient Background -->
+                    <FrameLayout
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginEnd="16dp">
 
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@drawable/circle_gradient_background"
+                            android:scaleType="centerCrop" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_auto_awesome"
+                            app:tint="@color/white" />
+
+                    </FrameLayout>
+
+                    <!-- Header Text -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="16dp"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="AI Quiz Generator"
-                            android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                            android:textColor="?attr/colorOnPrimaryContainer" />
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Create quizzes from text, images, or voice"
-                            android:textAppearance="?attr/textAppearanceBodyMedium"
-                            android:textColor="?attr/colorOnPrimaryContainer"
-                            android:alpha="0.7" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="#666666" />
+
+                    </LinearLayout>
+
+                    <!-- Feature Chips -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AI Powered"
+                            android:textSize="10sp"
+                            android:textColor="@color/white"
+                            app:chipBackgroundColor="@color/gradient_purple_start"
+                            app:chipStrokeWidth="0dp"
+                            app:chipMinHeight="24dp"
+                            style="@style/Widget.Material3.Chip.Filter" />
 
                     </LinearLayout>
 
@@ -91,13 +124,14 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Topic Suggestions -->
-            <TextView
+            <!-- Quick Topics Section -->
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quick Topics"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="?attr/colorOnSurface"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -117,15 +151,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant">
+                app:cardElevation="4dp"
+                android:backgroundTint="@color/white"
+                style="@style/Widget.Material3.CardView.Elevated">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="20dp">
+
+                    <!-- Section Title -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create Your Quiz"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Describe what you want or upload content"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="#666666"
+                        android:layout_marginBottom="16dp" />
 
                     <!-- Text Input -->
                     <com.google.android.material.textfield.TextInputLayout
@@ -138,6 +190,8 @@
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp"
                         app:endIconMode="clear_text"
+                        app:boxStrokeColor="@color/gradient_blue_start"
+                        app:hintTextColor="@color/gradient_blue_start"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -148,6 +202,7 @@
                             android:minLines="3"
                             android:maxLines="8"
                             android:inputType="textMultiLine|textCapSentences"
+                            android:textColor="@color/black"
                             android:scrollbars="vertical" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -168,9 +223,13 @@
                             android:layout_weight="1"
                             android:layout_marginEnd="8dp"
                             android:text="Voice"
+                            android:textColor="@color/white"
                             app:icon="@drawable/ic_mic"
+                            app:iconTint="@color/white"
                             app:iconGravity="textStart"
-                            style="@style/Widget.Material3.Button.TonalButton" />
+                            app:backgroundTint="@color/gradient_green_start"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.Material3.Button.UnelevatedButton" />
 
                         <!-- Image Upload Button -->
                         <com.google.android.material.button.MaterialButton
@@ -180,9 +239,13 @@
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
                             android:text="Image"
+                            android:textColor="@color/white"
                             app:icon="@drawable/ic_image"
+                            app:iconTint="@color/white"
                             app:iconGravity="textStart"
-                            style="@style/Widget.Material3.Button.TonalButton" />
+                            app:backgroundTint="@color/gradient_orange_start"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.Material3.Button.UnelevatedButton" />
 
                     </LinearLayout>
 
@@ -194,9 +257,9 @@
                         android:layout_marginTop="16dp"
                         android:visibility="gone"
                         app:cardCornerRadius="12dp"
-                        app:cardElevation="1dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="?attr/colorOutlineVariant">
+                        app:cardElevation="2dp"
+                        android:backgroundTint="#F5F5F5"
+                        style="@style/Widget.Material3.CardView.Elevated">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -210,13 +273,14 @@
                                 android:orientation="horizontal"
                                 android:gravity="center_vertical">
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="Selected Image"
-                                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                                    android:textColor="?attr/colorOnSurface" />
+                                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold" />
 
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_remove_image"
@@ -225,7 +289,9 @@
                                     android:minWidth="0dp"
                                     android:text="Remove"
                                     android:textSize="12sp"
+                                    android:textColor="@color/gradient_pink_start"
                                     app:icon="@drawable/ic_close"
+                                    app:iconTint="@color/gradient_pink_start"
                                     app:iconSize="16dp"
                                     style="@style/Widget.Material3.Button.TextButton" />
 
@@ -237,16 +303,16 @@
                                 android:layout_height="120dp"
                                 android:layout_marginTop="8dp"
                                 android:scaleType="centerCrop"
-                                android:background="?attr/colorSurfaceVariant"
+                                android:background="#E0E0E0"
                                 android:contentDescription="Selected image preview" />
 
-                            <TextView
+                            <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/text_image_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:textAppearance="?attr/textAppearanceBodySmall"
-                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                                android:textColor="#666666"
                                 tools:text="image_file.jpg" />
 
                         </LinearLayout>
@@ -264,43 +330,57 @@
                 android:layout_height="56dp"
                 android:text="Generate Quiz"
                 android:textSize="16sp"
+                android:textColor="@color/white"
                 app:icon="@drawable/ic_auto_awesome"
+                app:iconTint="@color/white"
                 app:iconGravity="textStart"
+                app:backgroundTint="@color/gradient_blue_start"
                 app:cornerRadius="16dp"
                 style="@style/Widget.Material3.Button.UnelevatedButton" />
 
             <!-- Status Section -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/layout_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:backgroundTint="@color/white"
+                style="@style/Widget.Material3.CardView.Elevated">
 
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progress_bar"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    app:indicatorColor="?attr/colorPrimary" />
+                    android:orientation="vertical"
+                    android:padding="32dp"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/text_ai_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Generating quiz..."
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="?attr/colorOnSurface"
-                    android:gravity="center" />
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        app:indicatorColor="@color/gradient_purple_start" />
 
-            </LinearLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_ai_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Generating quiz..."
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

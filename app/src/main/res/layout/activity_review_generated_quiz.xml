@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="@drawable/gradient_surface_background">
 
     <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
@@ -16,11 +16,11 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/gradient_blue_start"
             app:title="Review &amp; Edit Quiz"
-            app:titleTextColor="?attr/colorOnPrimary"
+            app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="?attr/colorOnPrimary" />
+            app:navigationIconTint="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,15 +35,96 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="16dp"
             android:paddingBottom="100dp">
 
             <!-- Header Card with Save Options -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardElevation="4dp"
+                android:backgroundTint="@color/white"
+                style="@style/Widget.Material3.CardView.Elevated">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Config Icon with Gradient Background -->
+                    <FrameLayout
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@drawable/circle_gradient_background"
+                            android:scaleType="centerCrop" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_edit"
+                            app:tint="@color/white" />
+
+                    </FrameLayout>
+
+                    <!-- Config Info -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quiz Configuration"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Set name and choose collection"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="#666666" />
+
+                    </LinearLayout>
+
+                    <!-- Status Chip -->
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ready"
+                        android:textSize="10sp"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/gradient_green_start"
+                        app:chipStrokeWidth="0dp"
+                        app:chipMinHeight="24dp"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Input Fields Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:backgroundTint="@color/white"
                 style="@style/Widget.Material3.CardView.Elevated">
 
                 <LinearLayout
@@ -52,27 +133,22 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Quiz Configuration"
-                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginBottom="16dp" />
-
                     <!-- Quiz Set Name -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Quiz Set Name"
+                        app:boxStrokeColor="@color/gradient_blue_start"
+                        app:hintTextColor="@color/gradient_blue_start"
                         app:startIconDrawable="@drawable/ic_edit"
-                        app:startIconTint="?attr/colorPrimary">
+                        app:startIconTint="@color/gradient_blue_start">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edit_set_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/black"
                             android:inputType="textCapSentences" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -84,8 +160,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="Save to Collection"
+                        app:boxStrokeColor="@color/gradient_blue_start"
+                        app:hintTextColor="@color/gradient_blue_start"
                         app:startIconDrawable="@drawable/ic_folder"
-                        app:startIconTint="?attr/colorPrimary">
+                        app:startIconTint="@color/gradient_blue_start">
 
                         <Spinner
                             android:id="@+id/spinner_collection"
@@ -99,32 +177,68 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quiz Instructions -->
-            <LinearLayout
+            <!-- Instructions Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:background="?attr/colorPrimaryContainer"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:backgroundTint="@color/gradient_purple_start"
+                style="@style/Widget.Material3.CardView.Elevated">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_info"
-                    app:tint="?attr/colorOnPrimaryContainer"
-                    android:layout_marginEnd="12dp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tap questions to edit • Select correct answers • Toggle question types"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="?attr/colorOnPrimaryContainer" />
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="How to Edit"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap questions to edit • Select correct answers • Toggle question types"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="@color/white"
+                            android:alpha="0.9" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section Title -->
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Generated Questions"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
 
             <!-- Quiz Questions List -->
             <androidx.recyclerview.widget.RecyclerView
@@ -146,8 +260,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="Save Quiz Set"
+        android:textColor="@color/white"
         app:icon="@drawable/ic_save"
-        app:backgroundTint="?attr/colorPrimary"
-        app:iconTint="?attr/colorOnPrimary" />
+        app:iconTint="@color/white"
+        app:backgroundTint="@color/gradient_green_start" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

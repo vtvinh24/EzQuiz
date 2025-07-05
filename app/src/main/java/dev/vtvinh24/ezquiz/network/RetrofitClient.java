@@ -2,7 +2,9 @@ package dev.vtvinh24.ezquiz.network;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -12,11 +14,31 @@ public class RetrofitClient {
   public static final String BASE_URL_AI_SERVICE = "https://server-horusoul.onrender.com/";
   private static final Map<String, Retrofit> retrofitMap = new ConcurrentHashMap<>();
 
+  private static OkHttpClient createDefaultClient() {
+    return new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build();
+  }
+
+  private static OkHttpClient createAIClient() {
+    return new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(180, TimeUnit.SECONDS)
+            .writeTimeout(180, TimeUnit.SECONDS)
+            .build();
+  }
+
   public static Retrofit getInstance(String baseUrl) {
     Retrofit retrofit = retrofitMap.get(baseUrl);
     if (retrofit == null) {
+      OkHttpClient client = baseUrl.equals(BASE_URL_AI_SERVICE) ?
+              createAIClient() : createDefaultClient();
+
       retrofit = new Retrofit.Builder()
               .baseUrl(baseUrl)
+              .client(client)
               .addConverterFactory(GsonConverterFactory.create())
               .build();
       retrofitMap.put(baseUrl, retrofit);

@@ -61,8 +61,8 @@ public class QuizSetListActivity extends AppCompatActivity
     recyclerView = findViewById(R.id.recyclerView);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    // Truyền cả hai listener vào adapter
-    adapter = new QuizSetAdapter(quizSets, this, this);
+    // Cập nhật để truyền context vào adapter
+    adapter = new QuizSetAdapter(this, quizSets, this, this);
     recyclerView.setAdapter(adapter);
 
     FloatingActionButton fabAdd = findViewById(R.id.fab_add_set); // Đảm bảo đúng ID FAB

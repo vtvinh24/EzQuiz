@@ -46,7 +46,10 @@ public interface QuizDao {
   ;
 
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type = 'FLASHCARD'")
-  List<QuizEntity> getFlashcardsByQuizSetId(long quizSetId); // Phương thức cũ gây ra lỗi
+  List<QuizEntity> getFlashcardsByQuizSetId(long quizSetId);
+
+  @Query("SELECT COUNT(*) FROM quiz WHERE quizSetId = :quizSetId")
+  int countByQuizSetId(long quizSetId);
 
   // ====================================================================
   // === THÊM PHƯƠNG THỨC MỚI NÀY VÀO ===

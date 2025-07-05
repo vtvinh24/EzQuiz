@@ -63,7 +63,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private MaterialButton btnRemoveImage;
     private CircularProgressIndicator progressBar;
     private TextView textAiStatus;
-    private LinearLayout layoutStatus;
+    private MaterialCardView layoutStatus;
     private MaterialToolbar toolbar;
     private RecyclerView recyclerTopics;
     private MaterialCardView cardImagePreview;
