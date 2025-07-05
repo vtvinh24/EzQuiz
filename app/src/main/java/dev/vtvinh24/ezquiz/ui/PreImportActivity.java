@@ -41,12 +41,12 @@ public class PreImportActivity extends AppCompatActivity {
 
   private void setupActivityResultLauncher() {
     qrScannerLauncher = registerForActivityResult(
-      new ActivityResultContracts.StartActivityForResult(),
-      result -> {
-        if (result.getResultCode() == RESULT_OK) {
-          finish();
-        }
-      }
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+              if (result.getResultCode() == RESULT_OK) {
+                finish();
+              }
+            }
     );
   }
 

@@ -9,9 +9,9 @@
         android:id="@+id/edit_paste_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints="username"
         android:hint="@string/hint_dialog_paste_id"
-        android:inputType="text"
-        android:autofillHints="username" />
+        android:inputType="text" />
 
     <Button
         android:id="@+id/btn_import_paste"

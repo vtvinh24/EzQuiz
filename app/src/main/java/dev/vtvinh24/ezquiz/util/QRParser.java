@@ -2,9 +2,6 @@ package dev.vtvinh24.ezquiz.util;
 
 import android.graphics.ImageFormat;
 import android.media.Image;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;

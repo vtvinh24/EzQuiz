@@ -44,12 +44,10 @@ import dev.vtvinh24.ezquiz.network.QuizImporter;
 import dev.vtvinh24.ezquiz.util.QRParser;
 
 public class QrScannerActivity extends AppCompatActivity {
-  private static final String TAG = "QrScannerActivity";
-  private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
-
   public static final String EXTRA_COLLECTION_ID = "collection_id";
   public static final String EXTRA_SET_NAME = "set_name";
-
+  private static final String TAG = "QrScannerActivity";
+  private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
   private ExecutorService cameraExecutor;
   private QRParser qrParser;
   private boolean isProcessing = false;
@@ -95,16 +93,16 @@ public class QrScannerActivity extends AppCompatActivity {
     editText.setHint("Enter QR code data manually");
 
     new AlertDialog.Builder(this)
-      .setTitle("Manual QR Input")
-      .setView(editText)
-      .setPositiveButton("Process", (dialog, which) -> {
-        String qrData = editText.getText().toString().trim();
-        if (!qrData.isEmpty()) {
-          handleQRResult(qrData);
-        }
-      })
-      .setNegativeButton("Cancel", null)
-      .show();
+            .setTitle("Manual QR Input")
+            .setView(editText)
+            .setPositiveButton("Process", (dialog, which) -> {
+              String qrData = editText.getText().toString().trim();
+              if (!qrData.isEmpty()) {
+                handleQRResult(qrData);
+              }
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
   }
 
   private void requestCameraPermission() {
@@ -147,13 +145,13 @@ public class QrScannerActivity extends AppCompatActivity {
     preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
     ResolutionSelector resolutionSelector = new ResolutionSelector.Builder()
-      .setResolutionStrategy(ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY)
-      .build();
+            .setResolutionStrategy(ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY)
+            .build();
 
     ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
-      .setResolutionSelector(resolutionSelector)
-      .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-      .build();
+            .setResolutionSelector(resolutionSelector)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build();
 
     imageAnalysis.setAnalyzer(cameraExecutor, this::analyzeImage);
 
@@ -179,18 +177,18 @@ public class QrScannerActivity extends AppCompatActivity {
 
     if (mediaImage != null) {
       qrParser.getDataFromQR(mediaImage)
-        .addOnSuccessListener(result -> {
-          if (result != null && !result.isEmpty()) {
-            handleQRResult(result);
-          }
-          isProcessing = false;
-          imageProxy.close();
-        })
-        .addOnFailureListener(e -> {
-          Log.e(TAG, "QR parsing failed", e);
-          isProcessing = false;
-          imageProxy.close();
-        });
+              .addOnSuccessListener(result -> {
+                if (result != null && !result.isEmpty()) {
+                  handleQRResult(result);
+                }
+                isProcessing = false;
+                imageProxy.close();
+              })
+              .addOnFailureListener(e -> {
+                Log.e(TAG, "QR parsing failed", e);
+                isProcessing = false;
+                imageProxy.close();
+              });
     } else {
       isProcessing = false;
       imageProxy.close();
@@ -290,14 +288,14 @@ public class QrScannerActivity extends AppCompatActivity {
 
   private void showImportSuccessDialog(int count) {
     new AlertDialog.Builder(this)
-      .setTitle("Import Successful")
-      .setMessage("Successfully imported " + count + " flashcards")
-      .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-        setResult(RESULT_OK);
-        finish();
-      })
-      .setCancelable(false)
-      .show();
+            .setTitle("Import Successful")
+            .setMessage("Successfully imported " + count + " flashcards")
+            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+              setResult(RESULT_OK);
+              finish();
+            })
+            .setCancelable(false)
+            .show();
   }
 
   private void showError(String message) {

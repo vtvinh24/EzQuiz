@@ -43,7 +43,7 @@ public interface QuizDao {
   @Query("SELECT * FROM quiz WHERE type = 'FLASHCARD'")
   List<QuizEntity> getFlashcards();
 
-;
+  ;
 
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type = 'FLASHCARD'")
   List<QuizEntity> getFlashcardsByQuizSetId(long quizSetId); // Phương thức cũ gây ra lỗi

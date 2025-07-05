@@ -6,10 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,14 +50,14 @@ public class QuizImporter {
         List<String> answers = Collections.singletonList(answer);
         List<Integer> correct = Collections.singletonList(0);
         quizzes.add(new Quiz(
-          question,
-          answers,
-          correct,
-          Quiz.Type.FLASHCARD,
-          now,
-          now,
-          false,
-          0
+                question,
+                answers,
+                correct,
+                Quiz.Type.FLASHCARD,
+                now,
+                now,
+                false,
+                0
         ));
       }
       return quizzes;
@@ -95,14 +93,14 @@ public class QuizImporter {
         List<String> answers = Collections.singletonList(answer);
         List<Integer> correct = Collections.singletonList(0);
         quizzes.add(new Quiz(
-          question,
-          answers,
-          correct,
-          Quiz.Type.FLASHCARD,
-          now,
-          now,
-          false,
-          0
+                question,
+                answers,
+                correct,
+                Quiz.Type.FLASHCARD,
+                now,
+                now,
+                false,
+                0
         ));
       }
       return quizzes;

@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Url;
 
 public interface PasteService {
-    @GET
-    Call<ResponseBody> getRawPaste(@Url String url);
+  @GET
+  Call<ResponseBody> getRawPaste(@Url String url);
 }
 
