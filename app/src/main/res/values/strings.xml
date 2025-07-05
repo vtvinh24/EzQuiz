@@ -27,14 +27,15 @@
     <string name="imported_set_name">Imported from %1$s</string>
     <string name="imported_set_description">Imported via Paste ID: %1$s</string>
     <string name="import_success">Imported %1$d items to new set.</string>
+    <string name="qr_enter_manually">Enter QR Code Manually</string>
+    <string name="qr_submit">Submit</string>
     <string name="desc_summary_icon">Summary icon</string>
-    <string name="summary_title">Hoàn thành!</string>
-    <string name="action_study_unknown_again">Học lại các thẻ chưa biết</string>
-    <string name="action_restart_session">Học lại từ đầu</string>
-    <string name="action_done">Hoàn thành</string>
-    <string name="action_dont_know">dont know</string>
-    <string name="action_know">know</string>
-
+    <string name="summary_title">Completed!</string>
+    <string name="action_study_unknown_again">Study unknown cards again</string>
+    <string name="action_restart_session">Restart from beginning</string>
+    <string name="action_done">Done</string>
+    <string name="action_dont_know">Don\'t know</string>
+    <string name="action_know">Know</string>
     <string name="review_save_quiz"><![CDATA[Review & Save Quiz]]></string>
     <string name="save_to_collection">Save to Collection:</string>
     <string name="new_set_name">New Set Name:</string>
@@ -45,5 +46,11 @@
     <string name="cd_ai_prompt">Input field for describing quiz requirements</string>
     <string name="generate_quiz">Generate Quiz</string>
     <string name="wrong_answer">Wrong Answer</string>
-
+    <string name="import_manually">Import Manually</string>
+    <string name="qr_scanner_placeholder">[QR Scanner]</string>
+    <string name="scan_qr_or_import_manually">Scan QR or import manually</string>
+    <string name="select_collection">Select Collection</string>
+    <string name="set_name_optional">Set Name (optional)</string>
+    <string name="enter_set_name">Enter set name</string>
+    <string name="next">Next</string>
 </resources>

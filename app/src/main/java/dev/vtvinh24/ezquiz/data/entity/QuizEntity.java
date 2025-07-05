@@ -28,6 +28,6 @@ public class QuizEntity {
   public int order = 0;
 
   public boolean isFlashcard() {
-      return type == Quiz.Type.FLASHCARD;
+    return type == Quiz.Type.FLASHCARD;
   }
 }

@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.core.ktx)
     implementation(libs.fragment)
+    // Google ML Kit Barcode Scanning
+    implementation(libs.barcode.scanning)
 
     // UI Components
     implementation(libs.constraintlayout)
@@ -80,6 +82,13 @@ dependencies {
 
     // WorkManager (for spaced repetition)
     implementation(libs.workmanager)
+
+    // CameraX
+    implementation(libs.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.camera.extensions)
 
     // Testing
     testImplementation(libs.junit)

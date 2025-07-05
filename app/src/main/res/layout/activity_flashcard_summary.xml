@@ -16,26 +16,26 @@
         android:text="@string/summary_title"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/text_summary"
         app:layout_constraintEnd_toStartOf="@+id/icon_summary"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_summary"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_bias="0.25" /> <!-- Điều chỉnh vertical_bias để định vị nhóm lên phần trên của màn hình -->
+        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintVertical_chainStyle="packed" /> <!-- Điều chỉnh vertical_bias để định vị nhóm lên phần trên của màn hình -->
 
     <ImageView
         android:id="@+id/icon_summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:contentDescription="@string/desc_summary_icon"
         android:src="@drawable/ic_check_circle"
-        app:layout_constraintStart_toEndOf="@+id/text_summary_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_summary_title"
         app:layout_constraintBottom_toBottomOf="@+id/text_summary_title"
-        app:tint="?attr/colorPrimary"
-        android:layout_marginStart="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_summary_title"
+        app:layout_constraintTop_toTopOf="@+id/text_summary_title"
+        app:tint="?attr/colorPrimary" />
 
     <!-- Văn bản tóm tắt chi tiết: Được căn giữa và nằm dưới tiêu đề chính -->
     <TextView
@@ -46,10 +46,10 @@
         android:gravity="center"
         android:textAppearance="?attr/textAppearanceBody1"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/flow_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_summary_title"
-        app:layout_constraintBottom_toTopOf="@+id/flow_buttons"
         tools:text="Bạn đã biết 15 / 20 thẻ!" />
 
     <!-- Group này chỉ để điều khiển visibility, không ảnh hưởng đến layout -->
@@ -64,12 +64,12 @@
         android:id="@+id/flow_buttons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:constraint_referenced_ids="btn_study_unknown_again,btn_restart,btn_done"
         app:flow_verticalGap="8dp"
         app:flow_wrapMode="chain"
-        app:constraint_referenced_ids="btn_study_unknown_again,btn_restart,btn_done"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_study_unknown_again"
@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:text="@string/action_study_unknown_again"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_restart"

@@ -16,6 +16,7 @@ import dev.vtvinh24.ezquiz.data.entity.QuizCollectionEntity;
 public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAdapter.ViewHolder> {
   private final List<QuizCollectionEntity> collections;
   private final OnItemClickListener listener;
+
   public QuizCollectionAdapter(List<QuizCollectionEntity> collections, OnItemClickListener listener) {
     this.collections = collections;
     this.listener = listener;

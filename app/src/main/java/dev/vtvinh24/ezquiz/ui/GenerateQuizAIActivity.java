@@ -13,17 +13,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
 
 import java.util.List;
 
 import dev.vtvinh24.ezquiz.R;
-import dev.vtvinh24.ezquiz.data.model.AIService;
-import dev.vtvinh24.ezquiz.data.model.RetrofitClient;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizRequest;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
+import dev.vtvinh24.ezquiz.network.AIService;
+import dev.vtvinh24.ezquiz.network.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,8 +88,8 @@ public class GenerateQuizAIActivity extends AppCompatActivity {
             } else {
               Log.e(TAG, "Response successful but quizzes list is null or empty");
               Toast.makeText(GenerateQuizAIActivity.this,
-                "Could not generate quiz. Please try again.",
-                Toast.LENGTH_SHORT).show();
+                      "Could not generate quiz. Please try again.",
+                      Toast.LENGTH_SHORT).show();
             }
           } else {
             String errorBody = "";
@@ -102,18 +101,18 @@ public class GenerateQuizAIActivity extends AppCompatActivity {
               Log.e(TAG, "Error parsing error body", e);
             }
             Log.e(TAG, "API call failed. Code: " + response.code()
-              + " | Message: " + response.message()
-              + " | Error Body: " + errorBody);
+                    + " | Message: " + response.message()
+                    + " | Error Body: " + errorBody);
 
             Toast.makeText(GenerateQuizAIActivity.this,
-              "Server error: " + response.code(),
-              Toast.LENGTH_SHORT).show();
+                    "Server error: " + response.code(),
+                    Toast.LENGTH_SHORT).show();
           }
         } catch (Exception e) {
           Log.e(TAG, "Error processing response", e);
           Toast.makeText(GenerateQuizAIActivity.this,
-            "Error processing server response",
-            Toast.LENGTH_SHORT).show();
+                  "Error processing server response",
+                  Toast.LENGTH_SHORT).show();
         }
       }
 
@@ -122,8 +121,8 @@ public class GenerateQuizAIActivity extends AppCompatActivity {
         showLoading(false);
         Log.e(TAG, "Network call failed", t);
         Toast.makeText(GenerateQuizAIActivity.this,
-          "Network error: " + t.getMessage(),
-          Toast.LENGTH_SHORT).show();
+                "Network error: " + t.getMessage(),
+                Toast.LENGTH_SHORT).show();
       }
     });
   }
