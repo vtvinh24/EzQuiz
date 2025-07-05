@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.FlashcardResult;
 
@@ -16,11 +17,10 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flashcard_summary); // Bạn cần tạo layout này
+        setContentView(R.layout.activity_flashcard_summary);
 
         TextView textSummary = findViewById(R.id.text_summary);
         Button btnDone = findViewById(R.id.btn_done);
-        // Thêm các button khác nếu cần: "Học lại", "Học lại các thẻ chưa biết"
 
         List<FlashcardResult> results = (List<FlashcardResult>) getIntent().getSerializableExtra(EXTRA_RESULTS);
 

@@ -59,6 +59,13 @@ public class QuizRepository {
   }
 
   public List<QuizEntity> getFlashcardsOfSet(long setId) {
-    return db.quizDao().getFlashcardsByQuizSetId(setId);
+    android.util.Log.d("DEBUG_FLASHCARD", "Repository calling DAO with setId: " + setId);
+    List<QuizEntity> result = db.quizDao().getAllQuizzesBySetIdForFlashcard(setId);
+    if (result != null) {
+      android.util.Log.d("DEBUG_FLASHCARD", "DAO returned a list with size: " + result.size());
+    } else {
+      android.util.Log.d("DEBUG_FLASHCARD", "DAO returned a NULL list.");
+    }
+    return result;
   }
 }
