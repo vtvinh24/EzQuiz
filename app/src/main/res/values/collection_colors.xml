@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Collection card background colors -->
+    <color name="collection_card_background">@android:color/white</color>
+
+    <!-- Gradient colors for collection icons -->
+    <color name="gradient_blue_start">#667eea</color>
+    <color name="gradient_blue_end">#764ba2</color>
+
+    <color name="gradient_green_start">#11998e</color>
+    <color name="gradient_green_end">#38ef7d</color>
+
+    <color name="gradient_orange_start">#fc4a1a</color>
+    <color name="gradient_orange_end">#f7b733</color>
+
+    <color name="gradient_purple_start">#a8edea</color>
+    <color name="gradient_purple_end">#fed6e3</color>
+
+    <color name="gradient_pink_start">#ff9a9e</color>
+    <color name="gradient_pink_end">#fecfef</color>
+
+    <color name="gradient_teal_start">#667eea</color>
+    <color name="gradient_teal_end">#667eea</color>
+</resources>
+

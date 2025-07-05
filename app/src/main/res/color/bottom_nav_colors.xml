@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Special color for Generate AI item when selected -->
+    <item android:color="?attr/colorPrimary" android:state_checked="true" />
+    <!-- Normal color for other items -->
+    <item android:color="?attr/colorOnSurfaceVariant" />
+</selector>

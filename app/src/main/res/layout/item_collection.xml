@@ -1,21 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/collection_card_background"
+    style="@style/Widget.Material3.CardView.Elevated">
 
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/textDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp" />
-</LinearLayout>
+        <!-- Collection Icon with Dynamic Color -->
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp">
 
+            <!-- Background Circle -->
+            <ImageView
+                android:id="@+id/icon_background"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/circle_gradient_background"
+                android:scaleType="centerCrop" />
+
+            <!-- Collection Icon -->
+            <ImageView
+                android:id="@+id/icon_collection"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_folder"
+                app:tint="@android:color/white" />
+
+        </FrameLayout>
+
+        <!-- Collection Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Collection Name -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                tools:text="Math Collection" />
+
+            <!-- Collection Description -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                tools:text="Mathematics and algebra quizzes" />
+
+            <!-- Quiz Count Badge -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_quiz_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 quizzes"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/gradient_blue_start"
+                    app:chipStrokeWidth="0dp"
+                    app:chipMinHeight="28dp"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_last_updated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Updated today"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/gradient_green_start"
+                    app:chipStrokeWidth="0dp"
+                    app:chipMinHeight="28dp"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Action Icon -->
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_forward"
+            app:tint="#666666"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
