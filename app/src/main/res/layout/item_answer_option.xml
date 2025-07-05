@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Radio Button for Single Choice -->
+    <RadioButton
+        android:id="@+id/radio_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:buttonTint="?attr/colorPrimary" />
+
+    <!-- Checkbox for Multiple Choice -->
+    <CheckBox
+        android:id="@+id/checkbox_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:buttonTint="?attr/colorPrimary"
+        android:visibility="gone" />
+
+    <!-- Answer Text Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="8dp"
+        android:hint="Answer option">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_answer_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:maxLines="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Remove Answer Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_remove_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:padding="8dp"
+        app:icon="@drawable/ic_close"
+        app:iconSize="18dp"
+        style="@style/Widget.Material3.Button.TextButton"
+        app:iconTint="?attr/colorError" />
+
+</LinearLayout>
