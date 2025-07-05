@@ -13,8 +13,7 @@ import dev.vtvinh24.ezquiz.ui.FlashcardViewModel.QuizDisplayItem;
 
 public class FlashcardAdapter extends FragmentStateAdapter {
 
-    // THAY ĐỔI 1:
-    // Danh sách bây giờ chứa các đối tượng QuizDisplayItem, không phải Quiz.
+    // Danh sách chứa các đối tượng QuizDisplayItem
     private List<QuizDisplayItem> items = new ArrayList<>();
 
     public FlashcardAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -24,12 +23,11 @@ public class FlashcardAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        // THAY ĐỔI 2:
         // Lấy đối tượng QuizDisplayItem tại vị trí hiện tại.
         QuizDisplayItem currentItem = items.get(position);
 
         // Truyền đối tượng Quiz (nằm bên trong QuizDisplayItem) vào Fragment.
-        // Giao diện của FlashcardFragment không cần thay đổi, nó vẫn chỉ cần đối tượng Quiz.
+        // FlashcardFragment chỉ cần đối tượng Quiz model (không có ID).
         return FlashcardFragment.newInstance(currentItem.quiz);
     }
 
@@ -38,10 +36,9 @@ public class FlashcardAdapter extends FragmentStateAdapter {
         return items.size();
     }
 
-    // THAY ĐỔI 3:
-    // Phương thức submitList bây giờ nhận một danh sách các QuizDisplayItem.
+    // Phương thức submitList nhận một danh sách các QuizDisplayItem.
     public void submitList(List<QuizDisplayItem> newItems) {
         this.items = newItems;
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // Cân nhắc dùng DiffUtil cho hiệu suất
     }
 }

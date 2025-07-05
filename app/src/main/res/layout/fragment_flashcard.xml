@@ -1,67 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_front"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="12dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="24dp">
-
-            <TextView
-                android:id="@+id/text_flashcard_question"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textColor="?attr/colorOnSurface"
-                android:textAlignment="center"
-                tools:text="What is the capital of Japan?" />
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.card.MaterialCardView
+    <!-- Card mặt sau (chỉ hiện đáp án đúng) - Không thay đổi -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
+        android:layout_gravity="center"
+        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
-        app:cardCornerRadius="12dp">
+        android:alpha="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:orientation="vertical"
-            android:padding="24dp"
-            android:background="?attr/colorPrimaryContainer">
+            android:gravity="center"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đáp án đúng:"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:id="@+id/text_flashcard_answer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textColor="?attr/colorOnPrimaryContainer"
-                android:textAlignment="center"
+                android:gravity="center"
+                android:textSize="24sp"
+                tools:text="Đáp án 1\nĐáp án 3"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Card mặt trước (hiện câu hỏi và TẤT CẢ lựa chọn) - CẬP NHẬT Ở ĐÂY -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- TextView cho câu hỏi -->
+            <TextView
+                android:id="@+id/text_flashcard_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                tools:text="Tokyo" />
+                android:layout_marginBottom="24dp"
+                tools:text="Đây là câu hỏi?"/>
+
+            <!-- Vùng chứa các đáp án lựa chọn (sẽ được thêm bằng code) -->
+            <LinearLayout
+                android:id="@+id/front_answers_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>
