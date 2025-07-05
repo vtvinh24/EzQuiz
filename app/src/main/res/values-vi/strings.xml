@@ -35,8 +35,8 @@
     <string name="action_study_unknown_again">Học lại các thẻ chưa biết</string>
     <string name="action_restart_session">Học lại từ đầu</string>
     <string name="action_done">Hoàn thành</string>
-    <string name="action_dont_know">không biết</string>
-    <string name="action_know">biết</string>
+    <string name="action_dont_know">Không biết</string>
+    <string name="action_know">Biết</string>
     <string name="review_save_quiz"><![CDATA[Xem lại & Lưu Quiz]]></string>
     <string name="save_to_collection">Lưu vào bộ sưu tập:</string>
     <string name="new_set_name">Tên bộ mới:</string>
