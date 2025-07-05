@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Locale;
 
 import dev.vtvinh24.ezquiz.R;
+import dev.vtvinh24.ezquiz.data.db.AppDatabase;
+import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizCollectionEntity;
 
 public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAdapter.ViewHolder> {
@@ -72,10 +74,11 @@ public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAd
     // Set dynamic gradient background for icon
     setGradientBackground(holder.iconBackground, position, itemContext);
 
-    // Set quiz count (placeholder for now - would need to query actual count)
-    int quizCount = 0; // TODO: Get actual quiz count from database
-    String quizCountText = quizCount + (quizCount == 1 ? " quiz" : " quizzes");
-    holder.chipQuizCount.setText(quizCountText);
+    // Get actual quiz set count from database
+    AppDatabase db = AppDatabaseProvider.getDatabase(itemContext);
+    int setCount = db.quizSetDao().countByCollectionId(collection.id);
+    String setCountText = setCount + (setCount == 1 ? " set" : " sets");
+    holder.chipQuizCount.setText(setCountText);
 
     // Set last updated info
     String lastUpdated = formatLastUpdated(collection.updatedAt);
