@@ -53,10 +53,10 @@ public class PostImportActivity extends AppCompatActivity {
       EditText editPasteId = dialogView.findViewById(R.id.edit_paste_id);
       Button btnImportPaste = dialogView.findViewById(R.id.btn_import_paste);
       AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle(R.string.title_import_paste)
-        .setView(dialogView)
-        .setNegativeButton(android.R.string.cancel, null)
-        .create();
+              .setTitle(R.string.title_import_paste)
+              .setView(dialogView)
+              .setNegativeButton(android.R.string.cancel, null)
+              .create();
       btnImportPaste.setOnClickListener(view -> {
         String pasteId = editPasteId.getText().toString().trim();
         if (pasteId.isEmpty()) {

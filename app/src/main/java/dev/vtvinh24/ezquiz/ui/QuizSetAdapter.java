@@ -3,7 +3,7 @@ package dev.vtvinh24.ezquiz.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button; // Import Button
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dev.vtvinh24.ezquiz.R;
-import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity; // Giả định Adapter của bạn dùng QuizSetEntity
+import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 
 public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHolder> {
   private final List<QuizSetEntity> quizSets; // Đổi từ collections thành quizSets cho rõ ràng

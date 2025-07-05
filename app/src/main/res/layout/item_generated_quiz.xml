@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Outlined"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    style="@style/Widget.Material3.CardView.Outlined">
+    android:layout_marginBottom="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,21 +16,21 @@
             android:id="@+id/text_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Correct Answer"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            android:hint="Correct Answer">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_correct_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:minLines="1"/>
+                android:minLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -39,54 +38,54 @@
             android:id="@+id/container_wrong_answers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Wrong Answer 1"
                 android:layout_marginTop="8dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:hint="Wrong Answer 1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_wrong_answer_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:minLines="1"/>
+                    android:minLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Wrong Answer 2"
                 android:layout_marginTop="8dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:hint="Wrong Answer 2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_wrong_answer_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:minLines="1"/>
+                    android:minLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Wrong Answer 3"
                 android:layout_marginTop="8dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:hint="Wrong Answer 3">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_wrong_answer_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:minLines="1"/>
+                    android:minLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,13 +93,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_edit_quiz"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="8dp"
             android:text="Edit"
-            app:icon="@drawable/ic_edit"
-            style="@style/Widget.Material3.Button.TextButton"/>
+            app:icon="@drawable/ic_edit" />
 
     </LinearLayout>
 

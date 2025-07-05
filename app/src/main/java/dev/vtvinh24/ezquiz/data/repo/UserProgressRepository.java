@@ -43,7 +43,7 @@ public class UserProgressRepository {
   public void deleteQuizSetProgress(long setId) {
     setDao.deleteProgress(setId);
   }
-  
+
   public UserQuizCollectionProgress getQuizCollectionProgress(long collectionId) {
     return collectionDao.getProgress(collectionId);
   }

@@ -1,20 +1,34 @@
 package dev.vtvinh24.ezquiz.util;
 
+import android.graphics.ImageFormat;
 import android.media.Image;
 
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.common.InputImage;
+
+import java.util.List;
 
 public class QRParser {
-  // TODO: Implement QR code parsing logic
   public Gson getGsonFromQR(String qrCode) {
-    // This method should parse the QR code string and return a Gson object
-    // For now, we will just return a new Gson instance
     return new Gson();
   }
 
-  public String getDataFromQR(Image image) {
-    // TODO: This method should extract data from the QR code image
-    // For now, we will just return an empty string
-    return "";
+  public Task<String> getDataFromQR(Image image) {
+    if (image == null || image.getFormat() != ImageFormat.YUV_420_888) {
+      throw new IllegalArgumentException("Image must be in YUV_420_888 format");
+    }
+    InputImage inputImage = InputImage.fromMediaImage(image, 0);
+    BarcodeScanner scanner = BarcodeScanning.getClient();
+    return scanner.process(inputImage).continueWith(task -> {
+      List<Barcode> barcodes = task.getResult();
+      if (barcodes != null && !barcodes.isEmpty()) {
+        return barcodes.get(0).getRawValue();
+      }
+      return "";
+    });
   }
 }
