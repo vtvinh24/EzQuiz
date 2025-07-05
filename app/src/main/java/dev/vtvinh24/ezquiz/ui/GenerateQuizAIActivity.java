@@ -242,11 +242,50 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         textImageName.setText("");
     }
 
+    private String getMimeTypeFromUri(Uri uri) {
+        String mimeType = getContentResolver().getType(uri);
+        if (mimeType == null || !mimeType.startsWith("image/")) {
+            String extension = "";
+            String path = uri.getPath();
+            if (path != null) {
+                int i = path.lastIndexOf('.');
+                if (i > 0) {
+                    extension = path.substring(i + 1).toLowerCase();
+                }
+            }
+
+            switch (extension) {
+                case "jpg":
+                case "jpeg":
+                    return "image/jpeg";
+                case "png":
+                    return "image/png";
+                case "webp":
+                    return "image/webp";
+                case "gif":
+                    return "image/gif";
+                default:
+                    return "image/jpeg"; // Default fallback
+            }
+        }
+        return mimeType;
+    }
+
     private File createFileFromUri(Uri uri) throws IOException {
         InputStream inputStream = getContentResolver().openInputStream(uri);
         if (inputStream == null) return null;
 
-        String fileName = "quiz_image_" + System.currentTimeMillis() + ".jpg";
+        String mimeType = getMimeTypeFromUri(uri);
+        String extension = ".jpg";
+        if (mimeType.equals("image/png")) {
+            extension = ".png";
+        } else if (mimeType.equals("image/webp")) {
+            extension = ".webp";
+        } else if (mimeType.equals("image/gif")) {
+            extension = ".gif";
+        }
+
+        String fileName = "quiz_image_" + System.currentTimeMillis() + extension;
         File file = new File(getCacheDir(), fileName);
 
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
@@ -276,9 +315,19 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
 
         try {
             if (selectedImageFile != null) {
-                // Generate quiz with both text and image
+                // Determine proper MIME type based on file extension
+                String mimeType = "image/jpeg"; // Default
+                String fileName = selectedImageFile.getName().toLowerCase();
+                if (fileName.endsWith(".png")) {
+                    mimeType = "image/png";
+                } else if (fileName.endsWith(".webp")) {
+                    mimeType = "image/webp";
+                } else if (fileName.endsWith(".gif")) {
+                    mimeType = "image/gif";
+                }
+
                 RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), prompt);
-                RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), selectedImageFile);
+                RequestBody imageBody = RequestBody.create(MediaType.parse(mimeType), selectedImageFile);
                 MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", selectedImageFile.getName(), imageBody);
 
                 aiService.generateQuiz(promptBody, imagePart).enqueue(createQuizCallback());
