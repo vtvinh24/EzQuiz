@@ -30,34 +30,50 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="26">
 
+        <!-- Main Activities -->
         <activity
-            android:name=".ui.SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.EzQuiz.NoActionBar">
+            android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="false" />
-        <activity android:name=".ui.QuizSetListActivity" />
-        <activity android:name=".ui.QuizListActivity" />
-        <activity android:name=".ui.GenerateQuizAIActivity" />
-        <activity android:name=".ui.ReviewGeneratedQuizActivity" />
-        <activity android:name=".ui.PostImportActivity" />
-        <activity android:name=".ui.PreImportActivity" />
 
-        <activity android:name=".ui.PracticeActivity" android:exported="false" />
-        <activity android:name=".ui.ScoreActivity" android:exported="false" />
+        <!-- AI Quiz Generation -->
+        <activity
+            android:name=".ui.GenerateQuizAIActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ReviewGeneratedQuizActivity"
+            android:exported="false" />
+
+        <!-- Quiz and Collection Management -->
+        <activity
+            android:name=".ui.QuizSetListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.QuizListActivity"
+            android:exported="false" />
+
+        <!-- Practice and Testing -->
+        <activity
+            android:name=".ui.PracticeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ScoreActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.FlashcardActivity"
             android:exported="false" />
         <activity
             android:name=".ui.FlashcardSummaryActivity"
             android:exported="false" />
-        <activity android:name=".ui.QrScannerActivity" />
+
+        <!-- Utility Activities -->
+        <activity
+            android:name=".ui.QrScannerActivity"
+            android:exported="false" />
 
         <receiver
             android:name="dev.vtvinh24.ezquiz.util.ReminderReceiver"

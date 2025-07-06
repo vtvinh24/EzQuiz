@@ -4,16 +4,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -30,21 +39,26 @@ import dev.vtvinh24.ezquiz.data.entity.QuizCollectionEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
+import dev.vtvinh24.ezquiz.ui.adapter.EditableQuizAdapter;
 
-public class ReviewGeneratedQuizActivity extends AppCompatActivity {
+public class ReviewGeneratedQuizActivity extends AppCompatActivity implements EditableQuizAdapter.OnQuizChangeListener {
 
   public static final String EXTRA_GENERATED_QUIZZES = "EXTRA_GENERATED_QUIZZES";
   private static final String TAG = "ReviewQuizActivity";
 
   private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
   private RecyclerView recyclerView;
-  private GeneratedQuizAdapter adapter;
+  private EditableQuizAdapter adapter;
   private Spinner spinnerCollection;
   private EditText editSetName;
+  private EditText editDescription;
   private ExtendedFloatingActionButton btnSave;
+  private ExtendedFloatingActionButton fabAddQuestion;
+  private MaterialTextView textQuestionCount;
   private List<GeneratedQuizItem> generatedQuizzes;
   private List<QuizCollectionEntity> collections;
   private AppDatabase db;
+  private ItemTouchHelper itemTouchHelper;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +72,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
       loadQuizData();
       initializeViews();
       setupRecyclerView();
+      setupItemTouchHelper();
       loadCollections();
     } catch (Exception e) {
       Log.e(TAG, "Error in onCreate", e);
@@ -67,12 +82,26 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
   }
 
   private void setupToolbar() {
-    MaterialToolbar toolbar = findViewById(R.id.topAppBar);
-    setSupportActionBar(toolbar);
-    if (getSupportActionBar() != null) {
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    // Setup custom navigation với style mới
+    ImageView btnBack = findViewById(R.id.btn_back);
+    MaterialButton btnPreview = findViewById(R.id.btn_preview);
+
+    if (btnBack != null) {
+      btnBack.setOnClickListener(v -> finish());
     }
-    toolbar.setNavigationOnClickListener(v -> finish());
+
+    if (btnPreview != null) {
+      btnPreview.setOnClickListener(v -> showPreviewDialog());
+    }
+  }
+
+  private void showPreviewDialog() {
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("Quiz Preview")
+        .setMessage("Preview functionality will show a quick overview of your quiz questions and answers.")
+        .setPositiveButton("Coming Soon", null)
+        .setNegativeButton("Close", null)
+        .show();
   }
 
   private void initializeDatabase() {
@@ -121,13 +150,22 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
       recyclerView = findViewById(R.id.recycler_view_generated_quiz);
       spinnerCollection = findViewById(R.id.spinner_collection);
       editSetName = findViewById(R.id.edit_set_name);
+      editDescription = findViewById(R.id.edit_description);
       btnSave = findViewById(R.id.btn_save_quiz_set);
+      fabAddQuestion = findViewById(R.id.fab_add_question);
+      textQuestionCount = findViewById(R.id.text_question_count);
 
       btnSave.setOnClickListener(v -> saveQuizSet());
+      fabAddQuestion.setOnClickListener(v -> showAddQuestionDialog());
 
       // Set default quiz set name
       String defaultName = "AI Quiz Set " + System.currentTimeMillis();
       editSetName.setText(defaultName);
+
+      // Set default description placeholder
+      setupDefaultDescription();
+
+      updateQuestionCount();
 
     } catch (Exception e) {
       Log.e(TAG, "Error initializing views: " + e.getMessage(), e);
@@ -136,17 +174,116 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
     }
   }
 
+  private void setupDefaultDescription() {
+    // Tạo description mặc định với thời gian hiện tại
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy 'lúc' HH:mm", java.util.Locale.getDefault());
+    String currentDateTime = sdf.format(new java.util.Date());
+    String defaultDescription = "Được tạo vào " + currentDateTime;
+
+    // Thiết lập placeholder hint thay vì text mặc định
+    editDescription.setHint("Mô tả bộ quiz (mặc định: " + defaultDescription + ")");
+  }
+
   private void setupRecyclerView() {
     Log.d(TAG, "Setting up RecyclerView with enhanced adapter");
-    adapter = new GeneratedQuizAdapter(this, generatedQuizzes);
+    adapter = new EditableQuizAdapter(this, generatedQuizzes);
+    adapter.setOnQuizChangeListener(this);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     recyclerView.setAdapter(adapter);
 
-    // Add some spacing between items
-    recyclerView.addItemDecoration(new androidx.recyclerview.widget.DividerItemDecoration(
-        this, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL));
-
     Log.d(TAG, "RecyclerView setup complete with " + generatedQuizzes.size() + " items");
+  }
+
+  private void setupItemTouchHelper() {
+    ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+      @Override
+      public boolean onMove(@NonNull RecyclerView recyclerView,
+                           @NonNull RecyclerView.ViewHolder viewHolder,
+                           @NonNull RecyclerView.ViewHolder target) {
+        int fromPosition = viewHolder.getAdapterPosition();
+        int toPosition = target.getAdapterPosition();
+        adapter.moveQuiz(fromPosition, toPosition);
+        return true;
+      }
+
+      @Override
+      public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        int position = viewHolder.getAdapterPosition();
+        showDeleteQuestionConfirmation(position);
+      }
+
+      @Override
+      public boolean isLongPressDragEnabled() {
+        return true;
+      }
+
+      @Override
+      public boolean isItemViewSwipeEnabled() {
+        return true;
+      }
+    };
+
+    itemTouchHelper = new ItemTouchHelper(callback);
+    itemTouchHelper.attachToRecyclerView(recyclerView);
+    adapter.setItemTouchHelper(itemTouchHelper);
+  }
+
+  private void showAddQuestionDialog() {
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("Add New Question")
+        .setMessage("Choose where to add the new question:")
+        .setPositiveButton("Add at End", (dialog, which) -> {
+          adapter.addNewQuiz(adapter.getItemCount());
+          updateQuestionCount();
+        })
+        .setNeutralButton("Add at Beginning", (dialog, which) -> {
+          adapter.addNewQuiz(0);
+          updateQuestionCount();
+        })
+        .setNegativeButton("Cancel", null)
+        .show();
+  }
+
+  private void showDeleteQuestionConfirmation(int position) {
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("Delete Question")
+        .setMessage("Are you sure you want to delete this question?")
+        .setPositiveButton("Delete", (dialog, which) -> {
+          adapter.removeQuiz(position);
+          updateQuestionCount();
+        })
+        .setNegativeButton("Cancel", (dialog, which) -> {
+          adapter.notifyItemChanged(position);
+        })
+        .show();
+  }
+
+  private void updateQuestionCount() {
+    int count = adapter != null ? adapter.getItemCount() : generatedQuizzes.size();
+    if (textQuestionCount != null) {
+      textQuestionCount.setText(count + " questions • Tap to edit, swipe to delete");
+    }
+  }
+
+  @Override
+  public void onQuizChanged() {
+    updateQuestionCount();
+  }
+
+  @Override
+  public void onQuizDeleted(int position) {
+    updateQuestionCount();
+    Toast.makeText(this, "Question deleted", Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void onQuizAdded(int position) {
+    updateQuestionCount();
+    Toast.makeText(this, "Question added", Toast.LENGTH_SHORT).show();
+    recyclerView.scrollToPosition(position);
   }
 
   private void loadCollections() {
@@ -207,16 +344,14 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
       return;
     }
 
-    // Get updated quiz data from adapter
     List<GeneratedQuizItem> updatedQuizzes = adapter.getUpdatedQuizItems();
     if (updatedQuizzes == null || updatedQuizzes.isEmpty()) {
-      Toast.makeText(this, "No quiz questions to save", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, "No valid quiz questions to save", Toast.LENGTH_SHORT).show();
       return;
     }
 
     QuizCollectionEntity selectedCollection = collections.get(selectedPosition);
 
-    // Show loading state
     btnSave.setEnabled(false);
     btnSave.setText("Saving...");
 
@@ -243,15 +378,24 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
                                    List<GeneratedQuizItem> quizzes) {
     Log.d(TAG, "Saving quiz set: " + setName + " to collection: " + collection.name);
 
+    // Xử lý description - nếu trống thì dùng mặc định
+    String description = editDescription.getText().toString().trim();
+    if (description.isEmpty()) {
+      java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy 'lúc' HH:mm", java.util.Locale.getDefault());
+      String currentDateTime = sdf.format(new java.util.Date());
+      description = "Được tạo vào " + currentDateTime;
+    }
+
     // Create quiz set
     QuizSetEntity quizSet = new QuizSetEntity();
     quizSet.name = setName;
+    quizSet.description = description;
     quizSet.collectionId = collection.id;
     quizSet.createdAt = System.currentTimeMillis();
     quizSet.updatedAt = System.currentTimeMillis();
 
     long quizSetId = db.quizSetDao().insert(quizSet);
-    Log.d(TAG, "Quiz set saved with ID: " + quizSetId);
+    Log.d(TAG, "Quiz set saved with ID: " + quizSetId + " and description: " + description);
 
     // Save individual quizzes
     for (int i = 0; i < quizzes.size(); i++) {

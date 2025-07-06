@@ -28,7 +28,7 @@ import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 
 // Thêm implements QuizSetAdapter.OnPlayFlashcardClickListener
 public class QuizSetListActivity extends AppCompatActivity
-        implements QuizSetAdapter.OnItemClickListener, QuizSetAdapter.OnPlayFlashcardClickListener {
+        implements QuizSetAdapter.OnItemClickListener, QuizSetAdapter.OnPlayFlashcardClickListener, QuizSetAdapter.OnPracticeClickListener {
 
   public static final String EXTRA_COLLECTION_ID = "collectionId"; // Hằng số cho ID bộ sưu tập
   private final List<QuizSetEntity> quizSets = new ArrayList<>(); // Đổi từ collections sang quizSets
@@ -61,8 +61,8 @@ public class QuizSetListActivity extends AppCompatActivity
     recyclerView = findViewById(R.id.recyclerView);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    // Cập nhật để truyền context vào adapter
-    adapter = new QuizSetAdapter(this, quizSets, this, this);
+    // Updated constructor call with all three listeners
+    adapter = new QuizSetAdapter(this, quizSets, this, this, this);
     recyclerView.setAdapter(adapter);
 
     FloatingActionButton fabAdd = findViewById(R.id.fab_add_set); // Đảm bảo đúng ID FAB
@@ -134,6 +134,13 @@ public class QuizSetListActivity extends AppCompatActivity
     // NEW: Xử lý khi nhấn nút "Play Flashcards"
     Intent intent = new Intent(this, FlashcardActivity.class);
     intent.putExtra(FlashcardActivity.EXTRA_SET_ID, quizSetId); // Sử dụng EXTRA_SET_ID từ FlashcardActivity
+    startActivity(intent);
+  }
+
+  @Override
+  public void onPracticeClick(long quizSetId) {
+    Intent intent = new Intent(this, PracticeActivity.class);
+    intent.putExtra("quiz_set_id", quizSetId);
     startActivity(intent);
   }
 

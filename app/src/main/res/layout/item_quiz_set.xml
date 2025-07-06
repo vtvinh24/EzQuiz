@@ -120,22 +120,29 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_play_flashcard"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Play"
-                android:textSize="12sp"
-                android:minWidth="60dp"
+                android:layout_height="32dp"
+                android:text="Flashcards"
+                android:textSize="10sp"
+                android:minWidth="80dp"
+                android:layout_marginBottom="4dp"
                 app:icon="@android:drawable/ic_media_play"
-                app:iconSize="16dp"
-                app:cornerRadius="18dp"
+                app:iconSize="14dp"
+                app:cornerRadius="16dp"
                 style="@style/Widget.Material3.Button.TonalButton" />
 
-            <!-- Arrow Icon -->
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/ic_arrow_forward"
-                app:tint="#666666" />
+            <!-- Practice Quiz Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_practice_quiz"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="Practice"
+                android:textSize="10sp"
+                android:minWidth="80dp"
+                app:icon="@drawable/ic_quiz"
+                app:iconSize="14dp"
+                app:cornerRadius="16dp"
+                app:backgroundTint="@color/gradient_green_start"
+                style="@style/Widget.Material3.Button" />
 
         </LinearLayout>
 
