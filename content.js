@@ -4,9 +4,24 @@ async function getExtractorForSite(hostname) {
     const src = chrome.runtime.getURL("extractors/quizlet.js");
     const mod = await import(src);
     return new mod.default();
+  } else if (hostname.endsWith("quizizz.com") || hostname.endsWith("wayground.com")) {
+    const src = chrome.runtime.getURL("extractors/quizizz.js");
+    const mod = await import(src);
+    return new mod.default();
   }
   // Add more site extractors here as needed
   return null;
+}
+
+// Import common utilities
+async function importUtils() {
+  const src = chrome.runtime.getURL("extractors/utils.js");
+  const mod = await import(src);
+  return {
+    uploadData: mod.uploadData,
+    createQRData: mod.createQRData,
+    generateQRCode: mod.generateQRCode,
+  };
 }
 
 // Utility: Upload text to a list of public paste services via background script
@@ -203,51 +218,63 @@ async function insertSendToAppDiv() {
     qrImg.style.display = "none";
     scanLabel.style.display = "none";
     errorDiv.textContent = "";
+
     let errorMsg = "";
     const hostname = window.location.hostname.replace(/^www\./, "");
     const extractor = await getExtractorForSite(hostname);
-    let flashcards = [],
-      qrData = window.location.href;
+    const utils = await importUtils();
+
+    let dataToUpload = null;
+    let dataType = null;
+
     if (extractor) {
-      if (extractor.getFlashcards && extractor.getFlashcards().length > 0) {
-        flashcards = extractor.getFlashcards();
-        try {
-          const jsonStr = JSON.stringify(flashcards);
-          const retrievalUrl = await getRetrievalUrl(jsonStr);
-          if (retrievalUrl) {
-            qrData = JSON.stringify({ type: "request", url: retrievalUrl });
-            if (window._qrUploadWarning) errorMsg = window._qrUploadWarning;
-          } else if (jsonStr.length < 2000) {
-            qrData = jsonStr;
-            errorMsg = "Failed to upload to all text hosting services. Using direct JSON.";
-          } else {
-            qrData = "[DATA TOO LARGE FOR QR]";
-            errorMsg = "Failed to upload to all text hosting services and data is too large for QR.";
-          }
-        } catch (e) {
-          errorMsg = "Unexpected error: " + (e && e.message ? e.message : e);
-        }
+      const flashcards = extractor.getFlashcards();
+      const quizzes = await extractor.getQuizzes();
+
+      if (flashcards.length > 0) {
+        dataToUpload = JSON.stringify(flashcards);
+        dataType = "flashcards";
+      } else if (quizzes.length > 0) {
+        dataToUpload = JSON.stringify(quizzes);
+        dataType = "quizzes";
       }
     }
+
     spinner.style.display = "none";
-    if (qrData && qrData !== "[DATA TOO LARGE FOR QR]") {
-      qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(qrData);
-      qrImg.alt = "QR of flashcard data or current URL";
-      qrImg.style.display = "block";
-      setTimeout(() => {
-        qrImg.style.opacity = "1";
-      }, 50);
-      scanLabel.style.display = "flex";
+
+    if (dataToUpload && dataType) {
+      try {
+        const uploadUrl = await utils.uploadData(dataToUpload);
+        if (uploadUrl) {
+          const qrData = utils.createQRData(dataType, uploadUrl);
+          const qrCodeUrl = utils.generateQRCode(qrData);
+
+          qrImg.src = qrCodeUrl;
+          qrImg.alt = `QR code for ${dataType} data`;
+          qrImg.style.display = "block";
+          setTimeout(() => {
+            qrImg.style.opacity = "1";
+          }, 50);
+          scanLabel.style.display = "flex";
+        } else {
+          errorMsg = "Failed to upload data to paste services.";
+          if (window._qrUploadWarning) errorMsg += " " + window._qrUploadWarning;
+        }
+      } catch (e) {
+        errorMsg = "Error processing data: " + e.message;
+      }
     } else {
-      qrImg.style.display = "none";
-      scanLabel.style.display = "none";
+      errorMsg = "No quiz or flashcard data found on this page.";
     }
-    errorDiv.textContent = errorMsg;
+
+    if (errorMsg) {
+      errorDiv.textContent = errorMsg;
+    }
   };
 }
 
 // Only show the QR code on supported quiz sites
-const DEFAULT_SITES = ["quizlet.com", "kahoot.it", "socrative.com", "forms.google.com", "quizziz.com", "blooket.com", "gimkit.com"];
+const DEFAULT_SITES = ["quizlet.com", "kahoot.it", "socrative.com", "forms.google.com", "quizziz.com", "wayground.com", "blooket.com", "gimkit.com"];
 
 function getSupportedSites(callback) {
   if (chrome && chrome.storage && chrome.storage.local) {
@@ -276,7 +303,26 @@ getSupportedSites((sites) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "extractQuiz") {
-    const data = extractQuizData();
-    sendResponse({ quiz: data });
+    (async () => {
+      try {
+        const hostname = window.location.hostname.replace(/^www\./, "");
+        const extractor = await getExtractorForSite(hostname);
+
+        if (extractor) {
+          const quizzes = await extractor.getQuizzes();
+          const flashcards = extractor.getFlashcards();
+
+          sendResponse({
+            quiz: quizzes.length > 0 ? quizzes : flashcards,
+            success: true,
+          });
+        } else {
+          sendResponse({ quiz: [], success: false, error: "No extractor found for this site" });
+        }
+      } catch (e) {
+        sendResponse({ quiz: [], success: false, error: e.message });
+      }
+    })();
+    return true; // Keep the message port open for async response
   }
 });
