@@ -5,13 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="?attr/colorSurface">
+    android:background="@color/white">
 
-    <!-- Tên Set -->
+    <!-- Tên Quiz Set -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_set_name"
+        android:hint="Tên bộ câu hỏi"
+        app:boxBackgroundMode="outline"
         app:boxStrokeColor="?attr/colorPrimary">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -25,8 +26,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_set_description"
         android:layout_marginTop="16dp"
+        android:hint="Mô tả ngắn"
+        app:boxBackgroundMode="outline"
         app:boxStrokeColor="?attr/colorPrimary">
 
         <com.google.android.material.textfield.TextInputEditText

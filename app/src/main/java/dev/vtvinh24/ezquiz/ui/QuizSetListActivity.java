@@ -1,5 +1,6 @@
 package dev.vtvinh24.ezquiz.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -40,7 +41,6 @@ public class QuizSetListActivity extends AppCompatActivity {
         db = AppDatabaseProvider.getDatabase(this);
         collectionId = getIntent().getLongExtra("collectionId", -1);
 
-        // ✅ Hiển thị tên Collection thay vì "Quiz Sets"
         TextView titleSet = findViewById(R.id.title_set);
         String collectionName = getIntent().getStringExtra("collection_name");
         if (collectionName != null && !collectionName.isEmpty()) {
@@ -119,22 +119,44 @@ public class QuizSetListActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.VISIBLE);
         }
 
-        recyclerView.setAdapter(new QuizSetAdapter(sets, this::onItemLongClick));
+        recyclerView.setAdapter(new QuizSetAdapter(sets, new QuizSetAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(QuizSetEntity set) {
+                Intent intent = new Intent(QuizSetListActivity.this, QuizListActivity.class);
+                intent.putExtra("setId", set.id);
+                intent.putExtra("set_name", set.name);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(QuizSetEntity set) {
+                showOptionDialog(set);
+            }
+        }));
     }
 
-    public void onItemLongClick(QuizSetEntity set) {
-        String[] options = {"Edit", "Delete"};
-        new AlertDialog.Builder(this)
-                .setTitle(set.name)
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        showEditSetDialog(set);
-                    } else if (which == 1) {
-                        db.quizSetDao().delete(set);
-                        refreshSets();
-                        Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .show();
+    private void showOptionDialog(QuizSetEntity set) {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_options, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        dialogView.findViewById(R.id.option_edit).setOnClickListener(v -> {
+            dialog.dismiss();
+            showEditSetDialog(set);
+        });
+
+        dialogView.findViewById(R.id.option_delete).setOnClickListener(v -> {
+            dialog.dismiss();
+            db.quizSetDao().delete(set);
+            refreshSets();
+            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+        });
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        dialog.show();
     }
 }

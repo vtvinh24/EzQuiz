@@ -1,0 +1,10 @@
+<resources>
+    <array name="random_material_colors">
+        <item>@color/purple_501</item>
+        <item>@color/amber_500</item>
+        <item>@color/green_500</item>
+        <item>@color/blue_500</item>
+        <item>@color/orange_500</item>
+        <item>@color/red_500</item>
+    </array>
+</resources>

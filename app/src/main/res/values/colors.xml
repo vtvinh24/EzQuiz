@@ -13,5 +13,10 @@
     <color name="bg_quiz_4">#FFCCBC</color>
     <color name="bg_quiz_5">#B3E5FC</color>
     <color name="bg_quiz_6">#F8BBD0</color>
-
+    <color name="purple_501">#9C27B0</color>
+    <color name="amber_500">#FFC107</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="orange_500">#FF9800</color>
+    <color name="red_500">#F44336</color>
 </resources>
