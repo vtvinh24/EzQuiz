@@ -32,6 +32,8 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
     setContentView(R.layout.activity_flashcard_summary);
 
     TextView textSummary = findViewById(R.id.text_summary);
+    TextView textKnownCount = findViewById(R.id.text_known_count);
+    TextView textUnknownCount = findViewById(R.id.text_unknown_count);
     Button btnDone = findViewById(R.id.btn_done);
     Button btnRestart = findViewById(R.id.btn_restart);
     Button btnStudyUnknown = findViewById(R.id.btn_study_unknown_again);
@@ -43,9 +45,14 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
 
     if (results != null && !results.isEmpty()) {
       long knownCount = results.stream().filter(FlashcardResult::wasKnown).count();
+      long unknownCount = results.stream().filter(r -> !r.wasKnown()).count();
       int totalCount = results.size();
       String summary = String.format("Bạn đã biết %d / %d thẻ!", knownCount, totalCount);
       textSummary.setText(summary);
+
+      // Đếm số thẻ đã biết và chưa biết
+      textKnownCount.setText(String.valueOf(knownCount));
+      textUnknownCount.setText(String.valueOf(unknownCount));
 
       // Lọc ra các ID chưa biết
       unknownCardIds.addAll(
@@ -65,6 +72,8 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
 
     } else {
       textSummary.setText("Không có kết quả để hiển thị.");
+      textKnownCount.setText("0");
+      textUnknownCount.setText("0");
       btnStudyUnknown.setVisibility(View.GONE);
     }
 

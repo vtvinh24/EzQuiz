@@ -3,93 +3,186 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="@android:color/background_light"
     tools:context=".ui.FlashcardActivity">
 
+    <!-- Enhanced Progress bar -->
+    <LinearLayout
+        android:id="@+id/progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/progress_background"
+        android:padding="4dp">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:progressDrawable="@drawable/progress_drawable"
+            android:background="@android:color/transparent"
+            tools:progress="30" />
+    </LinearLayout>
+
+    <!-- Card counter in top right corner -->
     <TextView
-        android:id="@+id/text_flashcard_progress"
+        android:id="@+id/tv_card_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:textSize="16sp"
-        tools:text="1 / 20" />
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/counter_background"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:elevation="8dp"
+        tools:text="1 / 100" />
 
+    <!-- Hidden jump button -->
+    <Button
+        android:id="@+id/btn_jump_to"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <!-- Card stack container -->
+    <FrameLayout
+        android:id="@+id/card_stack_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/progress_container"
+        android:layout_above="@+id/navigation_container"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- Background cards for depth effect -->
+        <View
+            android:id="@+id/background_card_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/card_background"
+            android:alpha="0.3"
+            android:elevation="1dp" />
+
+        <View
+            android:id="@+id/background_card_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginVertical="4dp"
+            android:background="@drawable/card_background"
+            android:alpha="0.6"
+            android:elevation="2dp" />
+
+        <!-- Main swipeable card -->
+        <dev.vtvinh24.ezquiz.ui.SwipeableCardView
+            android:id="@+id/swipeable_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="4dp">
+
+            <include layout="@layout/item_flashcard_content" />
+
+        </dev.vtvinh24.ezquiz.ui.SwipeableCardView>
+
+    </FrameLayout>
+
+    <!-- Navigation arrows and action labels -->
     <LinearLayout
+        android:id="@+id/navigation_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:layout_above="@+id/action_container"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/text_flashcard_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="120dp"
-            android:text="Question"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btn_previous_card"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/navigation_button_background"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@android:color/white"
+            android:elevation="4dp"
+            android:contentDescription="Previous card" />
 
-        <Button
-            android:id="@+id/btn_flip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
-            android:text="Show Answer" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
-        <LinearLayout
-            android:id="@+id/container_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
+        <ImageButton
+            android:id="@+id/btn_next_card"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/navigation_button_background"
+            android:src="@drawable/ic_arrow_forward"
+            android:tint="@android:color/white"
+            android:elevation="4dp"
+            android:contentDescription="Next card" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="32dp"
-                android:background="?android:attr/listDivider" />
-
-            <TextView
-                android:id="@+id/text_flashcard_answer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:minHeight="100dp"
-                android:text="Answer"
-                android:textSize="20sp" />
-
-        </LinearLayout>
     </LinearLayout>
 
+    <!-- Action labels (Don't Know / Know) - Fixed layout -->
     <LinearLayout
+        android:id="@+id/action_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/action_container_background"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:elevation="2dp">
 
-        <Button
+        <TextView
             android:id="@+id/btn_dont_know"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="I don't know"
-            android:textColor="@android:color/holo_red_dark" />
+            android:layout_marginEnd="8dp"
+            android:text="Don't Know"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:background="@drawable/button_dont_know_enhanced"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_know"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="I know"
-            android:textColor="@android:color/holo_green_dark" />
+            android:layout_marginStart="8dp"
+            android:text="Know"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:background="@drawable/button_know_enhanced"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground" />
 
     </LinearLayout>
 

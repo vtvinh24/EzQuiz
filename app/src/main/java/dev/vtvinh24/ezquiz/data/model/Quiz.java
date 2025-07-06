@@ -33,6 +33,19 @@ public class Quiz implements Serializable {
     return answers;
   }
 
+  public String getAnswer() {
+    if (answers != null && !answers.isEmpty()) {
+      if (correctAnswerIndices != null && !correctAnswerIndices.isEmpty()) {
+        int correctIndex = correctAnswerIndices.get(0);
+        if (correctIndex >= 0 && correctIndex < answers.size()) {
+          return answers.get(correctIndex);
+        }
+      }
+      return answers.get(0);
+    }
+    return "";
+  }
+
   public List<Integer> getCorrectAnswerIndices() {
     return correctAnswerIndices;
   }
