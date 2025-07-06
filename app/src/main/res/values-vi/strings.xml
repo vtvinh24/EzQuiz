@@ -54,4 +54,6 @@
     <string name="set_name_optional">Tên bộ (không bắt buộc)</string>
     <string name="enter_set_name">Nhập tên bộ</string>
     <string name="next">Tiếp theo</string>
+    <string name="previous_card">card trước</string>
+    <string name="next_card">card tiếp theo</string>
 </resources>

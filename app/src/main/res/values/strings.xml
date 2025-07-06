@@ -53,4 +53,6 @@
     <string name="set_name_optional">Set Name (optional)</string>
     <string name="enter_set_name">Enter set name</string>
     <string name="next">Next</string>
+    <string name="previous_card">Previous Card</string>
+    <string name="next_card">Next Card</string>
 </resources>
