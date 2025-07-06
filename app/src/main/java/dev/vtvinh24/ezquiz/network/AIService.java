@@ -1,23 +1,31 @@
 package dev.vtvinh24.ezquiz.network;
 
-import dev.vtvinh24.ezquiz.data.model.GenerateQuizRequest;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface AIService {
   /**
-   * Đường dẫn ở đây sẽ được nối vào BASE_URL_AI_SERVICE.
-   * https://server-horusoul.onrender.com/ + generate-quiz
-   * -> https://server-horusoul.onrender.com/generate-quiz
-   * <p>
-   * Nếu bạn đã đặt tiền tố /api trên server (ví dụ: /api/generate-quiz),
-   * thì ở đây bạn cần điền "api/generate-quiz".
-   * Dựa vào link bạn đưa, có vẻ không có tiền tố /api.
+   * Generate quiz with support for both text prompts and image files
+   * Uses multipart form data to match the Node.js backend with multer
    */
-  @Headers("Content-Type: application/json") // Đảm bảo server nhận đúng định dạng
+  @Multipart
   @POST("generate-quiz")
-  Call<GenerateQuizResponse> generateQuiz(@Body GenerateQuizRequest request);
+  Call<GenerateQuizResponse> generateQuiz(
+          @Part("prompt") RequestBody prompt,
+          @Part MultipartBody.Part file
+  );
+
+  /**
+   * Generate quiz with only text prompt (when no image is provided)
+   */
+  @Multipart
+  @POST("generate-quiz")
+  Call<GenerateQuizResponse> generateQuizTextOnly(
+          @Part("prompt") RequestBody prompt
+  );
 }

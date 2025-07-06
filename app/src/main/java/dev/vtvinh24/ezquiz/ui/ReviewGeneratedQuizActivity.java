@@ -3,7 +3,6 @@ package dev.vtvinh24.ezquiz.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -34,14 +34,14 @@ import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
 public class ReviewGeneratedQuizActivity extends AppCompatActivity {
 
   public static final String EXTRA_GENERATED_QUIZZES = "EXTRA_GENERATED_QUIZZES";
-  private static final String TAG = "ReviewQuizActivity"; // Tag để lọc log trong Logcat
-  // Dùng Executor để chạy tác vụ DB trên luồng nền, tránh lỗi ANR
+  private static final String TAG = "ReviewQuizActivity";
+
   private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
   private RecyclerView recyclerView;
   private GeneratedQuizAdapter adapter;
   private Spinner spinnerCollection;
   private EditText editSetName;
-  private Button btnSave;
+  private ExtendedFloatingActionButton btnSave;
   private List<GeneratedQuizItem> generatedQuizzes;
   private List<QuizCollectionEntity> collections;
   private AppDatabase db;
@@ -51,35 +51,53 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_review_generated_quiz);
 
-    // Set up toolbar
+    setupToolbar();
+    initializeDatabase();
+
+    try {
+      loadQuizData();
+      initializeViews();
+      setupRecyclerView();
+      loadCollections();
+    } catch (Exception e) {
+      Log.e(TAG, "Error in onCreate", e);
+      Toast.makeText(this, "An error occurred while loading the quiz", Toast.LENGTH_SHORT).show();
+      finish();
+    }
+  }
+
+  private void setupToolbar() {
     MaterialToolbar toolbar = findViewById(R.id.topAppBar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
     toolbar.setNavigationOnClickListener(v -> finish());
+  }
 
-    // Khởi tạo database ngay từ đầu
+  private void initializeDatabase() {
     try {
       db = AppDatabaseProvider.getDatabase(this);
     } catch (Exception e) {
       Log.e(TAG, "Failed to initialize database", e);
       Toast.makeText(this, "Error: Could not initialize database", Toast.LENGTH_SHORT).show();
       finish();
+    }
+  }
+
+  private void loadQuizData() {
+    String quizzesJson = getIntent().getStringExtra(EXTRA_GENERATED_QUIZZES);
+    Log.d(TAG, "Received JSON data: " + quizzesJson);
+
+    if (quizzesJson == null || quizzesJson.isEmpty()) {
+      Log.e(TAG, "No quiz data received");
+      Toast.makeText(this, "Error: No quiz data received", Toast.LENGTH_SHORT).show();
+      finish();
       return;
     }
 
     try {
-      String quizzesJson = getIntent().getStringExtra(EXTRA_GENERATED_QUIZZES);
-      Log.d(TAG, "Received JSON data: " + quizzesJson);
-
-      if (quizzesJson == null || quizzesJson.isEmpty()) {
-        Log.e(TAG, "No quiz data received");
-        Toast.makeText(this, "Error: No quiz data received", Toast.LENGTH_SHORT).show();
-        finish();
-        return;
-      }
-
-      Type listType = new TypeToken<List<GeneratedQuizItem>>() {
-      }.getType();
+      Type listType = new TypeToken<List<GeneratedQuizItem>>() {}.getType();
       generatedQuizzes = new Gson().fromJson(quizzesJson, listType);
 
       if (generatedQuizzes == null || generatedQuizzes.isEmpty()) {
@@ -90,19 +108,9 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
       }
 
       Log.d(TAG, "Successfully parsed " + generatedQuizzes.size() + " quizzes");
-
-      // Initialize views and setup UI
-      initializeViews();
-      setupRecyclerView();
-      loadCollections();
-
     } catch (JsonSyntaxException e) {
       Log.e(TAG, "JSON parsing error: " + e.getMessage(), e);
       Toast.makeText(this, "Error: Invalid data format", Toast.LENGTH_SHORT).show();
-      finish();
-    } catch (Exception e) {
-      Log.e(TAG, "Unexpected error in onCreate: " + e.getMessage(), e);
-      Toast.makeText(this, "An unexpected error occurred", Toast.LENGTH_SHORT).show();
       finish();
     }
   }
@@ -116,6 +124,11 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
       btnSave = findViewById(R.id.btn_save_quiz_set);
 
       btnSave.setOnClickListener(v -> saveQuizSet());
+
+      // Set default quiz set name
+      String defaultName = "AI Quiz Set " + System.currentTimeMillis();
+      editSetName.setText(defaultName);
+
     } catch (Exception e) {
       Log.e(TAG, "Error initializing views: " + e.getMessage(), e);
       Toast.makeText(this, "Error setting up the screen", Toast.LENGTH_SHORT).show();
@@ -124,113 +137,148 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity {
   }
 
   private void setupRecyclerView() {
-    Log.d(TAG, "setupRecyclerView: Setting up RecyclerView.");
+    Log.d(TAG, "Setting up RecyclerView with enhanced adapter");
     adapter = new GeneratedQuizAdapter(this, generatedQuizzes);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     recyclerView.setAdapter(adapter);
-    Log.d(TAG, "RecyclerView setup complete.");
+
+    // Add some spacing between items
+    recyclerView.addItemDecoration(new androidx.recyclerview.widget.DividerItemDecoration(
+        this, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL));
+
+    Log.d(TAG, "RecyclerView setup complete with " + generatedQuizzes.size() + " items");
   }
 
   private void loadCollections() {
-    Log.d(TAG, "loadCollections: Loading collections from database.");
-    // Chạy truy vấn DB trên luồng nền
+    Log.d(TAG, "Loading collections from database");
     databaseExecutor.execute(() -> {
-      collections = db.quizCollectionDao().getAll();
+      try {
+        collections = db.quizCollectionDao().getAll();
 
-      // Cập nhật UI trên luồng chính
-      runOnUiThread(() -> {
-        if (collections == null) {
-          Log.e(TAG, "loadCollections: Failed to load collections from database.");
-          Toast.makeText(this, "Error loading collections.", Toast.LENGTH_SHORT).show();
-          return;
-        }
+        runOnUiThread(() -> {
+          if (collections == null) {
+            Log.e(TAG, "Failed to load collections from database");
+            Toast.makeText(this, "Error loading collections.", Toast.LENGTH_SHORT).show();
+            return;
+          }
 
-        Log.d(TAG, "Loaded " + collections.size() + " collections.");
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        for (QuizCollectionEntity c : collections) {
-          spinnerAdapter.add(c.name);
-        }
-        spinnerCollection.setAdapter(spinnerAdapter);
-        Log.d(TAG, "Spinner adapter set.");
-      });
+          Log.d(TAG, "Loaded " + collections.size() + " collections");
+          setupCollectionSpinner();
+        });
+      } catch (Exception e) {
+        Log.e(TAG, "Error loading collections", e);
+        runOnUiThread(() -> Toast.makeText(this, "Error loading collections", Toast.LENGTH_SHORT).show());
+      }
     });
   }
 
+  private void setupCollectionSpinner() {
+    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
+        android.R.layout.simple_spinner_item);
+    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+    for (QuizCollectionEntity collection : collections) {
+      spinnerAdapter.add(collection.name);
+    }
+
+    spinnerCollection.setAdapter(spinnerAdapter);
+
+    // Select first collection by default if available
+    if (!collections.isEmpty()) {
+      spinnerCollection.setSelection(0);
+    }
+  }
+
   private void saveQuizSet() {
-    Log.d(TAG, "saveQuizSet: Save button clicked.");
     String setName = editSetName.getText().toString().trim();
     if (setName.isEmpty()) {
-      editSetName.setError("Set name cannot be empty");
+      Toast.makeText(this, "Please enter a quiz set name", Toast.LENGTH_SHORT).show();
       return;
     }
 
-    if (spinnerCollection.getSelectedItemPosition() < 0 || collections == null || collections.isEmpty()) {
+    if (collections == null || collections.isEmpty()) {
+      Toast.makeText(this, "No collections available", Toast.LENGTH_SHORT).show();
+      return;
+    }
+
+    int selectedPosition = spinnerCollection.getSelectedItemPosition();
+    if (selectedPosition < 0 || selectedPosition >= collections.size()) {
       Toast.makeText(this, "Please select a collection", Toast.LENGTH_SHORT).show();
       return;
     }
 
-    long selectedCollectionId = collections.get(spinnerCollection.getSelectedItemPosition()).id;
-    Log.d(TAG, "Selected collection ID: " + selectedCollectionId);
+    // Get updated quiz data from adapter
+    List<GeneratedQuizItem> updatedQuizzes = adapter.getUpdatedQuizItems();
+    if (updatedQuizzes == null || updatedQuizzes.isEmpty()) {
+      Toast.makeText(this, "No quiz questions to save", Toast.LENGTH_SHORT).show();
+      return;
+    }
 
-    // Lấy dữ liệu đã được cập nhật từ adapter
-    List<GeneratedQuizItem> quizzesToSave = adapter.getUpdatedQuizItems();
-    Log.d(TAG, "Number of quizzes to save: " + quizzesToSave.size());
+    QuizCollectionEntity selectedCollection = collections.get(selectedPosition);
 
-    Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
+    // Show loading state
+    btnSave.setEnabled(false);
+    btnSave.setText("Saving...");
 
-    // Chạy tác vụ lưu vào DB trên luồng nền
     databaseExecutor.execute(() -> {
       try {
-        // 1. Tạo và chèn QuizSet
-        QuizSetEntity newSet = new QuizSetEntity();
-        newSet.name = setName;
-        newSet.description = "Generated by AI";
-        newSet.collectionId = selectedCollectionId;
-        newSet.createdAt = System.currentTimeMillis();
-        newSet.updatedAt = System.currentTimeMillis();
+        saveQuizSetToDatabase(setName, selectedCollection, updatedQuizzes);
 
-        long newSetId = db.quizSetDao().insert(newSet);
-        Log.d(TAG, "New QuizSet created with ID: " + newSetId);
-
-        // 2. Chèn từng câu hỏi
-        for (GeneratedQuizItem item : quizzesToSave) {
-          QuizEntity quizEntity = new QuizEntity();
-          quizEntity.question = item.question;
-          quizEntity.answers = item.answers;
-          quizEntity.correctAnswerIndices = item.correctAnswerIndices;
-          quizEntity.type = item.type;
-          quizEntity.quizSetId = newSetId;
-          quizEntity.createdAt = System.currentTimeMillis();
-          quizEntity.updatedAt = System.currentTimeMillis();
-
-          long quizId = db.quizDao().insert(quizEntity);
-          Log.d(TAG, "Inserted quiz with ID: " + quizId);
-        }
-        Log.d(TAG, "Saved " + quizzesToSave.size() + " quizzes to the new set.");
-
-        // Hiển thị thông báo và đóng Activity trên luồng UI
         runOnUiThread(() -> {
-          Toast.makeText(this, "Quiz set saved successfully!", Toast.LENGTH_LONG).show();
-          setResult(RESULT_OK);
+          Toast.makeText(this, "Quiz set saved successfully!", Toast.LENGTH_SHORT).show();
           finish();
         });
       } catch (Exception e) {
         Log.e(TAG, "Error saving quiz set", e);
         runOnUiThread(() -> {
-          Toast.makeText(this, "Error saving quiz set: " + e.getMessage(), Toast.LENGTH_LONG).show();
+          Toast.makeText(this, "Error saving quiz set: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+          btnSave.setEnabled(true);
+          btnSave.setText("Save Quiz Set");
         });
       }
     });
   }
 
+  private void saveQuizSetToDatabase(String setName, QuizCollectionEntity collection,
+                                   List<GeneratedQuizItem> quizzes) {
+    Log.d(TAG, "Saving quiz set: " + setName + " to collection: " + collection.name);
+
+    // Create quiz set
+    QuizSetEntity quizSet = new QuizSetEntity();
+    quizSet.name = setName;
+    quizSet.collectionId = collection.id;
+    quizSet.createdAt = System.currentTimeMillis();
+    quizSet.updatedAt = System.currentTimeMillis();
+
+    long quizSetId = db.quizSetDao().insert(quizSet);
+    Log.d(TAG, "Quiz set saved with ID: " + quizSetId);
+
+    // Save individual quizzes
+    for (int i = 0; i < quizzes.size(); i++) {
+      GeneratedQuizItem item = quizzes.get(i);
+
+      QuizEntity quiz = new QuizEntity();
+      quiz.question = item.question;
+      quiz.answers = item.answers;
+      quiz.correctAnswerIndices = item.correctAnswerIndices;
+      quiz.type = item.type;
+      quiz.quizSetId = quizSetId;
+        quiz.order = i;
+      quiz.createdAt = System.currentTimeMillis();
+      quiz.updatedAt = System.currentTimeMillis();
+
+      long quizId = db.quizDao().insert(quiz);
+      Log.d(TAG, "Saved quiz " + (i + 1) + " with ID: " + quizId);
+    }
+
+    Log.d(TAG, "Successfully saved " + quizzes.size() + " quizzes to quiz set");
+  }
+
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    // Đóng executor khi activity bị hủy để tránh rò rỉ bộ nhớ
     if (databaseExecutor != null && !databaseExecutor.isShutdown()) {
       databaseExecutor.shutdown();
     }
-    Log.d(TAG, "onDestroy: Activity destroyed.");
   }
 }
