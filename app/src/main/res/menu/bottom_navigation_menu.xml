@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_collections"
+        android:title="Collections"
+        android:icon="@drawable/ic_folder" />
+
+    <item
+        android:id="@+id/nav_progress"
+        android:title="Progress"
+        android:icon="@drawable/ic_progress" />
+
+    <!-- Generate AI - center item with special styling -->
+    <item
+        android:id="@+id/nav_generate_ai"
+        android:title="Generate"
+        android:icon="@drawable/ic_brain_ai" />
+
+    <item
+        android:id="@+id/nav_history"
+        android:title="History"
+        android:icon="@drawable/ic_history" />
+
+    <item
+        android:id="@+id/nav_subscription"
+        android:title="Premium"
+        android:icon="@drawable/ic_premium" />
+
+</menu>

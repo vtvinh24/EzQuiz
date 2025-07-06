@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import dev.vtvinh24.ezquiz.R;
-import dev.vtvinh24.ezquiz.network.AIService;
+import dev.vtvinh24.ezquiz.data.model.AIService;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
 import dev.vtvinh24.ezquiz.network.RetrofitClient;
@@ -63,7 +63,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private MaterialButton btnRemoveImage;
     private CircularProgressIndicator progressBar;
     private TextView textAiStatus;
-    private LinearLayout layoutStatus;
+    private MaterialCardView layoutStatus;
     private MaterialToolbar toolbar;
     private RecyclerView recyclerTopics;
     private MaterialCardView cardImagePreview;

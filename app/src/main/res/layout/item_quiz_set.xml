@@ -1,51 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="?attr/selectableItemBackground">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/white"
+    style="@style/Widget.Material3.CardView.Elevated">
 
-    <TextView
-        android:id="@+id/text_set_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tên Bộ Quiz Set"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/text_set_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Mô tả của bộ quiz set này."
-        android:textColor="#666666"
-        android:textSize="14sp" />
-
-    <!-- Container cho các nút bấm -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginTop="16dp">
+        android:padding="20dp"
+        android:gravity="center_vertical">
 
-        <!-- Nút mới cho chế độ Practice -->
-        <Button
-            android:id="@+id/btn_practice_quiz"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+        <!-- Quiz Set Icon -->
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp">
+
+            <!-- Background Circle -->
+            <ImageView
+                android:id="@+id/icon_background"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/circle_gradient_background"
+                android:scaleType="centerCrop" />
+
+            <!-- Quiz Set Icon -->
+            <ImageView
+                android:id="@+id/icon_quiz_set"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_brain_ai"
+                app:tint="@android:color/white" />
+
+        </FrameLayout>
+
+        <!-- Quiz Set Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Quiz Set Name -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_set_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                tools:text="Math Quiz Set" />
+
+            <!-- Quiz Set Description -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_set_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                tools:text="Algebra and geometry questions" />
+
+            <!-- Quiz Count and Action Buttons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Quiz Count Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_quiz_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 quizzes"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/gradient_purple_start"
+                    app:chipStrokeWidth="0dp"
+                    app:chipMinHeight="28dp"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <!-- Difficulty Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_difficulty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Easy"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/gradient_orange_start"
+                    app:chipStrokeWidth="0dp"
+                    app:chipMinHeight="28dp"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Practice" />
+            android:orientation="vertical"
+            android:gravity="center">
 
-        <!-- Nút Play Flashcards đã có -->
-        <Button
-            android:id="@+id/btn_play_flashcard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Flashcards" />
+            <!-- Play Flashcard Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_play_flashcard"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Play"
+                android:textSize="12sp"
+                android:minWidth="60dp"
+                app:icon="@android:drawable/ic_media_play"
+                app:iconSize="16dp"
+                app:cornerRadius="18dp"
+                style="@style/Widget.Material3.Button.TonalButton" />
+
+            <!-- Arrow Icon -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="#666666" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

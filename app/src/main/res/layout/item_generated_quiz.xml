@@ -7,8 +7,9 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="16dp"
+    android:backgroundTint="@color/white"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,54 +17,86 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Question Number and Type Badge -->
+        <!-- Question Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/text_question_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/circle_background"
-                android:text="1"
-                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                android:textColor="?attr/colorOnPrimary"
-                android:gravity="center"
-                android:minWidth="32dp"
-                android:minHeight="32dp"
-                android:layout_marginEnd="12dp" />
+            <!-- Question Icon with Gradient Background -->
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="12dp">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_question_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Single Choice"
-                android:textSize="12sp"
-                app:chipBackgroundColor="?attr/colorSecondaryContainer"
-                app:chipStrokeWidth="0dp"
-                android:layout_marginEnd="8dp" />
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/circle_gradient_background"
+                    android:scaleType="centerCrop" />
 
-            <View
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_question_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+            <!-- Question Type and Controls -->
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <!-- Edit Question Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_edit_question"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Edit"
-                android:textSize="12sp"
-                app:icon="@drawable/ic_edit"
-                app:iconSize="16dp"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:minWidth="0dp"
-                android:paddingHorizontal="12dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_question_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Single Choice"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/gradient_blue_start"
+                        app:chipStrokeWidth="0dp"
+                        app:chipMinHeight="28dp"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <!-- Edit Question Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_edit_question"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="Edit"
+                        android:textSize="12sp"
+                        android:textColor="@color/gradient_orange_start"
+                        app:icon="@drawable/ic_edit"
+                        app:iconTint="@color/gradient_orange_start"
+                        app:iconSize="16dp"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -74,70 +107,123 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Question"
-            android:layout_marginBottom="16dp">
+            app:boxStrokeColor="@color/gradient_blue_start"
+            app:hintTextColor="@color/gradient_blue_start"
+            android:layout_marginBottom="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:inputType="textMultiLine|textCapSentences"
                 android:minLines="2"
                 android:maxLines="5" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Answers Section -->
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
+        <!-- Answers Section Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Answer Options"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Answer Options"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <!-- Add Answer Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="Add"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_add"
+                app:iconTint="@color/white"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/gradient_green_start"
+                app:cornerRadius="16dp"
+                style="@style/Widget.Material3.Button.UnelevatedButton"
+                android:minWidth="0dp"
+                android:paddingHorizontal="16dp" />
+
+        </LinearLayout>
 
         <!-- Answer Options Container -->
         <LinearLayout
             android:id="@+id/container_answers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp" />
 
-        <!-- Add Answer Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_answer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Add Option"
-            app:icon="@drawable/ic_add"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_gravity="start" />
-
-        <!-- Question Type Toggle -->
-        <LinearLayout
+        <!-- Question Type Toggle Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:background="?attr/colorSurfaceVariant"
-            android:layout_marginHorizontal="-4dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/gradient_purple_start"
+            style="@style/Widget.Material3.CardView.Elevated">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Allow multiple correct answers"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switch_multiple_choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_check_circle"
+                    app:tint="@color/white"
+                    android:layout_marginEnd="12dp" />
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Multiple Choice"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="2dp" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Allow multiple correct answers"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="@color/white"
+                        android:alpha="0.8" />
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_multiple_choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/white"
+                    app:trackTint="@color/white" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 

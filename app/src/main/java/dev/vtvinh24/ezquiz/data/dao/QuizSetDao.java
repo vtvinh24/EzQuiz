@@ -30,6 +30,9 @@ public interface QuizSetDao {
   @Query("SELECT * FROM quiz_set WHERE collectionId = :collectionId")
   List<QuizSetEntity> getByCollectionId(long collectionId);
 
+  @Query("SELECT COUNT(*) FROM quiz_set WHERE collectionId = :collectionId AND archived = 0")
+  int countByCollectionId(long collectionId);
+
   @Query("SELECT * FROM quiz_set WHERE archived = 1")
   List<QuizSetEntity> getArchived();
 }
