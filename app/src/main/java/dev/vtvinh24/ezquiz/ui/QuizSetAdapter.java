@@ -38,9 +38,23 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
 
   public QuizSetAdapter(Context context, List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener, OnPlayFlashcardClickListener playFlashcardClickListener) {
     this.context = context;
+
+  // === THÊM LISTENER MỚI VÀO ĐÂY ===
+  private final OnPracticeClickListener practiceClickListener;
+
+  // === THÊM INTERFACE MỚI ===
+  public interface OnPracticeClickListener {
+    void onPracticeClick(long quizSetId);
+  }
+
+  // === SỬA CONSTRUCTOR ĐỂ NHẬN LISTENER MỚI ===
+  public QuizSetAdapter(List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener,
+                        OnPlayFlashcardClickListener playFlashcardClickListener,
+                        OnPracticeClickListener practiceClickListener) {
     this.quizSets = quizSets;
     this.itemClickListener = itemClickListener;
     this.playFlashcardClickListener = playFlashcardClickListener;
+    this.practiceClickListener = practiceClickListener; // Gán listener
   }
 
   @NonNull
@@ -88,9 +102,17 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       }
     });
 
+    // Giữ nguyên listener cho nút Play Flashcards
     holder.btnPlayFlashcard.setOnClickListener(v -> {
       if (playFlashcardClickListener != null) {
         playFlashcardClickListener.onPlayFlashcardClick(quizSet.id);
+      }
+    });
+
+    // === BẮT SỰ KIỆN CHO NÚT MỚI ===
+    holder.btnPracticeQuiz.setOnClickListener(v -> {
+      if(practiceClickListener != null) {
+        practiceClickListener.onPracticeClick(quizSet.id);
       }
     });
   }
@@ -143,11 +165,13 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     void onPlayFlashcardClick(long quizSetId);
   }
 
+  // === SỬA VIEWHOLDER ĐỂ ÁNH XẠ NÚT MỚI ===
   static class ViewHolder extends RecyclerView.ViewHolder {
     TextView textName, textDescription;
     ImageView iconBackground, iconQuizSet;
     Chip chipQuizCount, chipDifficulty;
     MaterialButton btnPlayFlashcard;
+    Button btnPracticeQuiz; // Thêm nút practice
 
     ViewHolder(View itemView) {
       super(itemView);
@@ -157,7 +181,7 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       iconQuizSet = itemView.findViewById(R.id.icon_quiz_set);
       chipQuizCount = itemView.findViewById(R.id.chip_quiz_count);
       chipDifficulty = itemView.findViewById(R.id.chip_difficulty);
-      btnPlayFlashcard = itemView.findViewById(R.id.btn_play_flashcard);
+      btnPracticeQuiz = itemView.findViewById(R.id.btn_practice_quiz); // Ánh xạ nút mới
     }
   }
 }

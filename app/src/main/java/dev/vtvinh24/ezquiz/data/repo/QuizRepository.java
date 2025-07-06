@@ -40,7 +40,9 @@ public class QuizRepository {
   public List<QuizSetEntity> getSetsOfCollection(long collectionId) {
     return db.quizSetDao().getByCollectionId(collectionId);
   }
-
+  public List<QuizEntity> getQuizzesByIds(List<Long> ids) {
+    return db.quizDao().getQuizzesByIds(ids);
+  }
   public List<QuizEntity> getQuizzesOfCollection(long collectionId) {
     List<QuizSetEntity> sets = db.quizSetDao().getByCollectionId(collectionId);
     List<QuizEntity> quizzes = new ArrayList<>();
