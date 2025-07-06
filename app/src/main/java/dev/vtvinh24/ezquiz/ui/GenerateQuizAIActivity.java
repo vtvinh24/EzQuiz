@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import dev.vtvinh24.ezquiz.R;
-import dev.vtvinh24.ezquiz.data.model.AIService;
+import dev.vtvinh24.ezquiz.network.AIService;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
 import dev.vtvinh24.ezquiz.network.RetrofitClient;
