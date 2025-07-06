@@ -15,41 +15,59 @@ import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 
 public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHolder> {
-  private final List<QuizSetEntity> quizSets; // Đổi từ collections thành quizSets cho rõ ràng
+  private final List<QuizSetEntity> quizSets;
   private final OnItemClickListener itemClickListener;
-  private final OnPlayFlashcardClickListener playFlashcardClickListener; // NEW: Listener cho nút Play
+  private final OnPlayFlashcardClickListener playFlashcardClickListener;
 
-  // Thay đổi constructor để nhận listener mới
-  public QuizSetAdapter(List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener, OnPlayFlashcardClickListener playFlashcardClickListener) {
+  // === THÊM LISTENER MỚI VÀO ĐÂY ===
+  private final OnPracticeClickListener practiceClickListener;
+
+  // === THÊM INTERFACE MỚI ===
+  public interface OnPracticeClickListener {
+    void onPracticeClick(long quizSetId);
+  }
+
+  // === SỬA CONSTRUCTOR ĐỂ NHẬN LISTENER MỚI ===
+  public QuizSetAdapter(List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener,
+                        OnPlayFlashcardClickListener playFlashcardClickListener,
+                        OnPracticeClickListener practiceClickListener) {
     this.quizSets = quizSets;
     this.itemClickListener = itemClickListener;
     this.playFlashcardClickListener = playFlashcardClickListener;
+    this.practiceClickListener = practiceClickListener; // Gán listener
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_set, parent, false); // Đảm bảo đúng tên layout item
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_set, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    QuizSetEntity quizSet = quizSets.get(position); // Đổi từ collection thành quizSet
+    QuizSetEntity quizSet = quizSets.get(position);
     holder.textName.setText(quizSet.name);
     holder.textDescription.setText(quizSet.description);
 
-    // Xử lý click cho toàn bộ item (nếu có)
+    // Giữ nguyên listener cho click toàn bộ item
     holder.itemView.setOnClickListener(v -> {
       if (itemClickListener != null) {
         itemClickListener.onItemClick(quizSet);
       }
     });
 
-    // NEW: Xử lý click cho nút "Play Flashcards"
+    // Giữ nguyên listener cho nút Play Flashcards
     holder.btnPlayFlashcard.setOnClickListener(v -> {
       if (playFlashcardClickListener != null) {
-        playFlashcardClickListener.onPlayFlashcardClick(quizSet.id); // Truyền ID của Quiz Set
+        playFlashcardClickListener.onPlayFlashcardClick(quizSet.id);
+      }
+    });
+
+    // === BẮT SỰ KIỆN CHO NÚT MỚI ===
+    holder.btnPracticeQuiz.setOnClickListener(v -> {
+      if(practiceClickListener != null) {
+        practiceClickListener.onPracticeClick(quizSet.id);
       }
     });
   }
@@ -59,25 +77,25 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     return quizSets.size();
   }
 
-  // Interface cho click vào toàn bộ item (nếu có)
   public interface OnItemClickListener {
-    void onItemClick(QuizSetEntity quizSet); // Đổi từ QuizCollectionEntity thành QuizSetEntity
+    void onItemClick(QuizSetEntity quizSet);
   }
 
-  // NEW: Interface cho click vào nút "Play Flashcards"
   public interface OnPlayFlashcardClickListener {
     void onPlayFlashcardClick(long quizSetId);
   }
 
+  // === SỬA VIEWHOLDER ĐỂ ÁNH XẠ NÚT MỚI ===
   static class ViewHolder extends RecyclerView.ViewHolder {
     TextView textName, textDescription;
-    Button btnPlayFlashcard; // NEW: Ánh xạ nút
+    Button btnPlayFlashcard, btnPracticeQuiz; // Thêm nút practice
 
     ViewHolder(View itemView) {
       super(itemView);
-      textName = itemView.findViewById(R.id.text_set_name); // Đảm bảo đúng ID
-      textDescription = itemView.findViewById(R.id.text_set_description); // Đảm bảo đúng ID
-      btnPlayFlashcard = itemView.findViewById(R.id.btn_play_flashcard); // NEW: Ánh xạ nút
+      textName = itemView.findViewById(R.id.text_set_name);
+      textDescription = itemView.findViewById(R.id.text_set_description);
+      btnPlayFlashcard = itemView.findViewById(R.id.btn_play_flashcard);
+      btnPracticeQuiz = itemView.findViewById(R.id.btn_practice_quiz); // Ánh xạ nút mới
     }
   }
 }
