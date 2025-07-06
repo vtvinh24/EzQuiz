@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements QuizCollectionAda
         findViewById(R.id.fab_generate_ai).setOnClickListener(v ->
                 startActivity(new Intent(this, GenerateQuizAIActivity.class)));
 
-        findViewById(R.id.fab_import_external).setOnClickListener(v ->
-                startActivity(new Intent(this, ImportQuizExternalActivity.class)));
 
         refreshCollections();
     }

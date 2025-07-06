@@ -1,8 +1,10 @@
 package dev.vtvinh24.ezquiz.data.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -12,6 +14,10 @@ import dev.vtvinh24.ezquiz.data.entity.QuizCollectionEntity;
 public interface QuizCollectionDao {
   @Insert
   long insert(QuizCollectionEntity collection);
+  @Update
+  void update(QuizCollectionEntity collection);
+  @Delete
+  void delete(QuizCollectionEntity collection);
 
   // Prevent deleting the Default collection
   @Query("DELETE FROM quiz_collection WHERE id = :id AND name != 'Default'")
