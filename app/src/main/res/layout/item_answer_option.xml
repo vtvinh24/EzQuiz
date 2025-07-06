@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="8dp"
+    android:padding="12dp"
     android:layout_marginBottom="8dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="@drawable/answer_option_item_background">
 
-    <!-- Radio Button for Single Choice -->
+    <!-- Correct Answer Selection (Radio for Single Choice) -->
     <RadioButton
-        android:id="@+id/radio_answer"
+        android:id="@+id/radio_single"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        android:buttonTint="?attr/colorPrimary" />
+        android:visibility="gone"
+        android:buttonTint="@color/gradient_blue_start" />
 
-    <!-- Checkbox for Multiple Choice -->
+    <!-- Correct Answer Selection (Checkbox for Multiple Choice) -->
     <CheckBox
-        android:id="@+id/checkbox_answer"
+        android:id="@+id/checkbox_multiple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        android:buttonTint="?attr/colorPrimary"
-        android:visibility="gone" />
+        android:visibility="visible"
+        android:buttonTint="@color/gradient_blue_start" />
 
     <!-- Answer Text Input -->
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginEnd="8dp"
-        android:hint="Answer option">
+        android:hint="Answer option"
+        app:boxStrokeColor="@color/gradient_blue_start"
+        app:hintTextColor="@color/gradient_blue_start"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_answer_text"
+            android:id="@+id/edit_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"
-            android:maxLines="3" />
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            tools:text="Paris" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Remove Answer Button -->
+    <!-- Delete Answer Button -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_remove_answer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="8dp"
-        app:icon="@drawable/ic_close"
+        android:id="@+id/btn_delete_answer"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:contentDescription="Delete answer option"
+        app:icon="@drawable/ic_delete"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
         app:iconSize="18dp"
-        style="@style/Widget.Material3.Button.TextButton"
-        app:iconTint="?attr/colorError" />
+        app:iconTint="@color/gradient_red_start"
+        android:backgroundTint="@color/white"
+        style="@style/Widget.Material3.Button.IconButton" />
 
 </LinearLayout>

@@ -9,4 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="correct_answer">#008000</color>
     <color name="incorrect_answer">#FF0000</color>
+
+    <!-- Additional colors for review screen (avoiding duplicates) -->
+    <color name="gradient_red_start">#D9534F</color>
+    <color name="gradient_red_end">#C9302C</color>
+    <color name="surface_background">#F8F9FA</color>
 </resources>

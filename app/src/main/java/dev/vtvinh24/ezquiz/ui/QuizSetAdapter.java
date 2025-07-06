@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
   private final List<QuizSetEntity> quizSets;
   private final OnItemClickListener itemClickListener;
   private final OnPlayFlashcardClickListener playFlashcardClickListener;
+  private final OnPracticeClickListener practiceClickListener;
   private final Context context;
 
   private final int[][] gradientColors = {
@@ -36,25 +38,13 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       {R.color.gradient_pink_start, R.color.gradient_pink_end}
   };
 
-  public QuizSetAdapter(Context context, List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener, OnPlayFlashcardClickListener playFlashcardClickListener) {
+  public QuizSetAdapter(Context context, List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener,
+                       OnPlayFlashcardClickListener playFlashcardClickListener, OnPracticeClickListener practiceClickListener) {
     this.context = context;
-
-  // === THÊM LISTENER MỚI VÀO ĐÂY ===
-  private final OnPracticeClickListener practiceClickListener;
-
-  // === THÊM INTERFACE MỚI ===
-  public interface OnPracticeClickListener {
-    void onPracticeClick(long quizSetId);
-  }
-
-  // === SỬA CONSTRUCTOR ĐỂ NHẬN LISTENER MỚI ===
-  public QuizSetAdapter(List<QuizSetEntity> quizSets, OnItemClickListener itemClickListener,
-                        OnPlayFlashcardClickListener playFlashcardClickListener,
-                        OnPracticeClickListener practiceClickListener) {
     this.quizSets = quizSets;
     this.itemClickListener = itemClickListener;
     this.playFlashcardClickListener = playFlashcardClickListener;
-    this.practiceClickListener = practiceClickListener; // Gán listener
+    this.practiceClickListener = practiceClickListener;
   }
 
   @NonNull
@@ -157,21 +147,12 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     }
   }
 
-  public interface OnItemClickListener {
-    void onItemClick(QuizSetEntity quizSet);
-  }
-
-  public interface OnPlayFlashcardClickListener {
-    void onPlayFlashcardClick(long quizSetId);
-  }
-
-  // === SỬA VIEWHOLDER ĐỂ ÁNH XẠ NÚT MỚI ===
   static class ViewHolder extends RecyclerView.ViewHolder {
     TextView textName, textDescription;
     ImageView iconBackground, iconQuizSet;
     Chip chipQuizCount, chipDifficulty;
     MaterialButton btnPlayFlashcard;
-    Button btnPracticeQuiz; // Thêm nút practice
+    Button btnPracticeQuiz;
 
     ViewHolder(View itemView) {
       super(itemView);
@@ -181,7 +162,20 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       iconQuizSet = itemView.findViewById(R.id.icon_quiz_set);
       chipQuizCount = itemView.findViewById(R.id.chip_quiz_count);
       chipDifficulty = itemView.findViewById(R.id.chip_difficulty);
-      btnPracticeQuiz = itemView.findViewById(R.id.btn_practice_quiz); // Ánh xạ nút mới
+      btnPlayFlashcard = itemView.findViewById(R.id.btn_play_flashcard);
+      btnPracticeQuiz = itemView.findViewById(R.id.btn_practice_quiz);
     }
+  }
+
+  public interface OnItemClickListener {
+    void onItemClick(QuizSetEntity quizSet);
+  }
+
+  public interface OnPlayFlashcardClickListener {
+    void onPlayFlashcardClick(long quizSetId);
+  }
+
+  public interface OnPracticeClickListener {
+    void onPracticeClick(long quizSetId);
   }
 }
