@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <!-- Subject Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <!-- Subject Icon -->
+        <ImageView
+            android:id="@+id/icon_subject"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_folder"
+            android:background="@drawable/circle_gradient_background"
+            android:padding="8dp"
+            app:tint="@color/gradient_blue_start" />
+
+        <!-- Subject Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_subject_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Từ vựng Tiếng Anh"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                tools:text="Từ vựng Tiếng Anh" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_subject_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45/60 thẻ đã học"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginTop="2dp"
+                tools:text="45/60 thẻ đã học" />
+
+        </LinearLayout>
+
+        <!-- Progress Percentage -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_subject_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="75%"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                android:textStyle="bold"
+                android:textColor="@color/gradient_blue_start"
+                tools:text="75%" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Circular Progress Ring -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Large Progress Circle -->
+        <FrameLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp">
+
+            <!-- Background Circle -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circular_progress_background" />
+
+            <!-- Progress Circle -->
+            <View
+                android:id="@+id/circular_progress_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circular_progress_foreground" />
+
+            <!-- Progress Text Center -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_progress_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="75%"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/gradient_blue_start"
+                android:textStyle="bold"
+                android:gravity="center"
+                tools:text="75%" />
+
+        </FrameLayout>
+
+        <!-- Progress Details -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Known Progress Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="#4CAF50"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Đã biết"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_known_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="45"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textStyle="bold"
+                    android:textColor="#4CAF50"
+                    tools:text="45" />
+
+            </LinearLayout>
+
+            <!-- Learning Progress Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="#FF9800"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Đang học"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_learning_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textStyle="bold"
+                    android:textColor="#FF9800"
+                    tools:text="10" />
+
+            </LinearLayout>
+
+            <!-- Unknown Progress Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="#F44336"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Chưa biết"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_unknown_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textStyle="bold"
+                    android:textColor="#F44336"
+                    tools:text="5" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Action Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_continue_study"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tiếp tục học"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/gradient_blue_start"
+        android:textColor="@android:color/white"
+        style="@style/Widget.Material3.Button"
+        app:icon="@drawable/ic_arrow_forward"
+        app:iconTint="@android:color/white"
+        app:iconGravity="textEnd" />
+
+</LinearLayout>
