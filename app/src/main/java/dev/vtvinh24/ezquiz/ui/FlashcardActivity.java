@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,23 +16,28 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import dev.vtvinh24.ezquiz.R;
+import dev.vtvinh24.ezquiz.ui.FlashcardViewModel.QuizDisplayItem;
 
 public class FlashcardActivity extends AppCompatActivity {
 
   public static final String EXTRA_SET_ID = "setId";
 
   private FlashcardViewModel viewModel;
-  private ViewPager2 viewPager;
-  private FlashcardAdapter adapter;
-  private Button btnKnow, btnDontKnow, btnJumpTo;
+  private SwipeableCardView swipeableCard;
+  private TextView tvQuestion, tvAnswer, tvTapToReveal, tvCardCounter;
+  private View cardFront, cardBack; // Add flip card views
+  private ProgressBar progressBar;
+  private TextView btnKnow, btnDontKnow;
+  private Button btnJumpTo;
   private ImageButton btnPreviousCard, btnNextCard;
+
+  private QuizDisplayItem currentCard;
+  private boolean isAnswerRevealed = false;
 
   private final ActivityResultLauncher<Intent> summaryLauncher = registerForActivityResult(
           new ActivityResultContracts.StartActivityForResult(),
@@ -62,7 +69,7 @@ public class FlashcardActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_flashcard_new);
+    setContentView(R.layout.activity_flashcard);
 
     long setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
     if (setId == -1) {
@@ -80,54 +87,143 @@ public class FlashcardActivity extends AppCompatActivity {
   }
 
   private void initViews() {
-    viewPager = findViewById(R.id.flashcard_view_pager);
+    swipeableCard = findViewById(R.id.swipeable_card);
+    tvQuestion = findViewById(R.id.tv_question);
+    tvAnswer = findViewById(R.id.tv_answer);
+    tvTapToReveal = findViewById(R.id.tv_tap_to_reveal);
+    tvCardCounter = findViewById(R.id.tv_card_counter);
+
+    // Add card front and back views for flip animation
+    cardFront = findViewById(R.id.card_front);
+    cardBack = findViewById(R.id.card_back);
+
+    progressBar = findViewById(R.id.progress_bar);
     btnKnow = findViewById(R.id.btn_know);
     btnDontKnow = findViewById(R.id.btn_dont_know);
     btnJumpTo = findViewById(R.id.btn_jump_to);
     btnPreviousCard = findViewById(R.id.btn_previous_card);
     btnNextCard = findViewById(R.id.btn_next_card);
+
+    // Setup entry animations
+    setupEntryAnimations();
+  }
+
+  private void setupEntryAnimations() {
+    // Animate progress bar from top
+    progressBar.setTranslationY(-100f);
+    progressBar.animate()
+        .translationY(0f)
+        .setDuration(600)
+        .setInterpolator(new android.view.animation.DecelerateInterpolator())
+        .start();
+
+    // Animate counter from right
+    tvCardCounter.setTranslationX(200f);
+    tvCardCounter.setAlpha(0f);
+    tvCardCounter.animate()
+        .translationX(0f)
+        .alpha(1f)
+        .setDuration(800)
+        .setStartDelay(200)
+        .setInterpolator(new android.view.animation.OvershootInterpolator(1.2f))
+        .start();
+
+    // Animate navigation buttons
+    btnPreviousCard.setScaleX(0f);
+    btnPreviousCard.setScaleY(0f);
+    btnNextCard.setScaleX(0f);
+    btnNextCard.setScaleY(0f);
+
+    btnPreviousCard.animate()
+        .scaleX(1f)
+        .scaleY(1f)
+        .setDuration(500)
+        .setStartDelay(400)
+        .setInterpolator(new android.view.animation.OvershootInterpolator(1.5f))
+        .start();
+
+    btnNextCard.animate()
+        .scaleX(1f)
+        .scaleY(1f)
+        .setDuration(500)
+        .setStartDelay(500)
+        .setInterpolator(new android.view.animation.OvershootInterpolator(1.5f))
+        .start();
+
+    // Animate action labels from bottom
+    btnDontKnow.setTranslationY(100f);
+    btnKnow.setTranslationY(100f);
+    btnDontKnow.setAlpha(0f);
+    btnKnow.setAlpha(0f);
+
+    btnDontKnow.animate()
+        .translationY(0f)
+        .alpha(1f)
+        .setDuration(600)
+        .setStartDelay(600)
+        .setInterpolator(new android.view.animation.DecelerateInterpolator())
+        .start();
+
+    btnKnow.animate()
+        .translationY(0f)
+        .alpha(1f)
+        .setDuration(600)
+        .setStartDelay(700)
+        .setInterpolator(new android.view.animation.DecelerateInterpolator())
+        .start();
   }
 
   private void initViewModel() {
     viewModel = new ViewModelProvider(this).get(FlashcardViewModel.class);
-    adapter = new FlashcardAdapter(this);
-    viewPager.setAdapter(adapter);
   }
 
   private void setupListeners() {
-    btnKnow.setOnClickListener(v -> viewModel.markAsKnown());
-    btnDontKnow.setOnClickListener(v -> viewModel.markAsUnknown());
+    // Swipe listeners
+    swipeableCard.setSwipeListener(new SwipeableCardView.SwipeListener() {
+      @Override
+      public void onSwipeLeft() {
+        animateActionFeedback(false);
+        viewModel.markAsUnknown();
+      }
+
+      @Override
+      public void onSwipeRight() {
+        animateActionFeedback(true);
+        viewModel.markAsKnown();
+      }
+    });
+
+    // Card tap to reveal answer
+    swipeableCard.setOnClickListener(v -> toggleAnswerWithAnimation());
+
+    // Action listeners with feedback
+    btnKnow.setOnClickListener(v -> {
+      animateActionFeedback(true);
+      viewModel.markAsKnown();
+    });
+
+    btnDontKnow.setOnClickListener(v -> {
+      animateActionFeedback(false);
+      viewModel.markAsUnknown();
+    });
+
     btnJumpTo.setOnClickListener(v -> showJumpToDialog());
 
     btnPreviousCard.setOnClickListener(v -> {
-      int currentItem = viewPager.getCurrentItem();
-      if (currentItem > 0) {
-        viewPager.setCurrentItem(currentItem - 1);
-      }
+      animateNavigationButton(btnPreviousCard);
+      viewModel.goToPreviousCard();
     });
 
     btnNextCard.setOnClickListener(v -> {
-      int currentItem = viewPager.getCurrentItem();
-      if (adapter != null && currentItem < adapter.getItemCount() - 1) {
-        viewPager.setCurrentItem(currentItem + 1);
-      }
-    });
-
-    viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-      @Override
-      public void onPageSelected(int position) {
-        super.onPageSelected(position);
-        viewModel.onUserSwiped(position);
-        updateNavigationButtons(position);
-      }
+      animateNavigationButton(btnNextCard);
+      viewModel.goToNextCard();
     });
   }
 
   private void setupObservers() {
     viewModel.flashcards.observe(this, quizDisplayItems -> {
       if (quizDisplayItems != null && !quizDisplayItems.isEmpty()) {
-        adapter.submitList(quizDisplayItems);
-        updateNavigationButtons(viewPager.getCurrentItem());
+        updateNavigationButtons();
       } else {
         if (viewModel.flashcards.getValue() == null || viewModel.flashcards.getValue().isEmpty()) {
           Toast.makeText(this, "No flashcards found in this set.", Toast.LENGTH_LONG).show();
@@ -137,8 +233,11 @@ public class FlashcardActivity extends AppCompatActivity {
     });
 
     viewModel.currentCardPosition.observe(this, position -> {
-      if (position != null && viewPager.getCurrentItem() != position) {
-        viewPager.setCurrentItem(position, true);
+      if (position != null && viewModel.flashcards.getValue() != null
+              && position < viewModel.flashcards.getValue().size()) {
+        currentCard = viewModel.flashcards.getValue().get(position);
+        displayCard(currentCard);
+        updateNavigationButtons();
       }
     });
 
@@ -153,14 +252,124 @@ public class FlashcardActivity extends AppCompatActivity {
     });
   }
 
-  private void updateNavigationButtons(int currentPosition) {
-    if (adapter == null || adapter.getItemCount() <= 1) {
+  private void displayCard(QuizDisplayItem card) {
+    if (card != null && card.quiz != null) {
+      tvQuestion.setText(card.quiz.getQuestion());
+      tvAnswer.setText(card.quiz.getAnswer());
+
+      hideAnswer();
+    }
+  }
+
+  private void toggleAnswer() {
+    if (isAnswerRevealed) {
+      hideAnswer();
+    } else {
+      showAnswer();
+    }
+  }
+
+  private void toggleAnswerWithAnimation() {
+    if (isAnswerRevealed) {
+      hideAnswerWithAnimation();
+    } else {
+      showAnswerWithAnimation();
+    }
+  }
+
+  private void showAnswer() {
+    tvAnswer.setVisibility(View.VISIBLE);
+    tvTapToReveal.setText("Tap to hide answer");
+    isAnswerRevealed = true;
+  }
+
+  private void showAnswerWithAnimation() {
+    // Card flip animation - rotate front out and back in
+    cardFront.animate()
+        .rotationY(90f)
+        .setDuration(150)
+        .withEndAction(() -> {
+            cardFront.setVisibility(View.GONE);
+            cardBack.setVisibility(View.VISIBLE);
+            cardBack.setRotationY(-90f);
+            cardBack.animate()
+                .rotationY(0f)
+                .setDuration(150)
+                .start();
+        })
+        .start();
+
+    isAnswerRevealed = true;
+  }
+
+  private void hideAnswerWithAnimation() {
+    // Card flip animation - rotate back out and front in
+    cardBack.animate()
+        .rotationY(90f)
+        .setDuration(150)
+        .withEndAction(() -> {
+            cardBack.setVisibility(View.GONE);
+            cardFront.setVisibility(View.VISIBLE);
+            cardFront.setRotationY(-90f);
+            cardFront.animate()
+                .rotationY(0f)
+                .setDuration(150)
+                .start();
+        })
+        .start();
+
+    isAnswerRevealed = false;
+  }
+
+  private void hideAnswer() {
+    cardBack.setVisibility(View.GONE);
+    cardFront.setVisibility(View.VISIBLE);
+    isAnswerRevealed = false;
+  }
+
+  private void updateNavigationButtons() {
+    if (viewModel.flashcards.getValue() == null || viewModel.flashcards.getValue().size() <= 1) {
       btnPreviousCard.setVisibility(View.GONE);
       btnNextCard.setVisibility(View.GONE);
       return;
     }
-    btnPreviousCard.setVisibility(currentPosition == 0 ? View.INVISIBLE : View.VISIBLE);
-    btnNextCard.setVisibility(currentPosition == adapter.getItemCount() - 1 ? View.INVISIBLE : View.VISIBLE);
+
+    Integer currentPos = viewModel.currentCardPosition.getValue();
+    if (currentPos != null) {
+      int totalCards = viewModel.flashcards.getValue().size();
+      btnPreviousCard.setVisibility(currentPos == 0 ? View.INVISIBLE : View.VISIBLE);
+      btnNextCard.setVisibility(currentPos == totalCards - 1 ? View.INVISIBLE : View.VISIBLE);
+
+      // Update progress bar and counter
+      updateProgressAndCounter(currentPos, totalCards);
+    }
+  }
+
+  private void updateProgressAndCounter(int currentPosition, int totalCards) {
+    // Animate progress bar update
+    int newProgress = (int) (((float) (currentPosition + 1) / totalCards) * 100);
+
+    android.animation.ObjectAnimator progressAnimator =
+            android.animation.ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), newProgress);
+    progressAnimator.setDuration(400);
+    progressAnimator.setInterpolator(new android.view.animation.DecelerateInterpolator());
+    progressAnimator.start();
+
+    // Animate counter text update with bounce effect
+    tvCardCounter.animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(150)
+            .withEndAction(() -> {
+                tvCardCounter.setText((currentPosition + 1) + " / " + totalCards);
+                tvCardCounter.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(150)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator())
+                        .start();
+            })
+            .start();
   }
 
   private void showJumpToDialog() {
@@ -198,5 +407,78 @@ public class FlashcardActivity extends AppCompatActivity {
     });
     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
     builder.show();
+  }
+
+  private void animateActionFeedback(boolean isKnow) {
+    TextView targetAction = isKnow ? btnKnow : btnDontKnow;
+    TextView otherAction = isKnow ? btnDontKnow : btnKnow;
+
+    // Quick flash animation - very fast and subtle
+    targetAction.animate()
+        .alpha(0.8f)
+        .setDuration(80)
+        .withEndAction(() -> {
+            targetAction.animate()
+                .alpha(1f)
+                .setDuration(80)
+                .start();
+        })
+        .start();
+
+    // No animation for other action to avoid jittery effect
+  }
+
+  private void animateNavigationButton(ImageButton button) {
+    button.animate()
+        .scaleX(0.8f)
+        .scaleY(0.8f)
+        .setDuration(100)
+        .withEndAction(() -> {
+            button.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(200)
+                .setInterpolator(new android.view.animation.OvershootInterpolator())
+                .start();
+        })
+        .start();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    // Clear all animations to prevent memory leaks
+    if (progressBar != null) {
+      progressBar.clearAnimation();
+    }
+
+    if (tvCardCounter != null) {
+      tvCardCounter.clearAnimation();
+    }
+
+    if (btnPreviousCard != null) {
+      btnPreviousCard.clearAnimation();
+    }
+
+    if (btnNextCard != null) {
+      btnNextCard.clearAnimation();
+    }
+
+    if (btnKnow != null) {
+      btnKnow.clearAnimation();
+    }
+
+    if (btnDontKnow != null) {
+      btnDontKnow.clearAnimation();
+    }
+
+    if (cardFront != null) {
+      cardFront.clearAnimation();
+    }
+
+    if (cardBack != null) {
+      cardBack.clearAnimation();
+    }
   }
 }

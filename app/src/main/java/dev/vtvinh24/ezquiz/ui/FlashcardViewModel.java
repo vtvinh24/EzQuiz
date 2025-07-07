@@ -153,6 +153,23 @@ public class FlashcardViewModel extends AndroidViewModel {
     }
   }
 
+  public void goToPreviousCard() {
+    Integer currentPos = _currentCardPosition.getValue();
+    if (currentPos != null && currentPos > 0) {
+      _currentCardPosition.setValue(currentPos - 1);
+      updateProgressText();
+    }
+  }
+
+  public void goToNextCard() {
+    Integer currentPos = _currentCardPosition.getValue();
+    List<QuizDisplayItem> cards = _flashcards.getValue();
+    if (currentPos != null && cards != null && currentPos < cards.size() - 1) {
+      _currentCardPosition.setValue(currentPos + 1);
+      updateProgressText();
+    }
+  }
+
   private void updateCardStatus(CardStatus status) {
     Integer position = _currentCardPosition.getValue();
     List<QuizDisplayItem> cards = _flashcards.getValue();
