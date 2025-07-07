@@ -14,4 +14,22 @@
     <color name="gradient_red_start">#D9534F</color>
     <color name="gradient_red_end">#C9302C</color>
     <color name="surface_background">#F8F9FA</color>
+
+    <color name="primary">#212529</color>
+
+    <color name="text_primary">#212529</color>
+    <color name="text_secondary">#6C757D</color>
+    <color name="text_hint">#6C757D</color>
+    <color name="text_disabled">#ADB5BD</color>
+    <color name="text_accent">#495057</color>
+
+    <color name="outline">#DDDDDD</color>
+    <color name="button_blue">#667eea</color>
+
+    <!-- Practice screen specific colors -->
+    <color name="practice_question">#1A237E</color>  <!-- Màu xanh đậm cho câu hỏi -->
+    <color name="practice_title">#667EEA</color>     <!-- Màu xanh chính -->
+    <color name="practice_answer_text">#2C3E50</color>  <!-- Màu xám đậm dễ đọc cho text câu trả lời -->
+    <color name="practice_answer_stroke">#E2E8F0</color> <!-- Màu viền nhạt cho các nút đáp án -->
+    <color name="practice_progress_text">#64748B</color> <!-- Màu xám cho text progress -->
 </resources>

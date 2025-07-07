@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +33,7 @@ public class PracticeQuestionFragment extends Fragment {
     private Quiz quiz;
     private long quizId;
     private LinearLayout answersContainer;
-    private List<CompoundButton> optionsViews; // List để giữ các RadioButton/CheckBox
+    private List<MaterialCardView> optionsViews; // Change type from CompoundButton to MaterialCardView
 
     public static PracticeQuestionFragment newInstance(long quizId, Quiz quiz) {
         PracticeQuestionFragment fragment = new PracticeQuestionFragment();
@@ -80,43 +82,54 @@ public class PracticeQuestionFragment extends Fragment {
         answersContainer.removeAllViews();
         optionsViews.clear();
         List<String> answers = quiz.getAnswers();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         if (quiz.getType() == Quiz.Type.SINGLE_CHOICE) {
-            RadioGroup radioGroup = new RadioGroup(getContext());
             for (int i = 0; i < answers.size(); i++) {
-                RadioButton rb = new RadioButton(getContext());
-                rb.setText(answers.get(i));
-                rb.setId(i);
-                rb.setTextSize(18);
-                rb.setPadding(8, 16, 8, 16);
-                optionsViews.add(rb);
-                radioGroup.addView(rb);
+                MaterialCardView cardView = (MaterialCardView) inflater.inflate(
+                    R.layout.item_practice_answer, answersContainer, false);
+
+                TextView textAnswer = cardView.findViewById(R.id.text_answer_option);
+                textAnswer.setText(answers.get(i));
+
+                final int position = i;
+                cardView.setOnClickListener(v -> {
+                    // Uncheck all other cards
+                    for (MaterialCardView option : optionsViews) {
+                        option.setChecked(false);
+                    }
+                    cardView.setChecked(true);
+                    viewModel.onAnswerSelected(quizId, Collections.singletonList(position));
+                });
+
+                optionsViews.add(cardView);
+                answersContainer.addView(cardView);
             }
-            radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                viewModel.onAnswerSelected(quizId, Collections.singletonList(checkedId));
-            });
-            answersContainer.addView(radioGroup);
         } else { // MULTIPLE_CHOICE
             for (int i = 0; i < answers.size(); i++) {
-                CheckBox cb = new CheckBox(getContext());
-                cb.setText(answers.get(i));
-                cb.setId(i);
-                cb.setTextSize(18);
-                cb.setPadding(8, 16, 8, 16);
-                cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                MaterialCardView cardView = (MaterialCardView) inflater.inflate(
+                    R.layout.item_practice_answer, answersContainer, false);
+
+                TextView textAnswer = cardView.findViewById(R.id.text_answer_option);
+                textAnswer.setText(answers.get(i));
+
+                final int position = i;
+                cardView.setOnClickListener(v -> {
+                    cardView.setChecked(!cardView.isChecked());
                     updateViewModelWithMultipleChoices();
                 });
-                optionsViews.add(cb);
-                answersContainer.addView(cb);
+
+                optionsViews.add(cardView);
+                answersContainer.addView(cardView);
             }
         }
     }
 
     private void updateViewModelWithMultipleChoices() {
         ArrayList<Integer> selectedIndices = new ArrayList<>();
-        for(CompoundButton cb : optionsViews){
-            if(cb.isChecked()){
-                selectedIndices.add(cb.getId());
+        for (int i = 0; i < optionsViews.size(); i++) {
+            if (optionsViews.get(i).isChecked()) {
+                selectedIndices.add(i);
             }
         }
         viewModel.onAnswerSelected(quizId, selectedIndices);
@@ -124,18 +137,21 @@ public class PracticeQuestionFragment extends Fragment {
 
     private void showResults() {
         List<Integer> correctAnswers = quiz.getCorrectAnswerIndices();
-        for (CompoundButton option : optionsViews) {
-            int optionId = option.getId();
-            option.setEnabled(false); // Vô hiệu hóa lựa chọn
+        int colorCorrect = ContextCompat.getColor(requireContext(), R.color.correct_answer);
+        int colorIncorrect = ContextCompat.getColor(requireContext(), R.color.incorrect_answer);
 
-            // Tô màu xanh cho đáp án đúng
-            if (correctAnswers.contains(optionId)) {
-                option.setTextColor(ContextCompat.getColor(getContext(), R.color.correct_answer));
+        for (int i = 0; i < optionsViews.size(); i++) {
+            MaterialCardView cardView = optionsViews.get(i);
+            cardView.setEnabled(false);
+
+            if (correctAnswers.contains(i)) {
+                cardView.setStrokeColor(colorCorrect);
+                cardView.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
             }
 
-            // Nếu người dùng chọn sai, tô màu đỏ
-            if (option.isChecked() && !correctAnswers.contains(optionId)) {
-                option.setTextColor(ContextCompat.getColor(getContext(), R.color.incorrect_answer));
+            if (cardView.isChecked() && !correctAnswers.contains(i)) {
+                cardView.setStrokeColor(colorIncorrect);
+                cardView.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
             }
         }
     }

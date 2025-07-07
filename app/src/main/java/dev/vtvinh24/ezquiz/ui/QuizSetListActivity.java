@@ -140,7 +140,7 @@ public class QuizSetListActivity extends AppCompatActivity
   @Override
   public void onPracticeClick(long quizSetId) {
     Intent intent = new Intent(this, PracticeActivity.class);
-    intent.putExtra("quiz_set_id", quizSetId);
+    intent.putExtra(PracticeActivity.EXTRA_SET_ID, quizSetId);
     startActivity(intent);
   }
 
