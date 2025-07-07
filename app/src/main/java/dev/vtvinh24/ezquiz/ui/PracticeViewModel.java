@@ -61,6 +61,8 @@ public class PracticeViewModel extends AndroidViewModel {
 
     private final Map<Long, QuizAttemptResult> sessionResults = new HashMap<>();
 
+    private int currentPosition = 0;
+
     public PracticeViewModel(@NonNull Application application) {
         super(application);
         AppDatabase db = AppDatabaseProvider.getDatabase(application);
@@ -120,22 +122,35 @@ public class PracticeViewModel extends AndroidViewModel {
         _isAnswerChecked.postValue(true);
     }
 
-    public void moveToNextQuestion() {
-        Integer position = _currentQuestionPosition.getValue();
-        List<PracticeItem> items = _quizItems.getValue();
-        if (position != null && items != null) {
-            if (position < items.size() - 1) {
-                _currentQuestionPosition.setValue(position + 1);
-                _isAnswerChecked.setValue(false); // Reset trạng thái check
-                updateProgressText();
-            } else {
-                finishSession();
-            }
+    public Quiz getCurrentQuiz() {
+        List<PracticeItem> items = quizItems.getValue();
+        if (items != null && currentPosition < items.size()) {
+            return items.get(currentPosition).quiz;
         }
+        return null;
     }
 
-    private void finishSession() {
-        _sessionFinished.setValue(new SingleEvent<>(new ArrayList<>(sessionResults.values())));
+    public long getCurrentQuizId() {
+        List<PracticeItem> items = quizItems.getValue();
+        if (items != null && currentPosition < items.size()) {
+            return items.get(currentPosition).id;
+        }
+        return -1;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void moveToNextQuestion() {
+        List<PracticeItem> items = quizItems.getValue();
+        if (items != null && currentPosition < items.size() - 1) {
+            currentPosition++;
+            _currentQuestionPosition.setValue(currentPosition);
+            _isAnswerChecked.setValue(false);
+        } else {
+            _sessionFinished.setValue(new SingleEvent<>(new ArrayList<>(sessionResults.values())));
+        }
     }
 
     private void updateProgressText() {
