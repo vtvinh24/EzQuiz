@@ -274,7 +274,7 @@ async function insertSendToAppDiv() {
 }
 
 // Only show the QR code on supported quiz sites
-const DEFAULT_SITES = ["quizlet.com", "kahoot.it", "socrative.com", "forms.google.com", "quizziz.com", "wayground.com", "blooket.com", "gimkit.com"];
+const DEFAULT_SITES = ["quizlet.com", "kahoot.it", "socrative.com", "forms.google.com", "quizizz.com", "wayground.com", "blooket.com", "gimkit.com"];
 
 function getSupportedSites(callback) {
   if (chrome && chrome.storage && chrome.storage.local) {
