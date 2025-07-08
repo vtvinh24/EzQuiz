@@ -24,12 +24,21 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.quizlet.com/*", "*://*.kahoot.it/*", "*://*.socrative.com/*", "*://forms.google.com/*", "*://*.quizziz.com/*", "*://*.blooket.com/*", "*://*.gimkit.com/*"],
+      "matches": [
+        "*://*.quizlet.com/*",
+        "*://*.kahoot.it/*",
+        "*://*.socrative.com/*",
+        "*://forms.google.com/*",
+        "*://*.quizizz.com/*",
+        "*://*.wayground.com/*",
+        "*://*.blooket.com/*",
+        "*://*.gimkit.com/*"
+      ],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
   "host_permissions": [
     "https://paste.rs/",
     "https://0x0.st/",
@@ -37,7 +46,8 @@
     "*://*.kahoot.it/*",
     "*://*.socrative.com/*",
     "*://forms.google.com/*",
-    "*://*.quizziz.com/*",
+    "*://*.quizizz.com/*",
+    "*://*.wayground.com/*",
     "*://*.blooket.com/*",
     "*://*.gimkit.com/*"
   ],

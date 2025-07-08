@@ -1,4 +1,5 @@
 import { ExtractorInterface } from "./extractorInterface.js";
+import { getCurrentURL } from "./utils.js";
 
 class QuizletExtractor extends ExtractorInterface {
   constructor() {
@@ -47,7 +48,7 @@ class QuizletExtractor extends ExtractorInterface {
   }
 
   getURL() {
-    return window.location.href;
+    return getCurrentURL();
   }
 }
 
