@@ -46,16 +46,16 @@ public class TestConfigViewModel extends AndroidViewModel {
                 return;
             }
 
-            // === LOGIC ĐẾM MỚI (1-to-1) ===
+
             int availableMcCount = 0;
-            // Số câu T/F có thể tạo ra bằng số câu hỏi gốc
+
             int availableTfCount = 0;
 
             for (QuizEntity quiz : allQuizzes) {
                 if (quiz.answers != null && !quiz.answers.isEmpty()) {
-                    // Câu gốc có thể được chơi ở cả 2 chế độ
+
                     availableTfCount++;
-                    // Chỉ những câu > 2 đáp án mới tính là trắc nghiệm thuần túy
+
                     if (quiz.answers.size() > 2) {
                         availableMcCount++;
                     }
@@ -64,7 +64,7 @@ public class TestConfigViewModel extends AndroidViewModel {
 
             _mcCount.postValue(availableMcCount);
             _tfCount.postValue(availableTfCount);
-            // === KẾT THÚC LOGIC ĐẾM MỚI ===
+
         });
     }
 }

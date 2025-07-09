@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.db.AppDatabase;
 import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
@@ -25,7 +26,7 @@ import dev.vtvinh24.ezquiz.util.SingleEvent;
 
 public class TestViewModel extends AndroidViewModel {
 
-    // Lớp nội bộ để giữ Quiz và câu trả lời của người dùng
+
     public static class TestQuestionItem implements Serializable {
         public final long id;
         public final Quiz quiz;
@@ -37,7 +38,7 @@ public class TestViewModel extends AndroidViewModel {
         }
     }
 
-    // Lớp nội bộ để chứa kết quả cuối cùng
+
     public static class TestResult implements Serializable {
         public final int correctCount;
         public final int totalCount;
@@ -51,19 +52,19 @@ public class TestViewModel extends AndroidViewModel {
     private final QuizRepository quizRepository;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    // LiveData cho danh sách câu hỏi để hiển thị trên UI
+
     private final MutableLiveData<List<TestQuestionItem>> _questions = new MutableLiveData<>();
     public final LiveData<List<TestQuestionItem>> questions = _questions;
 
-    // LiveData cho trạng thái "Đang chấm điểm"
+
     private final MutableLiveData<Boolean> _isGrading = new MutableLiveData<>(false);
     public final LiveData<Boolean> isGrading = _isGrading;
 
-    // LiveData cho sự kiện cảnh báo khi chưa làm hết bài
+
     private final MutableLiveData<SingleEvent<Void>> _unansweredWarning = new MutableLiveData<>();
     public final LiveData<SingleEvent<Void>> unansweredWarning = _unansweredWarning;
 
-    // LiveData cho sự kiện khi bài kiểm tra hoàn thành
+
     private final MutableLiveData<SingleEvent<TestResult>> _sessionFinished = new MutableLiveData<>();
     public final LiveData<SingleEvent<TestResult>> sessionFinished = _sessionFinished;
 
@@ -87,11 +88,11 @@ public class TestViewModel extends AndroidViewModel {
                 return;
             }
 
-            // Tạo các danh sách riêng biệt cho từng loại câu hỏi
+
             List<TestQuestionItem> mcItems = new ArrayList<>();
             List<TestQuestionItem> tfItems = new ArrayList<>();
 
-            // Phân loại các câu hỏi vào danh sách tương ứng
+
             if (isMcChecked) {
                 for (QuizEntity entity : allOriginalQuizzes) {
                     if (entity.answers != null && entity.answers.size() > 2) {
@@ -104,12 +105,15 @@ public class TestViewModel extends AndroidViewModel {
 
             if (isTfChecked) {
                 long generatedIdCounter = -1L;
+                String trueString = getApplication().getString(R.string.answer_true);
+                String falseString = getApplication().getString(R.string.answer_false);
+
                 for (QuizEntity originalEntity : allOriginalQuizzes) {
                     if (originalEntity.answers == null || originalEntity.answers.isEmpty()) continue;
 
                     for (int i = 0; i < originalEntity.answers.size(); i++) {
                         String newQuestionText = originalEntity.question + "\n\n" + originalEntity.answers.get(i);
-                        List<String> newAnswers = Arrays.asList("Đúng", "Sai");
+                        List<String> newAnswers = Arrays.asList(trueString, falseString);
                         boolean isStatementTrue = originalEntity.correctAnswerIndices.contains(i);
                         List<Integer> newCorrectAnswerIndex = Collections.singletonList(isStatementTrue ? 0 : 1);
 
@@ -121,27 +125,23 @@ public class TestViewModel extends AndroidViewModel {
                 }
             }
 
-            // Xáo trộn thứ tự các câu hỏi BÊN TRONG mỗi danh sách
+
             Collections.shuffle(mcItems);
             Collections.shuffle(tfItems);
 
-            // Gộp các danh sách lại theo thứ tự: Trắc nghiệm trước, Đúng/Sai sau
+
             List<TestQuestionItem> finalCombinedList = new ArrayList<>();
             finalCombinedList.addAll(mcItems);
             finalCombinedList.addAll(tfItems);
 
-            // Giới hạn tổng số câu hỏi từ danh sách đã được sắp xếp đúng thứ tự
+
             List<TestQuestionItem> limitedList = finalCombinedList.stream().limit(totalCount).collect(Collectors.toList());
 
             _questions.postValue(limitedList);
         });
     }
 
-    /**
-     * Được gọi khi người dùng chọn một đáp án.
-     * Phương thức này chỉ cập nhật dữ liệu trong bộ nhớ.
-     * Việc cập nhật UI sẽ do Adapter tự xử lý bằng notifyItemChanged.
-     */
+
     public void onAnswerSelected(long quizId, List<Integer> selectedIndices) {
         List<TestQuestionItem> currentList = _questions.getValue();
         if (currentList == null) return;
@@ -153,9 +153,7 @@ public class TestViewModel extends AndroidViewModel {
         }
     }
 
-    /**
-     * Bắt đầu quá trình nộp bài.
-     */
+
     public void submitTest() {
         List<TestQuestionItem> currentList = _questions.getValue();
         if (currentList == null || currentList.isEmpty()) {
@@ -171,16 +169,11 @@ public class TestViewModel extends AndroidViewModel {
         }
     }
 
-    /**
-     * Buộc nộp bài ngay cả khi chưa làm hết.
-     */
+
     public void forceSubmitTest() {
         gradeTest();
     }
 
-    /**
-     * Thực hiện logic chấm điểm.
-     */
     private void gradeTest() {
         _isGrading.postValue(true);
         executor.execute(() -> {
@@ -191,13 +184,13 @@ public class TestViewModel extends AndroidViewModel {
             }
             int correctCount = 0;
             for (TestQuestionItem item : questions) {
-                // Sắp xếp để so sánh chính xác cho câu hỏi nhiều lựa chọn
+
                 Collections.sort(item.userAnswerIndices);
                 if (item.quiz.getCorrectAnswerIndices() != null) {
                     Collections.sort(item.quiz.getCorrectAnswerIndices());
                 }
 
-                // Logic chấm điểm đơn giản và nhất quán
+
                 boolean isCorrect = item.userAnswerIndices.equals(item.quiz.getCorrectAnswerIndices());
                 if (isCorrect) {
                     correctCount++;

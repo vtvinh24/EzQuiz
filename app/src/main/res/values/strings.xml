@@ -55,4 +55,71 @@
     <string name="next">Next</string>
     <string name="previous_card">Previous Card</string>
     <string name="next_card">Next Card</string>
+    <string name="error_collection_id_not_found">Error: Collection ID not found</string>
+    <string name="dialog_add_set_title"> More Quiz Sets  </string>
+    <string name="toast_starting_test_mode">Start Test Mode for Set ID: %1$d</string>
+    <string name="error_invalid_test_params">Error: Invalid test parameters.</string>
+    <string name="dialog_grading_message"> Grading…</string>
+    <string name="toast_no_questions_found">No matching questions were found for the selected mode(s).</string>
+    <string name="test_progress_format">%1$d / %2$d</string>
+    <string name="dialog_unanswered_title">Not completed</string>
+    <string name="dialog_unanswered_message">You have not completed all the questions. Are you sure you want to submit?</string>
+    <string name="btn_submit_anyway">Submit</string>
+    <string name="btn_continue_test">Continue</string>
+    <string name="dialog_close_test_title">Exit the test?</string>
+    <string name="dialog_close_test_message">Your progress will not be saved. Are you sure you want to exit?</string>
+    <string name="btn_exit">Exit</string>
+
+        <string name="question_header_multiple_choice">Multiple Choice</string>
+        <string name="prompt_select_multiple_answers">Choose one or more correct answers</string>
+        <string name="prompt_select_one_answer">Choose one correct answer</string>
+        <string name="question_header_true_false">True / False</string>
+        <string name="test_question_progress_format">%1$d / %2$d</string>
+    <string name="error_invalid_quiz_set_id">Error: Invalid quiz set ID.</string>
+    <string name="switch_label_multiple_choice">Multiple Choice (%d)</string>
+    <string name="switch_label_true_false">True/False (%d)</string>
+    <string name="hint_question_count">Questions (max: %d)</string>
+    <string name="toast_select_at_least_one_type">Please select at least one question type.</string>
+    <string name="toast_no_questions_for_selection">There are no questions of the selected type(s).</string>
+    <string name="error_invalid_question_count_range">Number of invalid questions (1 - %d)</string>
+    <string name="error_invalid_question_count">Number of invalid questions.</string>
+
+        <string name="toast_no_result_data">No result data.</string>
+        <string name="test_result_score_format">%1$d/%2$d (%3$d%%)</string>
+        <string name="test_result_message_excellent">You are excellent </string>
+        <string name="test_result_message_good">Congratulations! You have completed the test.</string>
+        <string name="test_result_message_needs_practice">You need more practice </string>
+        <string name="share_result_content">I just completed the test on EzQuiz with a score of %1$d/%2$d! </string>
+        <string name="share_result_title">EzQuiz Results</string>
+        <string name="toast_practice_again_coming_soon"> Retry feature will be added soon!</string>
+        <string name="error_cannot_find_id_for_retry">Error: ID not found for retry.</string>
+    <string name="answer_true">True</string>
+    <string name="answer_false">False</string>
+    <string name="cd_close">Close</string>
+    <string name="title_test_setup">Set up the test</string>
+    <string name="placeholder_set_name">Name of the card set</string>
+    <string name="hint_quantity">Quantity</string>
+    <string name="info_leave_blank_for_all">Leave blank to get all available questions.</string>
+    <string name="label_multiple_choice">Multiple Choice</string>
+    <string name="label_true_false">True/False</string>
+    <string name="btn_start_test">Start the test</string>
+
+    <string name="btn_submit_test">Submit test</string>
+    <string name="fab_next_unanswered">Unanswered question</string>
+    <string name="cd_success_icon">Success icon</string>
+    <string name="label_correct_questions">Correct question</string>
+    <string name="label_incorrect_questions">Incorrect question</string>
+    <string name="btn_share_result">Share result</string>
+    <string name="btn_practice_again">Retake the test</string>
+    <string name="btn_finish">Finished</string>
+    <string name="placeholder_terminology">Terminology</string>
+    <string name="prompt_choose_correct_answer">Choose the correct answer</string>
+    <string name="placeholder_mc_question_content">Multiple choice question content here?</string>
+    <string name="prompt_choose_answer">Choose answer</string>
+    <string name="placeholder_tf_question_content">The `final` statement in Java can be applied to variables, methods, and classes.</string>
+    <string name="label_suggested_answer">Suggested answer:</string>
+    <string name="placeholder_random_answer">This is a randomly selected answer.</string>
+    <string name="prompt_is_answer_true_or_false">Is the above answer True or False?</string>
+
+
 </resources>

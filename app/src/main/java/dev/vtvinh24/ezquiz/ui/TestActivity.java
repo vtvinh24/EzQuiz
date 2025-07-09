@@ -49,7 +49,7 @@ public class TestActivity extends AppCompatActivity {
         boolean isTfChecked = getIntent().getBooleanExtra("isTfChecked", false);
 
         if (setId == -1) {
-            Toast.makeText(this, "Lỗi: Tham số bài kiểm tra không hợp lệ.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_invalid_test_params), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -72,7 +72,7 @@ public class TestActivity extends AppCompatActivity {
         textProgress = findViewById(R.id.text_test_progress);
         btnSubmit = findViewById(R.id.btn_submit_test);
         gradingDialog = new ProgressDialog(this);
-        gradingDialog.setMessage("🔄 Đang chấm điểm…");
+        gradingDialog.setMessage(getString(R.string.dialog_grading_message));
         gradingDialog.setCancelable(false);
     }
 
@@ -85,7 +85,7 @@ public class TestActivity extends AppCompatActivity {
         viewModel.questions.observe(this, testQuestionItems -> {
             if (testQuestionItems != null) {
                 if (testQuestionItems.isEmpty()) {
-                    Toast.makeText(this, "Không tìm thấy câu hỏi phù hợp cho (các) chế độ đã chọn.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.toast_no_questions_found), Toast.LENGTH_LONG).show();
                     finish();
                 } else {
                     this.currentTestItems = testQuestionItems;
@@ -95,7 +95,7 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        // Observer này sẽ được kích hoạt mỗi khi một item được cập nhật
+
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeChanged(int positionStart, int itemCount) {
@@ -132,24 +132,24 @@ public class TestActivity extends AppCompatActivity {
         }
         long answeredCount = currentTestItems.stream().filter(item -> !item.userAnswerIndices.isEmpty()).count();
         int totalCount = currentTestItems.size();
-        textProgress.setText(answeredCount + " / " + totalCount);
+        textProgress.setText(getString(R.string.test_progress_format, (int) answeredCount, totalCount));
     }
 
     private void showUnansweredWarningDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Chưa hoàn thành")
-                .setMessage("Bạn chưa làm hết tất cả các câu hỏi. Bạn có chắc chắn muốn nộp bài không?")
-                .setPositiveButton("Nộp bài", (dialog, which) -> viewModel.forceSubmitTest())
-                .setNegativeButton("Làm tiếp", null)
+                .setTitle(R.string.dialog_unanswered_title)
+                .setMessage(R.string.dialog_unanswered_message)
+                .setPositiveButton(R.string.btn_submit_anyway, (dialog, which) -> viewModel.forceSubmitTest())
+                .setNegativeButton(R.string.btn_continue_test, null)
                 .show();
     }
 
     private void showCloseConfirmationDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Thoát bài kiểm tra?")
-                .setMessage("Tiến trình của bạn sẽ không được lưu lại. Bạn có chắc chắn muốn thoát?")
-                .setPositiveButton("Thoát", (dialog, which) -> finish())
-                .setNegativeButton("Hủy", null)
+                .setTitle(R.string.dialog_close_test_title)
+                .setMessage(R.string.dialog_close_test_message)
+                .setPositiveButton(R.string.btn_exit, (dialog, which) -> finish())
+                .setNegativeButton(R.string.btn_cancel, null)
                 .show();
     }
 
@@ -168,4 +168,3 @@ public class TestActivity extends AppCompatActivity {
         showCloseConfirmationDialog();
     }
 }
-

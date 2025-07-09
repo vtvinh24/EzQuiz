@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Phần tiêu đề câu hỏi (Số thứ tự, highlight) -->
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:textStyle="bold"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                tools:text="Câu hỏi" />
+                tools:text="@string/question" />
 
             <TextView
                 android:id="@+id/text_question_number"
@@ -43,7 +43,7 @@
                 tools:text="1 / 20" />
         </RelativeLayout>
 
-        <!-- Nội dung câu hỏi -->
+
         <TextView
             android:id="@+id/text_question_content"
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:lineSpacingMultiplier="1.2"
             android:layout_marginBottom="24dp"
-            tools:text="Nội dung câu hỏi trắc nghiệm ở đây?" />
+            tools:text="@string/placeholder_mc_question_content" />
 
         <View
             android:layout_width="match_parent"
@@ -59,16 +59,15 @@
             android:background="?attr/colorOutlineVariant"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Phần lựa chọn câu trả lời -->
+
         <TextView
             android:id="@+id/text_answer_prompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceTitleSmall"
             android:layout_marginBottom="12dp"
-            tools:text="Chọn câu trả lời" />
+            tools:text="@string/prompt_choose_answer" />
 
-        <!-- Container cho các đáp án (sẽ được thêm bằng code) -->
         <LinearLayout
             android:id="@+id/container_answers"
             android:layout_width="match_parent"

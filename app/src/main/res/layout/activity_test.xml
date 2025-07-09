@@ -7,7 +7,7 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.TestActivity">
 
-    <!-- Thanh công cụ (App Bar) ở trên cùng -->
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,12 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <!-- Nội dung bên trong Toolbar -->
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!-- Nút thoát -->
+
                 <ImageButton
                     android:id="@+id/btn_close_test"
                     android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
-                <!-- Tiến độ -->
+
                 <TextView
                     android:id="@+id/text_test_progress"
                     android:layout_width="wrap_content"
@@ -43,12 +43,12 @@
                     android:textStyle="bold"
                     tools:text="0 / 20" />
 
-                <!-- Nút nộp bài -->
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_submit_test"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nộp bài"
+                    android:text="@string/btn_submit_test"
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"/>
@@ -58,7 +58,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Danh sách câu hỏi có thể cuộn -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_test_questions"
         android:layout_width="match_parent"
@@ -69,14 +69,14 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_test_question" />
 
-    <!-- (Tùy chọn) Nút cuộn đến câu chưa làm -->
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_next_unanswered"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="16dp"
-        android:text="Câu chưa trả lời"
+        android:text="@string/fab_next_unanswered"
         app:icon="@drawable/ic_arrow_downward"
         android:visibility="gone"
         tools:visibility="visible"/>

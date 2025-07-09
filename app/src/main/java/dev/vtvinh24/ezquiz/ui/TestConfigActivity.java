@@ -23,7 +23,7 @@ public class TestConfigActivity extends AppCompatActivity {
     private long quizSetId;
     private TestConfigViewModel viewModel;
 
-    // Thay CheckBox bằng SwitchMaterial
+
     private SwitchMaterial switchMultipleChoice;
     private SwitchMaterial switchTrueFalse;
     private TextInputEditText editQuestionCount;
@@ -40,7 +40,7 @@ public class TestConfigActivity extends AppCompatActivity {
 
         quizSetId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
         if (quizSetId == -1) {
-            Toast.makeText(this, "Lỗi: ID bộ câu hỏi không hợp lệ.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_invalid_quiz_set_id), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -50,19 +50,19 @@ public class TestConfigActivity extends AppCompatActivity {
         setupObservers();
 
         CompoundButton.OnCheckedChangeListener listener = (buttonView, isChecked) -> updateMaxQuestionsHint();
-        // Gắn listener cho Switch
+
         switchMultipleChoice.setOnCheckedChangeListener(listener);
         switchTrueFalse.setOnCheckedChangeListener(listener);
 
         viewModel.loadAllTestableQuizzes(quizSetId);
         btnStartTest.setOnClickListener(v -> startTest());
 
-        // (Tùy chọn) Thêm sự kiện cho nút đóng
+
         findViewById(R.id.icon_close).setOnClickListener(v -> finish());
     }
 
     private void initViews() {
-        // Ánh xạ các view mới
+
         switchMultipleChoice = findViewById(R.id.switch_multiple_choice);
         switchTrueFalse = findViewById(R.id.switch_true_false);
         editQuestionCount = findViewById(R.id.edit_question_count);
@@ -73,20 +73,20 @@ public class TestConfigActivity extends AppCompatActivity {
     private void setupObservers() {
         viewModel.mcCount.observe(this, count -> {
             availableMcCount = count;
-            // Cập nhật text cho switch để hiển thị số câu hỏi có sẵn
-            switchMultipleChoice.setText(String.format("Trắc nghiệm (%d)", count));
+
+            switchMultipleChoice.setText(getString(R.string.switch_label_multiple_choice, count));
             updateMaxQuestionsHint();
         });
         viewModel.tfCount.observe(this, count -> {
             availableTfCount = count;
-            // Cập nhật text cho switch để hiển thị số câu hỏi có sẵn
-            switchTrueFalse.setText(String.format("Đúng/Sai (%d)", count));
+
+            switchTrueFalse.setText(getString(R.string.switch_label_true_false, count));
             updateMaxQuestionsHint();
         });
     }
 
     private void updateMaxQuestionsHint() {
-        textMaxHint.setText("Câu hỏi (tối đa: " + getMaxQuestionsFromSelection() + ")");
+        textMaxHint.setText(getString(R.string.hint_question_count, getMaxQuestionsFromSelection()));
     }
 
     private int getMaxQuestionsFromSelection() {
@@ -105,13 +105,13 @@ public class TestConfigActivity extends AppCompatActivity {
         boolean isTfChecked = switchTrueFalse.isChecked();
 
         if (!isMcChecked && !isTfChecked) {
-            Toast.makeText(this, "Vui lòng chọn ít nhất một loại câu hỏi.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_select_at_least_one_type), Toast.LENGTH_SHORT).show();
             return;
         }
 
         int maxQuestionsForSelection = getMaxQuestionsFromSelection();
         if (maxQuestionsForSelection == 0) {
-            Toast.makeText(this, "Không có câu hỏi nào thuộc (các) loại đã chọn.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_no_questions_for_selection), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -124,11 +124,11 @@ public class TestConfigActivity extends AppCompatActivity {
             try {
                 questionCount = Integer.parseInt(countStr);
                 if (questionCount <= 0 || questionCount > maxQuestionsForSelection) {
-                    editQuestionCount.setError("Số câu hỏi không hợp lệ (1 - " + maxQuestionsForSelection + ")");
+                    editQuestionCount.setError(getString(R.string.error_invalid_question_count_range, maxQuestionsForSelection));
                     return;
                 }
             } catch (NumberFormatException e) {
-                editQuestionCount.setError("Số câu hỏi không hợp lệ.");
+                editQuestionCount.setError(getString(R.string.error_invalid_question_count));
                 return;
             }
         }

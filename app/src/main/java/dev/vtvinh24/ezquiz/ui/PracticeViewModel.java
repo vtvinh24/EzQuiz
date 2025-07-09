@@ -91,7 +91,7 @@ public class PracticeViewModel extends AndroidViewModel {
         });
     }
 
-    // Được gọi từ Fragment khi người dùng chọn/bỏ chọn một đáp án
+
     public void onAnswerSelected(long quizId, List<Integer> selectedIndices) {
         List<PracticeItem> items = _quizItems.getValue();
         if (items == null) return;

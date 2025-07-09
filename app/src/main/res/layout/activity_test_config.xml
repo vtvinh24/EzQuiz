@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Header -->
+
         <ImageView
             android:id="@+id/icon_close"
             android:layout_width="32dp"
@@ -21,14 +21,14 @@
             android:src="@drawable/ic_close"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="Đóng"
+            android:contentDescription="@string/cd_close"
             app:tint="?attr/colorOnSurface" />
 
         <TextView
             android:id="@+id/text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Thiết lập bài kiểm tra"
+            android:text="@string/title_test_setup"
             android:textAppearance="?attr/textAppearanceHeadlineSmall"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/icon_close"
@@ -40,7 +40,7 @@
             android:id="@+id/text_subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Tên bộ thẻ"
+            tools:text="@string/placeholder_set_name"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintTop_toBottomOf="@id/text_title"
@@ -49,7 +49,7 @@
             android:layout_marginTop="4dp"/>
 
 
-        <!-- Phần cấu hình số câu hỏi -->
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_question_count"
             android:layout_width="match_parent"
@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Số lượng"
+                    android:hint="@string/hint_quantity"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -97,12 +97,12 @@
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     android:layout_marginTop="4dp"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:text="Để trống để lấy tất cả câu hỏi có sẵn."/>
+                    android:text="@string/info_leave_blank_for_all"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
 
-        <!-- Phần chọn loại câu hỏi -->
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_question_types"
             android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                 android:divider="@drawable/divider_horizontal"
                 android:showDividers="middle">
 
-                <!-- Trắc nghiệm: Sẽ tự động dùng colorPrimary cho trạng thái checked -->
+
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_multiple_choice"
                     android:layout_width="match_parent"
@@ -130,30 +130,30 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="12dp"
                     android:backgroundTint="@color/gradient_blue_start"
-                    android:text="Trắc nghiệm"
+                    android:text="@string/label_multiple_choice"
                     android:checked="true"
                     android:textAppearance="?attr/textAppearanceTitleMedium"/>
 
-                <!-- Đúng/Sai: Sẽ tự động dùng colorPrimary cho trạng thái checked -->
+
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_true_false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="12dp"
-                    android:text="Đúng/Sai"
+                    android:text="@string/label_true_false"
                     android:textAppearance="?attr/textAppearanceTitleMedium"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Nút bắt đầu: Sẽ tự động dùng colorPrimary làm màu nền -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_start_test"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/gradient_blue_start"
-            android:text="Bắt đầu làm kiểm tra"
+            android:text="@string/btn_start_test"
             android:paddingVertical="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

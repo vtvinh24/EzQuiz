@@ -27,7 +27,7 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
 
     private final TestViewModel viewModel;
 
-    // Định nghĩa các loại View
+
     private static final int VIEW_TYPE_MULTIPLE_CHOICE = 1;
     private static final int VIEW_TYPE_TRUE_FALSE = 2;
 
@@ -39,9 +39,10 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
     @Override
     public int getItemViewType(int position) {
         TestViewModel.TestQuestionItem item = getItem(position);
-        // Câu hỏi được tạo ra cho chế độ Đúng/Sai sẽ luôn có 2 đáp án
+
         if (item.quiz.getAnswers() != null && item.quiz.getAnswers().size() == 2) {
-            // Kiểm tra thêm nội dung để chắc chắn đây là câu Đúng/Sai
+
+            // Note: These strings are for logic, not display. Do not extract.
             if (item.quiz.getAnswers().get(0).equalsIgnoreCase("Đúng") &&
                     item.quiz.getAnswers().get(1).equalsIgnoreCase("Sai")) {
                 return VIEW_TYPE_TRUE_FALSE;
@@ -72,7 +73,7 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
         }
     }
 
-    // ViewHolder cho Trắc nghiệm
+
     class MultipleChoiceViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cardQuestion;
         TextView textQuestionHeader, textQuestionNumber, textQuestionContent, textAnswerPrompt;
@@ -89,14 +90,15 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
         }
 
         void bind(TestViewModel.TestQuestionItem item, int position, int total) {
-            textQuestionHeader.setText("Trắc nghiệm");
-            textQuestionNumber.setText(position + " / " + total);
+            Context context = itemView.getContext();
+            textQuestionHeader.setText(R.string.question_header_multiple_choice);
+            textQuestionNumber.setText(context.getString(R.string.test_question_progress_format, position, total));
             textQuestionContent.setText(item.quiz.getQuestion());
 
             if (item.quiz.getCorrectAnswerIndices() != null && item.quiz.getCorrectAnswerIndices().size() > 1) {
-                textAnswerPrompt.setText("Chọn một hoặc nhiều đáp án đúng");
+                textAnswerPrompt.setText(R.string.prompt_select_multiple_answers);
             } else {
-                textAnswerPrompt.setText("Chọn một đáp án đúng");
+                textAnswerPrompt.setText(R.string.prompt_select_one_answer);
             }
             updateCardHighlight(cardQuestion, item);
 
@@ -125,7 +127,7 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
                         newSelectedIndices.add(clickedIndex);
                     }
 
-                    // Cập nhật ViewModel và thông báo cho adapter vẽ lại item này
+
                     viewModel.onAnswerSelected(item.id, newSelectedIndices);
                     notifyItemChanged(getAdapterPosition());
                 });
@@ -134,14 +136,14 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
         }
     }
 
-    // ViewHolder cho Đúng/Sai
+
     class TrueFalseViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cardQuestion;
         TextView textQuestionHeader, textQuestionNumber, textQuestionContent;
-        // Đổi tên biến cho khớp với ID để dễ đọc hơn (tùy chọn nhưng nên làm)
+
         MaterialButton btnTrue, btnFalse;
 
-        // === THAY ĐỔI TRONG HÀM KHỞI TẠO ===
+
         public TrueFalseViewHolder(@NonNull View itemView) {
             super(itemView);
             cardQuestion = itemView.findViewById(R.id.card_question);
@@ -149,42 +151,41 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
             textQuestionNumber = itemView.findViewById(R.id.text_question_number);
             textQuestionContent = itemView.findViewById(R.id.text_question_content);
 
-            // Sử dụng ID đúng từ file XML
             btnTrue = itemView.findViewById(R.id.btn_true);
             btnFalse = itemView.findViewById(R.id.btn_false);
         }
 
-        // === THAY ĐỔI TRONG PHƯƠNG THỨC BIND ===
+
         void bind(TestViewModel.TestQuestionItem item, int position, int total) {
-            textQuestionHeader.setText("Đúng / Sai");
-            textQuestionNumber.setText(position + " / " + total);
-            // Nội dung câu hỏi giờ đây là sự kết hợp của câu hỏi gốc và một đáp án
-            // Để hiển thị đúng theo layout mới của bạn, chúng ta cần tách chúng ra
+            Context context = itemView.getContext();
+            textQuestionHeader.setText(R.string.question_header_true_false);
+            textQuestionNumber.setText(context.getString(R.string.test_question_progress_format, position, total));
+
             String fullQuestion = item.quiz.getQuestion();
             String[] parts = fullQuestion.split("\n\n");
             if (parts.length == 2) {
-                textQuestionContent.setText(parts[0]); // Câu hỏi gốc
+                textQuestionContent.setText(parts[0]);
                 // Tìm TextView cho đáp án được hiển thị
                 TextView textDisplayedAnswer = itemView.findViewById(R.id.text_displayed_answer);
                 if (textDisplayedAnswer != null) {
-                    textDisplayedAnswer.setText(parts[1]); // Đáp án đề xuất
+                    textDisplayedAnswer.setText(parts[1]);
                 }
             } else {
-                // Trường hợp dự phòng nếu không tách được
+
                 textQuestionContent.setText(fullQuestion);
             }
 
             updateCardHighlight(cardQuestion, item);
 
-            // Logic của bạn giả định đáp án 0 là "Đúng" và 1 là "Sai"
+
             final int TRUE_INDEX = 0;
             final int FALSE_INDEX = 1;
 
-            // Cập nhật trạng thái cho các nút mới
+
             updateButtonState(btnTrue, item.userAnswerIndices.contains(TRUE_INDEX));
             updateButtonState(btnFalse, item.userAnswerIndices.contains(FALSE_INDEX));
 
-            // Gắn sự kiện click
+
             btnTrue.setOnClickListener(v -> {
                 viewModel.onAnswerSelected(item.id, Collections.singletonList(TRUE_INDEX));
                 notifyItemChanged(getAdapterPosition());
@@ -229,7 +230,7 @@ public class TestAdapter extends ListAdapter<TestViewModel.TestQuestionItem, Rec
 
         @Override
         public boolean areContentsTheSame(@NonNull TestViewModel.TestQuestionItem oldItem, @NonNull TestViewModel.TestQuestionItem newItem) {
-            // So sánh lựa chọn của người dùng là đủ cho trường hợp này
+
             return oldItem.userAnswerIndices.equals(newItem.userAnswerIndices);
         }
     };

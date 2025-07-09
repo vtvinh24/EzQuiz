@@ -53,9 +53,7 @@ public interface QuizDao {
   @Query("SELECT COUNT(*) FROM quiz WHERE quizSetId = :quizSetId")
   int countByQuizSetId(long quizSetId);
 
-  // ====================================================================
-  // === THÊM PHƯƠNG THỨC MỚI NÀY VÀO ===
-  // Lấy TẤT CẢ các quiz trong một set để dùng cho màn hình Flashcard
+
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId")
   List<QuizEntity> getAllQuizzesBySetIdForFlashcard(long quizSetId);
   // ====================================================================
@@ -70,27 +68,17 @@ public interface QuizDao {
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type != 'FLASHCARD'")
   List<QuizEntity> getAllTestableQuizzesOfSet(long quizSetId);
 
-  /**
-   * Đếm số lượng câu hỏi Trắc nghiệm (cả đơn và đa lựa chọn) trong một bộ.
-   */
+
   @Query("SELECT COUNT(id) FROM quiz WHERE quizSetId = :quizSetId AND (type = 'SINGLE_CHOICE' OR type = 'MULTIPLE_CHOICE')")
   int countMultipleChoiceQuizzes(long quizSetId);
 
-  /**
-   * Đếm số lượng câu hỏi Đúng/Sai trong một bộ.
-   */
   @Query("SELECT COUNT(id) FROM quiz WHERE quizSetId = :quizSetId AND type = 'TRUE_FALSE'")
   int countTrueFalseQuizzes(long quizSetId);
 
-  /**
-   * Lấy các câu hỏi trong một bộ dựa trên một danh sách các loại (types) được chỉ định.
-   */
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type IN (:types)")
   List<QuizEntity> getQuizzesOfSetByTypes(long quizSetId, List<Quiz.Type> types);
 
-  /**
-   * Đếm số lượng câu hỏi trong một bộ dựa trên một danh sách các loại.
-   */
+
   @Query("SELECT COUNT(id) FROM quiz WHERE quizSetId = :quizSetId AND type IN (:types)")
   int countQuizzesOfSetByTypes(long quizSetId, List<Quiz.Type> types);
 

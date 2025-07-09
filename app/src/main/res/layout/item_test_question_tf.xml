@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textStyle="bold"
-                tools:text="Câu hỏi" />
+                tools:text="@string/question" />
 
             <TextView
                 android:id="@+id/text_question_number"
@@ -48,13 +48,13 @@
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:lineSpacingMultiplier="1.2"
             android:layout_marginBottom="16dp"
-            tools:text="Câu lệnh `final` trong Java có thể được áp dụng cho biến, phương thức và lớp." />
+            tools:text="@string/placeholder_tf_question_content" />
 
         <!-- === KHUNG HIỂN THỊ CÂU TRẢ LỜI NGẪU NHIÊN === -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Câu trả lời đề xuất:"
+            android:text="@string/label_suggested_answer"
             android:textAppearance="?attr/textAppearanceTitleSmall"
             android:layout_marginBottom="8dp"/>
 
@@ -72,7 +72,7 @@
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:textStyle="italic"
                 android:gravity="center"
-                tools:text="Đây là một câu trả lời được chọn ngẫu nhiên."/>
+                tools:text="@string/placeholder_random_answer"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -86,7 +86,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Câu trả lời trên là Đúng hay Sai?"
+            android:text="@string/prompt_is_answer_true_or_false"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             android:layout_marginBottom="8dp"/>
@@ -101,7 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sai"
+                android:text="@string/answer_false"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_marginEnd="8dp"/>
 
@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Đúng"
+                android:text="@string/answer_true"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_marginStart="8dp"/>
         </LinearLayout>

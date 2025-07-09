@@ -72,11 +72,11 @@ public class Quiz implements Serializable {
   }
   @Override
   public boolean equals(Object o) {
-    // 1. Kiểm tra xem có phải là chính nó không
+
     if (this == o) return true;
-    // 2. Kiểm tra xem có null không hoặc có khác lớp không
+
     if (o == null || getClass() != o.getClass()) return false;
-    // 3. Ép kiểu và so sánh từng trường
+
     Quiz quiz = (Quiz) o;
     return archived == quiz.archived &&
             difficulty == quiz.difficulty &&
@@ -90,7 +90,7 @@ public class Quiz implements Serializable {
 
   @Override
   public int hashCode() {
-    // Tạo một hash code duy nhất dựa trên các trường đã dùng trong equals()
+
     return Objects.hash(question, answers, correctAnswerIndices, type, createdAt, updatedAt, archived, difficulty);
   }
 

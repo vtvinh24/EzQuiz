@@ -31,11 +31,11 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
   private final List<QuizSetEntity> quizSets;
   private final Context context;
 
-  // === Listeners cho các hành động ===
+
   private final OnItemClickListener itemClickListener;
   private final OnPlayFlashcardClickListener playFlashcardClickListener;
   private final OnPracticeClickListener practiceClickListener;
-  private final OnTestClickListener testClickListener; // <<< BIẾN CỦA BẠN
+  private final OnTestClickListener testClickListener;
 
   private final int[][] gradientColors = {
           {R.color.gradient_blue_start, R.color.gradient_blue_end},
@@ -49,13 +49,13 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
                         OnItemClickListener itemClickListener,
                         OnPlayFlashcardClickListener playFlashcardClickListener,
                         OnPracticeClickListener practiceClickListener,
-                        OnTestClickListener testClickListener) { // <<< SỬA ĐỔI Ở ĐÂY
+                        OnTestClickListener testClickListener) {
     this.context = context;
     this.quizSets = quizSets;
     this.itemClickListener = itemClickListener;
     this.playFlashcardClickListener = playFlashcardClickListener;
     this.practiceClickListener = practiceClickListener;
-    this.testClickListener = testClickListener; // <<< GÁN GIÁ TRỊ CÒN THIẾU
+    this.testClickListener = testClickListener;
   }
 
   @NonNull
@@ -70,7 +70,7 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     QuizSetEntity quizSet = quizSets.get(position);
     Context itemContext = holder.itemView.getContext();
 
-    // --- Set quiz set name and description ---
+
     holder.textName.setText(quizSet.name != null ? quizSet.name : "Unnamed Quiz Set");
     String description = quizSet.description;
     if (description == null || description.trim().isEmpty()) {
@@ -78,11 +78,11 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     }
     holder.textDescription.setText(description);
 
-    // --- Set dynamic gradient background for icon ---
+
     setGradientBackground(holder.iconBackground, position, itemContext);
 
     // --- Get actual quiz count from database ---
-    // Cảnh báo: Lời gọi này có thể gây giật lag.
+
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler mainHandler = new Handler(Looper.getMainLooper());
     executor.execute(() -> {
@@ -120,7 +120,7 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       }
     });
 
-    // ================== THÊM LISTENER CHO NÚT TEST ==================
+
     holder.btnTest.setOnClickListener(v -> {
       if (testClickListener != null) {
         testClickListener.onTestClick(quizSet.id);
@@ -133,7 +133,7 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     return quizSets.size();
   }
 
-  // --- Các phương thức helper ---
+
   private void setGradientBackground(ImageView iconBackground, int position, Context context) {
     int colorIndex = position % gradientColors.length;
     int startColorRes = gradientColors[colorIndex][0];
@@ -166,14 +166,14 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     }
   }
 
-  // ================== CẬP NHẬT VIEW HOLDER ==================
+
   static class ViewHolder extends RecyclerView.ViewHolder {
     TextView textName, textDescription;
     ImageView iconBackground, iconQuizSet;
     Chip chipQuizCount, chipDifficulty;
     MaterialButton btnPlayFlashcard;
-    MaterialButton btnPracticeQuiz; // Đổi sang MaterialButton cho nhất quán
-    MaterialButton btnTest; // <<< THÊM NÚT TEST
+    MaterialButton btnPracticeQuiz;
+    MaterialButton btnTest;
 
     ViewHolder(View itemView) {
       super(itemView);
@@ -185,11 +185,11 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       chipDifficulty = itemView.findViewById(R.id.chip_difficulty);
       btnPlayFlashcard = itemView.findViewById(R.id.btn_play_flashcard);
       btnPracticeQuiz = itemView.findViewById(R.id.btn_practice_quiz);
-      btnTest = itemView.findViewById(R.id.btn_test); // <<< TÌM ID CỦA NÚT TEST
+      btnTest = itemView.findViewById(R.id.btn_test);
     }
   }
 
-  // === Các Interface cho Listener ===
+
   public interface OnItemClickListener {
     void onItemClick(QuizSetEntity quizSet);
   }

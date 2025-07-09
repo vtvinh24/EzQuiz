@@ -72,24 +72,20 @@ public class QuizRepository {
     return result;
   }
 
-  /**
-   * Lấy các câu hỏi trắc nghiệm (cả đơn và đa lựa chọn) của một bộ.
-   */
+
   public List<QuizEntity> getMultipleChoiceQuizzesOfSet(long setId) {
     return db.quizDao().getMultipleChoiceQuizzesOfSet(setId);
   }
 
-  /**
-   * Lấy các câu hỏi Đúng/Sai của một bộ.
-   */
+
   public List<QuizEntity> getTrueFalseQuizzesOfSet(long setId) {
     return db.quizDao().getTrueFalseQuizzesOfSet(setId);
   }
 
-  // =================================================================
+
 
   public List<QuizEntity> getQuizzesOfSet(long setId) {
-    // Sửa lại phương thức này để nó gọi đến một DAO tổng quát hơn nếu cần
+
     return db.quizDao().getAllTestableQuizzesOfSet(setId);
   }
 
