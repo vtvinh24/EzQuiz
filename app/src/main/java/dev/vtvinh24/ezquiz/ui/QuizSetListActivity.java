@@ -26,30 +26,35 @@ import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 
-// Thêm implements QuizSetAdapter.OnPlayFlashcardClickListener
+// =================== BƯỚC 1: IMPLEMENT INTERFACE MỚI ===================
 public class QuizSetListActivity extends AppCompatActivity
-        implements QuizSetAdapter.OnItemClickListener, QuizSetAdapter.OnPlayFlashcardClickListener, QuizSetAdapter.OnPracticeClickListener {
+        implements QuizSetAdapter.OnItemClickListener,
+        QuizSetAdapter.OnPlayFlashcardClickListener,
+        QuizSetAdapter.OnPracticeClickListener,
+        QuizSetAdapter.OnTestClickListener { // <<< THÊM INTERFACE MỚI VÀO ĐÂY
 
-  public static final String EXTRA_COLLECTION_ID = "collectionId"; // Hằng số cho ID bộ sưu tập
-  private final List<QuizSetEntity> quizSets = new ArrayList<>(); // Đổi từ collections sang quizSets
-  private final QuizSetRepository quizSetRepository; // Sử dụng repository
+  public static final String EXTRA_COLLECTION_ID = "collectionId";
+  private final List<QuizSetEntity> quizSets = new ArrayList<>();
   private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
   private final java.util.concurrent.ExecutorService executor = Executors.newSingleThreadExecutor();
+
+  // Khai báo biến ở đây
+  private QuizSetRepository quizSetRepository;
   private RecyclerView recyclerView;
   private QuizSetAdapter adapter;
   private AppDatabase db;
-  private long currentCollectionId; // Để biết đang ở bộ sưu tập nào
+  private long currentCollectionId;
 
-  public QuizSetListActivity() {
-    // Khởi tạo repository ở đây hoặc thông qua DI
-    db = AppDatabaseProvider.getDatabase(this); // Sẽ được truyền context từ Application
-    quizSetRepository = new QuizSetRepository(db);
-  }
+  // Xóa bỏ constructor
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_quiz_set_list); // Đảm bảo đúng layout
+    setContentView(R.layout.activity_quiz_set_list);
+
+    // Khởi tạo các đối tượng cần Context ở đây
+    db = AppDatabaseProvider.getDatabase(this);
+    quizSetRepository = new QuizSetRepository(db);
 
     currentCollectionId = getIntent().getLongExtra(EXTRA_COLLECTION_ID, -1);
     if (currentCollectionId == -1) {
@@ -61,11 +66,12 @@ public class QuizSetListActivity extends AppCompatActivity
     recyclerView = findViewById(R.id.recyclerView);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    // Updated constructor call with all three listeners
-    adapter = new QuizSetAdapter(this, quizSets, this, this, this);
+    // =================== BƯỚC 2: TRUYỀN LISTENER MỚI VÀO ADAPTER ===================
+    // Dòng này bây giờ đã đúng vì có đủ 6 tham số
+    adapter = new QuizSetAdapter(this, quizSets, this, this, this, this);
     recyclerView.setAdapter(adapter);
 
-    FloatingActionButton fabAdd = findViewById(R.id.fab_add_set); // Đảm bảo đúng ID FAB
+    FloatingActionButton fabAdd = findViewById(R.id.fab_add_set);
     fabAdd.setOnClickListener(v -> showAddSetDialog());
 
     refreshQuizSets();
@@ -95,7 +101,7 @@ public class QuizSetListActivity extends AppCompatActivity
   }
 
   private void showAddSetDialog() {
-    View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_set, null); // Tạo layout này
+    View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_set, null);
     EditText nameInput = dialogView.findViewById(R.id.edit_set_name);
     EditText descInput = dialogView.findViewById(R.id.edit_set_description);
 
@@ -109,10 +115,10 @@ public class QuizSetListActivity extends AppCompatActivity
                 QuizSetEntity entity = new QuizSetEntity();
                 entity.name = name;
                 entity.description = desc;
-                entity.collectionId = currentCollectionId; // Gán ID bộ sưu tập hiện tại
+                entity.collectionId = currentCollectionId;
                 entity.createdAt = System.currentTimeMillis();
                 entity.updatedAt = System.currentTimeMillis();
-                quizSetRepository.insertWithDefaultCollectionIfNeeded(entity); // Sử dụng repository
+                quizSetRepository.insertWithDefaultCollectionIfNeeded(entity);
                 refreshQuizSets();
               });
             })
@@ -123,7 +129,6 @@ public class QuizSetListActivity extends AppCompatActivity
   // region: Xử lý sự kiện click từ Adapter
   @Override
   public void onItemClick(QuizSetEntity quizSet) {
-    // Xử lý khi nhấn vào toàn bộ item (ví dụ: mở danh sách các Quiz trong Set)
     Intent intent = new Intent(this, QuizListActivity.class);
     intent.putExtra("quizSetId", quizSet.id);
     startActivity(intent);
@@ -131,9 +136,8 @@ public class QuizSetListActivity extends AppCompatActivity
 
   @Override
   public void onPlayFlashcardClick(long quizSetId) {
-    // NEW: Xử lý khi nhấn nút "Play Flashcards"
     Intent intent = new Intent(this, FlashcardActivity.class);
-    intent.putExtra(FlashcardActivity.EXTRA_SET_ID, quizSetId); // Sử dụng EXTRA_SET_ID từ FlashcardActivity
+    intent.putExtra(FlashcardActivity.EXTRA_SET_ID, quizSetId);
     startActivity(intent);
   }
 
@@ -144,8 +148,15 @@ public class QuizSetListActivity extends AppCompatActivity
     startActivity(intent);
   }
 
-  // endregion
+  // =================== BƯỚC 3: OVERRIDE PHƯƠNG THỨC onTestClick ===================
+  @Override
+  public void onTestClick(long quizSetId) {
+    Toast.makeText(this, "Bắt đầu Chế độ Kiểm tra cho Set ID: " + quizSetId, Toast.LENGTH_SHORT).show();
 
-  // Bạn có thể thêm các phương thức showEditSetDialog, onItemLongClick tương tự như MainActivity
-  // để quản lý các Quiz Set.
+    // Chuyển sang màn hình cấu hình bài kiểm tra (TestConfigActivity)
+    Intent intent = new Intent(this, TestConfigActivity.class);
+    intent.putExtra("quizSetId", quizSetId); // Truyền ID của bộ câu hỏi
+    startActivity(intent);
+  }
+  // endregion
 }

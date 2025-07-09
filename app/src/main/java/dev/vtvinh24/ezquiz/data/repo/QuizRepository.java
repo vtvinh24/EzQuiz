@@ -7,6 +7,7 @@ import dev.vtvinh24.ezquiz.data.db.AppDatabase;
 import dev.vtvinh24.ezquiz.data.entity.QuizCollectionEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
+import dev.vtvinh24.ezquiz.data.model.Quiz;
 
 public class QuizRepository {
   private final AppDatabase db;
@@ -33,9 +34,9 @@ public class QuizRepository {
     return db.quizDao().getById(quizId);
   }
 
-  public List<QuizEntity> getQuizzesOfSet(long setId) {
-    return db.quizDao().getByQuizSetId(setId);
-  }
+//  public List<QuizEntity> getQuizzesOfSet(long setId) {
+//    return db.quizDao().getByQuizSetId(setId);
+//  }
 
   public List<QuizSetEntity> getSetsOfCollection(long collectionId) {
     return db.quizSetDao().getByCollectionId(collectionId);
@@ -70,4 +71,42 @@ public class QuizRepository {
     }
     return result;
   }
+
+  /**
+   * Lấy các câu hỏi trắc nghiệm (cả đơn và đa lựa chọn) của một bộ.
+   */
+  public List<QuizEntity> getMultipleChoiceQuizzesOfSet(long setId) {
+    return db.quizDao().getMultipleChoiceQuizzesOfSet(setId);
+  }
+
+  /**
+   * Lấy các câu hỏi Đúng/Sai của một bộ.
+   */
+  public List<QuizEntity> getTrueFalseQuizzesOfSet(long setId) {
+    return db.quizDao().getTrueFalseQuizzesOfSet(setId);
+  }
+
+  // =================================================================
+
+  public List<QuizEntity> getQuizzesOfSet(long setId) {
+    // Sửa lại phương thức này để nó gọi đến một DAO tổng quát hơn nếu cần
+    return db.quizDao().getAllTestableQuizzesOfSet(setId);
+  }
+
+  public int countMultipleChoiceQuizzes(long setId) {
+    return db.quizDao().countMultipleChoiceQuizzes(setId);
+  }
+
+  public int countTrueFalseQuizzes(long setId) {
+    return db.quizDao().countTrueFalseQuizzes(setId);
+  }
+
+  public List<QuizEntity> getQuizzesOfSetByTypes(long setId, List<Quiz.Type> types) {
+    return db.quizDao().getQuizzesOfSetByTypes(setId, types);
+  }
+
+  public int countQuizzesOfSetByTypes(long setId, List<Quiz.Type> types) {
+    return db.quizDao().countQuizzesOfSetByTypes(setId, types);
+  }
+
 }

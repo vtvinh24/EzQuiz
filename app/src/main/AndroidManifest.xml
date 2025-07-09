@@ -60,6 +60,19 @@
         <activity
             android:name=".ui.PracticeActivity"
             android:exported="false" />
+        <!-- Khai báo cho màn hình cấu hình bài kiểm tra -->
+        <activity android:name=".ui.TestConfigActivity"
+            android:exported="false"   />
+
+        <!-- Khai báo cho màn hình làm bài kiểm tra -->
+        <activity android:name=".ui.TestActivity"
+            android:exported="false" />
+
+        <!-- Khai báo cho màn hình kết quả bài kiểm tra -->
+        <activity android:name=".ui.TestResultActivity"
+            android:exported="false"/>
+
+
         <activity
             android:name=".ui.ScoreActivity"
             android:exported="false" />

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@drawable/gradient_surface_background"
+    tools:context=".ui.TestResultActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- === Header Card: Hiển thị thông điệp chính === -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/gradient_blue_start"
+
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <ImageView
+                        android:id="@+id/icon_summary"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_trophy"
+                        android:background="@drawable/circle_white_background"
+                        android:padding="12dp"
+                        app:tint="@color/gradient_blue_start"
+                        android:layout_marginBottom="16dp"
+                        android:contentDescription="Success icon" />
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_result_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:textColor="?attr/colorOnPrimary"
+                        android:textStyle="bold"
+                        tools:text="Bạn thật xuất sắc! 🎉" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_result_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.9"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:textColor="?attr/colorOnPrimary"
+                        tools:text="10 / 10 (100%)" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- === Stats Cards: Thống kê Đúng/Sai === -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
+
+                <!-- Thẻ "Câu đúng" -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_correct"
+                    style="@style/Widget.Material3.CardView.Elevated"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="#A5D6A7"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gradient_known_card"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/text_correct_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                            android:textColor="#2E7D32"
+                            android:textStyle="bold"
+                            tools:text="9" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Câu đúng"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="#388E3C"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Thẻ "Câu sai" -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_incorrect"
+                    style="@style/Widget.Material3.CardView.Elevated"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="#FFCCBC"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gradient_unknown_card"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/text_incorrect_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                            android:textColor="#D32F2F"
+                            android:textStyle="bold"
+                            tools:text="1" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Câu sai"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="#F57C00"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- === Action Buttons: Các nút hành động === -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Nút chia sẻ (hiện khi điểm cao) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_share_result"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/gradient_blue_start"
+                    android:text="Chia sẻ kết quả"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_share"
+                    app:iconGravity="textStart"
+                    tools:visibility="visible" />
+
+                <!-- Nút làm lại bài kiểm tra -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_practice_again"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/gradient_blue_start"
+                    android:text="Làm lại bài kiểm tra"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_restart"
+                    app:iconGravity="textStart"
+                    tools:visibility="visible" />
+
+                <!-- Nút hoàn thành, quay về màn hình trước -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_finish"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/gradient_blue_start"
+                    android:layout_height="wrap_content"
+                    android:text="Hoàn thành" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
