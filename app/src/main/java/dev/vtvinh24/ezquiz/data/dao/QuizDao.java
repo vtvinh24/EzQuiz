@@ -53,10 +53,34 @@ public interface QuizDao {
   @Query("SELECT COUNT(*) FROM quiz WHERE quizSetId = :quizSetId")
   int countByQuizSetId(long quizSetId);
 
-  // ====================================================================
-  // === THÊM PHƯƠNG THỨC MỚI NÀY VÀO ===
-  // Lấy TẤT CẢ các quiz trong một set để dùng cho màn hình Flashcard
+
   @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId")
   List<QuizEntity> getAllQuizzesBySetIdForFlashcard(long quizSetId);
   // ====================================================================
+  // Trong QuizDao.java
+
+  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND (type = 'SINGLE_CHOICE' OR type = 'MULTIPLE_CHOICE')")
+  List<QuizEntity> getMultipleChoiceQuizzesOfSet(long quizSetId);
+
+  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type = 'TRUE_FALSE'")
+  List<QuizEntity> getTrueFalseQuizzesOfSet(long quizSetId);
+
+  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type != 'FLASHCARD'")
+  List<QuizEntity> getAllTestableQuizzesOfSet(long quizSetId);
+
+
+  @Query("SELECT COUNT(id) FROM quiz WHERE quizSetId = :quizSetId AND (type = 'SINGLE_CHOICE' OR type = 'MULTIPLE_CHOICE')")
+  int countMultipleChoiceQuizzes(long quizSetId);
+
+  @Query("SELECT COUNT(id) FROM quiz WHERE quizSetId = :quizSetId AND type = 'TRUE_FALSE'")
+  int countTrueFalseQuizzes(long quizSetId);
+
+  @Query("SELECT * FROM quiz WHERE quizSetId = :quizSetId AND type IN (:types)")
+  List<QuizEntity> getQuizzesOfSetByTypes(long quizSetId, List<Quiz.Type> types);
+
+
+  @Query("SELECT COUNT(id) FROM quiz WHERE quizSetId = :quizSetId AND type IN (:types)")
+  int countQuizzesOfSetByTypes(long quizSetId, List<Quiz.Type> types);
+
+
 }

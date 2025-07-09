@@ -2,6 +2,7 @@ package dev.vtvinh24.ezquiz.data.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class Quiz implements Serializable {
   private final String question;
@@ -69,10 +70,34 @@ public class Quiz implements Serializable {
   public int getDifficulty() {
     return difficulty;
   }
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Quiz quiz = (Quiz) o;
+    return archived == quiz.archived &&
+            difficulty == quiz.difficulty &&
+            Objects.equals(question, quiz.question) &&
+            Objects.equals(answers, quiz.answers) &&
+            Objects.equals(correctAnswerIndices, quiz.correctAnswerIndices) &&
+            type == quiz.type &&
+            Objects.equals(createdAt, quiz.createdAt) &&
+            Objects.equals(updatedAt, quiz.updatedAt);
+  }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(question, answers, correctAnswerIndices, type, createdAt, updatedAt, archived, difficulty);
+  }
 
   public enum Type {
     SINGLE_CHOICE,
     MULTIPLE_CHOICE,
-    FLASHCARD
+    FLASHCARD,
+
   }
 }

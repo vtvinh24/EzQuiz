@@ -32,4 +32,7 @@
     <color name="practice_answer_text">#2C3E50</color>  <!-- Màu xám đậm dễ đọc cho text câu trả lời -->
     <color name="practice_answer_stroke">#E2E8F0</color> <!-- Màu viền nhạt cho các nút đáp án -->
     <color name="practice_progress_text">#64748B</color> <!-- Màu xám cho text progress -->
+
+    <color name="unanswered_highlight">#FFAB00</color>
+
 </resources>

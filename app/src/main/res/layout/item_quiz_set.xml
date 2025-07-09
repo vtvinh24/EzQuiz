@@ -144,6 +144,20 @@
                 app:backgroundTint="@color/gradient_green_start"
                 style="@style/Widget.Material3.Button" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_test"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="Test"
+                android:textSize="10sp"
+                android:minWidth="80dp"
+                app:icon="@drawable/ic_quiz"
+                app:iconSize="14dp"
+                app:cornerRadius="16dp"
+                app:backgroundTint="@color/gradient_blue_start"
+                style="@style/Widget.Material3.Button" />
+
+
         </LinearLayout>
 
     </LinearLayout>
