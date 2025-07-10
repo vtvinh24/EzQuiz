@@ -130,4 +130,5 @@
     <string name="label_suggested_answer">Suggested answer:</string>
     <string name="placeholder_random_answer">This is a randomly selected answer.</string>
     <string name="prompt_is_answer_true_or_false">Is the above statement True or False?</string>
+    <string name="processing_qr_code">Processing...</string>
 </resources>
