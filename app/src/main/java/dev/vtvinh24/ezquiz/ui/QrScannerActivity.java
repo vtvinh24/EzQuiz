@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,9 +25,11 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 
@@ -49,18 +52,31 @@ import dev.vtvinh24.ezquiz.util.QRParser;
 public class QrScannerActivity extends AppCompatActivity {
   public static final String EXTRA_COLLECTION_ID = "collection_id";
   public static final String EXTRA_SET_NAME = "set_name";
+  public static final String EXTRA_USE_CAMERA = "use_camera";
+
   private static final String TAG = "QrScannerActivity";
   private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+
   private final Gson gson = new Gson();
   private ExecutorService cameraExecutor;
   private QRParser qrParser;
   private boolean isProcessing = false;
+
+  // UI components
   private PreviewView previewView;
   private MaterialToolbar toolbar;
-  private MaterialButton textInputButton;
-  private MaterialButton submitButton;
+  private MaterialButton manualInputButton;
+  private MaterialButton importButton;
+  private MaterialCardView qrPlaceholder;
+  private MaterialCardView statusCard;
+  private MaterialTextView textStatus;
+  private View qrFrameOverlay;
+  private MaterialTextView instructionText;
+
+  // Data
   private long collectionId;
   private String setName;
+  private boolean useCamera = true;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +87,18 @@ public class QrScannerActivity extends AppCompatActivity {
     initializeViews();
     setupToolbar();
     setupClickListeners();
-    requestCameraPermission();
+
+    if (useCamera) {
+      setupForScanningMode();
+    } else {
+      setupForManualMode();
+    }
   }
 
   private void getIntentData() {
     collectionId = getIntent().getLongExtra(EXTRA_COLLECTION_ID, -1);
     setName = getIntent().getStringExtra(EXTRA_SET_NAME);
+    useCamera = getIntent().getBooleanExtra(EXTRA_USE_CAMERA, true);
 
     if (collectionId == -1 || setName == null) {
       Toast.makeText(this, "Invalid import parameters", Toast.LENGTH_SHORT).show();
@@ -87,8 +109,14 @@ public class QrScannerActivity extends AppCompatActivity {
   private void initializeViews() {
     previewView = findViewById(R.id.camera_preview);
     toolbar = findViewById(R.id.toolbar);
-    textInputButton = findViewById(R.id.text_input_button);
-    submitButton = findViewById(R.id.submit_button);
+    manualInputButton = findViewById(R.id.manual_input_button);
+    importButton = findViewById(R.id.import_button);
+    qrPlaceholder = findViewById(R.id.qr_placeholder);
+    statusCard = findViewById(R.id.status_card);
+    textStatus = findViewById(R.id.text_import_status);
+    qrFrameOverlay = findViewById(R.id.qr_frame_overlay);
+    instructionText = findViewById(R.id.instruction_text);
+
     qrParser = new QRParser();
     cameraExecutor = Executors.newSingleThreadExecutor();
   }
@@ -103,8 +131,32 @@ public class QrScannerActivity extends AppCompatActivity {
   }
 
   private void setupClickListeners() {
-    textInputButton.setOnClickListener(v -> showManualInputDialog());
-    submitButton.setOnClickListener(v -> finish());
+    manualInputButton.setOnClickListener(v -> showManualInputDialog());
+
+    if (useCamera) {
+      importButton.setText(R.string.qr_cancel);
+      importButton.setOnClickListener(v -> finish());
+    } else {
+      importButton.setText(R.string.import_manually);
+      importButton.setOnClickListener(v -> showManualInputDialog());
+    }
+  }
+
+  private void setupForScanningMode() {
+    previewView.setVisibility(View.VISIBLE);
+    qrFrameOverlay.setVisibility(View.VISIBLE);
+    qrPlaceholder.setVisibility(View.GONE);
+    instructionText.setText(R.string.position_qr_within_frame);
+    setTitle(R.string.title_scan_qr_code);
+    requestCameraPermission();
+  }
+
+  private void setupForManualMode() {
+    previewView.setVisibility(View.GONE);
+    qrFrameOverlay.setVisibility(View.GONE);
+    qrPlaceholder.setVisibility(View.VISIBLE);
+    instructionText.setText(R.string.scan_qr_or_import_manually);
+    setTitle(R.string.import_quiz);
   }
 
   private void showManualInputDialog() {
@@ -128,6 +180,17 @@ public class QrScannerActivity extends AppCompatActivity {
             })
             .setNegativeButton("Cancel", null)
             .show();
+  }
+
+  // Show the import status and message
+  private void showStatus(String message) {
+    statusCard.setVisibility(View.VISIBLE);
+    textStatus.setText(message);
+  }
+
+  // Hide the status message
+  private void hideStatus() {
+    statusCard.setVisibility(View.GONE);
   }
 
   private void requestCameraPermission() {

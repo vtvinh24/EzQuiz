@@ -1,6 +1,5 @@
 package dev.vtvinh24.ezquiz.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,10 +7,13 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,8 +37,15 @@ public class PostImportActivity extends AppCompatActivity {
 
   private long selectedCollectionId = -1;
   private String setName = null;
-  private MaterialTextView textStatus;
+
+  // UI components
   private MaterialToolbar toolbar;
+  private MaterialTextView textStatus;
+  private MaterialCardView statusCard;
+  private MaterialButton importButton;
+  private MaterialButton manualInputButton;
+
+  private ActivityResultLauncher<Intent> qrScannerLauncher;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,26 +62,74 @@ public class PostImportActivity extends AppCompatActivity {
 
     selectedCollectionId = intent.getLongExtra(EXTRA_COLLECTION_ID, -1);
     setName = intent.getStringExtra(EXTRA_SET_NAME);
-    setContentView(R.layout.activity_import_quiz_external);
 
+    // Now using unified layout in placeholder mode
+    setContentView(R.layout.activity_qr_scanner);
+
+    setupActivityResultLauncher();
     initializeViews();
     setupToolbar();
     setupClickListeners();
+    setupPlaceholderMode();
+  }
+
+  private void setupActivityResultLauncher() {
+    qrScannerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+              if (result.getResultCode() == RESULT_OK) {
+                finish();
+              }
+            }
+    );
   }
 
   private void initializeViews() {
-    textStatus = findViewById(R.id.text_import_status);
     toolbar = findViewById(R.id.toolbar);
+    textStatus = findViewById(R.id.text_import_status);
+    statusCard = findViewById(R.id.status_card);
+    importButton = findViewById(R.id.import_button);
+    manualInputButton = findViewById(R.id.manual_input_button);
   }
 
   private void setupToolbar() {
     setSupportActionBar(toolbar);
+    toolbar.setTitle(R.string.import_quiz);
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
+  private void setupPlaceholderMode() {
+    // Setup for placeholder mode (no camera)
+    View qrFrameOverlay = findViewById(R.id.qr_frame_overlay);
+    MaterialCardView qrPlaceholder = findViewById(R.id.qr_placeholder);
+    View cameraPreview = findViewById(R.id.camera_preview);
+    MaterialTextView instructionText = findViewById(R.id.instruction_text);
+
+    // Hide camera elements, show placeholder
+    cameraPreview.setVisibility(View.GONE);
+    qrFrameOverlay.setVisibility(View.GONE);
+    qrPlaceholder.setVisibility(View.VISIBLE);
+
+    instructionText.setText(R.string.scan_qr_or_import_manually);
+    statusCard.setVisibility(View.GONE);
+  }
+
   private void setupClickListeners() {
-    MaterialButton btnImportManually = findViewById(R.id.btn_import_manually);
-    btnImportManually.setOnClickListener(v -> showImportDialog());
+    // Launch QR Scanner with actual camera when button is clicked
+    importButton.setText(R.string.scan_qr_code);
+    importButton.setOnClickListener(v -> startQRScanner());
+
+    // Show manual import dialog when this button is clicked
+    manualInputButton.setText(R.string.import_manually);
+    manualInputButton.setOnClickListener(v -> showImportDialog());
+  }
+
+  private void startQRScanner() {
+    Intent intent = new Intent(this, QrScannerActivity.class);
+    intent.putExtra(QrScannerActivity.EXTRA_COLLECTION_ID, selectedCollectionId);
+    intent.putExtra(QrScannerActivity.EXTRA_SET_NAME, setName);
+    intent.putExtra(QrScannerActivity.EXTRA_USE_CAMERA, true);
+    qrScannerLauncher.launch(intent);
   }
 
   private void showImportDialog() {
@@ -87,7 +144,7 @@ public class PostImportActivity extends AppCompatActivity {
             .setView(dialogView)
             .setNegativeButton(android.R.string.cancel, null);
 
-    AlertDialog dialog = builder.create();
+    androidx.appcompat.app.AlertDialog dialog = builder.create();
 
     btnImportPaste.setOnClickListener(view -> {
       String pasteId = editPasteId.getText().toString().trim();
@@ -104,7 +161,7 @@ public class PostImportActivity extends AppCompatActivity {
   }
 
   private void importFromPasteId(String pasteId) {
-    textStatus.setText(R.string.importing_please_wait);
+    showStatus(getString(R.string.importing_please_wait));
 
     Handler mainHandler = new Handler(Looper.getMainLooper());
     Executors.newSingleThreadExecutor().execute(() -> {
@@ -113,13 +170,18 @@ public class PostImportActivity extends AppCompatActivity {
 
       mainHandler.post(() -> {
         if (quizzes.isEmpty()) {
-          textStatus.setText(getString(R.string.error_no_items_imported));
+          showStatus(getString(R.string.error_no_items_imported));
           return;
         }
 
         saveQuizzesToDatabase(quizzes, pasteId);
       });
     });
+  }
+
+  private void showStatus(String message) {
+    statusCard.setVisibility(View.VISIBLE);
+    textStatus.setText(message);
   }
 
   private void saveQuizzesToDatabase(List<Quiz> quizzes, String pasteId) {
@@ -147,6 +209,6 @@ public class PostImportActivity extends AppCompatActivity {
       db.quizDao().insert(entity);
     }
 
-    textStatus.setText(getString(R.string.import_success, quizzes.size()));
+    showStatus(getString(R.string.import_success, quizzes.size()));
   }
 }

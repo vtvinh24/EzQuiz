@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:title="Scan QR Code"
+            app:title="@string/title_scan_qr_code"
             app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -25,30 +25,55 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Camera preview with overlay frame -->
-        <androidx.camera.view.PreviewView
-            android:id="@+id/camera_preview"
+        <!-- Camera Preview with overlay -->
+        <FrameLayout
+            android:id="@+id/camera_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
             app:layout_constraintBottom_toTopOf="@+id/card_controls"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_percent="0.6" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!-- QR Scanner Overlay -->
-        <ImageView
-            android:id="@+id/qr_frame_overlay"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/qr_scan_frame"
-            app:layout_constraintBottom_toBottomOf="@id/camera_preview"
-            app:layout_constraintEnd_toEndOf="@id/camera_preview"
-            app:layout_constraintStart_toStartOf="@id/camera_preview"
-            app:layout_constraintTop_toTopOf="@id/camera_preview"
-            app:tint="?attr/colorPrimary" />
+            <!-- Camera Preview -->
+            <androidx.camera.view.PreviewView
+                android:id="@+id/camera_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <!-- QR Scanner Overlay -->
+            <ImageView
+                android:id="@+id/qr_frame_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/qr_scan_frame"
+                android:visibility="visible"
+                app:tint="?attr/colorPrimary" />
+
+            <!-- Placeholder when camera is not in use -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/qr_placeholder"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="2dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/qr_scanner_placeholder"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
         <!-- Controls Card -->
         <com.google.android.material.card.MaterialCardView
@@ -70,6 +95,7 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/instruction_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -78,7 +104,7 @@
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/text_input_button"
+                    android:id="@+id/manual_input_button"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,13 +114,34 @@
                     app:icon="@drawable/ic_edit" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/submit_button"
+                    android:id="@+id/import_button"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingVertical="12dp"
-                    android:text="@string/qr_submit"
+                    android:text="@string/import_content"
                     app:icon="@drawable/ic_check_circle" />
+
+                <!-- Status display for import -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/status_card"
+                    style="@style/Widget.Material3.CardView.Filled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#FFF9C4"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_import_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

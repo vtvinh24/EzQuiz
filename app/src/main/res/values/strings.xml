@@ -120,6 +120,14 @@
     <string name="label_suggested_answer">Suggested answer:</string>
     <string name="placeholder_random_answer">This is a randomly selected answer.</string>
     <string name="prompt_is_answer_true_or_false">Is the above answer True or False?</string>
+    <string name="title_scan_qr_code">Scan QR</string>
+    <string name="import_content">Import content</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="manual_import">Manual Import</string>
+    <string name="import_quiz">Import Quiz</string>
+    <string name="importing_please_wait">Importing...</string>
+    <string name="qr_cancel">Cancel scan</string>
+    <string name="position_qr_within_frame">Please position QR within the frame</string>
 
 
 </resources>
