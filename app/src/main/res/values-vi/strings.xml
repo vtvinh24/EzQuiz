@@ -121,11 +121,13 @@
     <string name="label_suggested_answer">Câu trả lời đề xuất:</string>
     <string name="placeholder_random_answer">Đây là một câu trả lời được chọn ngẫu nhiên.</string>
     <string name="prompt_is_answer_true_or_false">Câu trả lời trên là Đúng hay Sai?</string>
-    <string name="title_scan_qr_code">Scan QR</string>
-    <string name="import_content">Import content</string>
-    <string name="import_quiz">Import Quiz</string>
-    <string name="importing_please_wait">Importing...</string>
-    <string name="qr_cancel">Cancel scan</string>
-    <string name="position_qr_within_frame">Please position QR within the frame</string>
+    <string name="title_scan_qr_code">Quét mã QR</string>
+    <string name="import_content">Nhập nội dung</string>
+    <string name="import_quiz">Nhập Quiz</string>
+    <string name="importing_please_wait">Đang nhập, vui lòng đợi…</string>
+    <string name="qr_cancel">Hủy</string>
+    <string name="position_qr_within_frame">Đặt mã QR trong khung</string>
+    <string name="chrome_extension_suggestion">Cần mã QR từ trang web? Thử tiện ích mở rộng Chrome của chúng tôi</string>
+    <string name="scan_qr_code">Quét mã QR</string>
 
 </resources>

@@ -99,35 +99,35 @@
     <string name="title_test_setup">Set up the test</string>
     <string name="placeholder_set_name">Name of the card set</string>
     <string name="hint_quantity">Quantity</string>
+    <string name="chrome_extension_suggestion">Need QR codes from websites? Try our Chrome Extension</string>
+    <string name="chrome_extension_url" translatable="false">https://chromewebstore.google.com/detail/quiz-qr-extractor/oeefhcndpdcphhbbadpnagbneoklkhlm</string>
+    <string name="importing_please_wait">Importing, please wait…</string>
+    <string name="position_qr_within_frame">Position the QR code within the frame</string>
+    <string name="import_quiz">Import Quiz</string>
+    <string name="title_scan_qr_code">Scan QR Code</string>
+    <string name="import_content">Import Content</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="qr_cancel">Cancel</string>
     <string name="info_leave_blank_for_all">Leave blank to get all available questions.</string>
+
+    <!-- Test related strings -->
     <string name="label_multiple_choice">Multiple Choice</string>
     <string name="label_true_false">True/False</string>
-    <string name="btn_start_test">Start the test</string>
-
-    <string name="btn_submit_test">Submit test</string>
-    <string name="fab_next_unanswered">Unanswered question</string>
+    <string name="btn_start_test">Start Test</string>
+    <string name="btn_submit_test">Submit Test</string>
+    <string name="fab_next_unanswered">Next Unanswered</string>
     <string name="cd_success_icon">Success icon</string>
-    <string name="label_correct_questions">Correct question</string>
-    <string name="label_incorrect_questions">Incorrect question</string>
-    <string name="btn_share_result">Share result</string>
-    <string name="btn_practice_again">Retake the test</string>
-    <string name="btn_finish">Finished</string>
+    <string name="label_correct_questions">Correct Questions</string>
+    <string name="label_incorrect_questions">Incorrect Questions</string>
+    <string name="btn_share_result">Share Result</string>
+    <string name="btn_practice_again">Practice Again</string>
+    <string name="btn_finish">Finish</string>
     <string name="placeholder_terminology">Terminology</string>
     <string name="prompt_choose_correct_answer">Choose the correct answer</string>
-    <string name="placeholder_mc_question_content">Multiple choice question content here?</string>
-    <string name="prompt_choose_answer">Choose answer</string>
-    <string name="placeholder_tf_question_content">The `final` statement in Java can be applied to variables, methods, and classes.</string>
+    <string name="placeholder_mc_question_content">Multiple choice question content goes here?</string>
+    <string name="prompt_choose_answer">Choose an answer</string>
+    <string name="placeholder_tf_question_content">The `final` keyword in Java can be applied to variables, methods, and classes.</string>
     <string name="label_suggested_answer">Suggested answer:</string>
     <string name="placeholder_random_answer">This is a randomly selected answer.</string>
-    <string name="prompt_is_answer_true_or_false">Is the above answer True or False?</string>
-    <string name="title_scan_qr_code">Scan QR</string>
-    <string name="import_content">Import content</string>
-    <string name="scan_qr_code">Scan QR Code</string>
-    <string name="manual_import">Manual Import</string>
-    <string name="import_quiz">Import Quiz</string>
-    <string name="importing_please_wait">Importing...</string>
-    <string name="qr_cancel">Cancel scan</string>
-    <string name="position_qr_within_frame">Please position QR within the frame</string>
-
-
+    <string name="prompt_is_answer_true_or_false">Is the above statement True or False?</string>
 </resources>
