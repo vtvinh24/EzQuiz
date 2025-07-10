@@ -142,6 +142,17 @@
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
                 </com.google.android.material.card.MaterialCardView>
+
+                <!-- Chrome Extension Link -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/chrome_extension_link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/chrome_extension_suggestion"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="?attr/colorPrimary" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

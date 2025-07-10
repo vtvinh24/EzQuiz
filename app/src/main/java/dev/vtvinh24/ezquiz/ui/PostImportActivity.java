@@ -1,25 +1,44 @@
 package dev.vtvinh24.ezquiz.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ExperimentalGetImage;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.core.resolutionselector.ResolutionSelector;
+import androidx.camera.core.resolutionselector.ResolutionStrategy;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dev.vtvinh24.ezquiz.R;
@@ -27,25 +46,37 @@ import dev.vtvinh24.ezquiz.data.db.AppDatabase;
 import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
+import dev.vtvinh24.ezquiz.data.model.QRData;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
 import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 import dev.vtvinh24.ezquiz.network.QuizImporter;
+import dev.vtvinh24.ezquiz.util.QRParser;
 
 public class PostImportActivity extends AppCompatActivity {
   public static final String EXTRA_COLLECTION_ID = "collection_id";
   public static final String EXTRA_SET_NAME = "set_name";
 
+  private static final String TAG = "PostImportActivity";
+  private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+
   private long selectedCollectionId = -1;
   private String setName = null;
+  private boolean isProcessing = false;
+
+  // QR scanner components
+  private final Gson gson = new Gson();
+  private ExecutorService cameraExecutor;
+  private QRParser qrParser;
 
   // UI components
+  private PreviewView previewView;
   private MaterialToolbar toolbar;
   private MaterialTextView textStatus;
   private MaterialCardView statusCard;
-  private MaterialButton importButton;
-  private MaterialButton manualInputButton;
-
-  private ActivityResultLauncher<Intent> qrScannerLauncher;
+  private MaterialButton cancelButton;
+  private MaterialCardView qrPlaceholder;
+  private View qrFrameOverlay;
+  private MaterialTextView instructionText;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,101 +94,207 @@ public class PostImportActivity extends AppCompatActivity {
     selectedCollectionId = intent.getLongExtra(EXTRA_COLLECTION_ID, -1);
     setName = intent.getStringExtra(EXTRA_SET_NAME);
 
-    // Now using unified layout in placeholder mode
     setContentView(R.layout.activity_qr_scanner);
 
-    setupActivityResultLauncher();
     initializeViews();
     setupToolbar();
     setupClickListeners();
-    setupPlaceholderMode();
-  }
-
-  private void setupActivityResultLauncher() {
-    qrScannerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-              if (result.getResultCode() == RESULT_OK) {
-                finish();
-              }
-            }
-    );
+    setupCameraMode();
   }
 
   private void initializeViews() {
     toolbar = findViewById(R.id.toolbar);
+    previewView = findViewById(R.id.camera_preview);
+    qrFrameOverlay = findViewById(R.id.qr_frame_overlay);
+    qrPlaceholder = findViewById(R.id.qr_placeholder);
+    instructionText = findViewById(R.id.instruction_text);
     textStatus = findViewById(R.id.text_import_status);
     statusCard = findViewById(R.id.status_card);
-    importButton = findViewById(R.id.import_button);
-    manualInputButton = findViewById(R.id.manual_input_button);
+    cancelButton = findViewById(R.id.import_button);
+
+    // Set up Chrome extension link
+    MaterialTextView chromeExtensionLink = findViewById(R.id.chrome_extension_link);
+    chromeExtensionLink.setOnClickListener(v -> openChromeExtension());
+  }
+
+  // Opens the Chrome extension URL in the default browser
+  private void openChromeExtension() {
+    String url = getString(R.string.chrome_extension_url);
+    Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
+    startActivity(intent);
   }
 
   private void setupToolbar() {
     setSupportActionBar(toolbar);
-    toolbar.setTitle(R.string.import_quiz);
+    toolbar.setTitle(R.string.title_scan_qr_code);
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-  private void setupPlaceholderMode() {
-    // Setup for placeholder mode (no camera)
-    View qrFrameOverlay = findViewById(R.id.qr_frame_overlay);
-    MaterialCardView qrPlaceholder = findViewById(R.id.qr_placeholder);
-    View cameraPreview = findViewById(R.id.camera_preview);
-    MaterialTextView instructionText = findViewById(R.id.instruction_text);
-
-    // Hide camera elements, show placeholder
-    cameraPreview.setVisibility(View.GONE);
-    qrFrameOverlay.setVisibility(View.GONE);
-    qrPlaceholder.setVisibility(View.VISIBLE);
-
-    instructionText.setText(R.string.scan_qr_or_import_manually);
-    statusCard.setVisibility(View.GONE);
-  }
-
   private void setupClickListeners() {
-    // Launch QR Scanner with actual camera when button is clicked
-    importButton.setText(R.string.scan_qr_code);
-    importButton.setOnClickListener(v -> startQRScanner());
+    // Set up cancel button
+    cancelButton.setText(R.string.qr_cancel);
+    cancelButton.setOnClickListener(v -> finish());
 
-    // Show manual import dialog when this button is clicked
-    manualInputButton.setText(R.string.import_manually);
-    manualInputButton.setOnClickListener(v -> showImportDialog());
+    // Hide manual input button
+    MaterialButton manualInputButton = findViewById(R.id.manual_input_button);
+    manualInputButton.setVisibility(View.GONE);
   }
 
-  private void startQRScanner() {
-    Intent intent = new Intent(this, QrScannerActivity.class);
-    intent.putExtra(QrScannerActivity.EXTRA_COLLECTION_ID, selectedCollectionId);
-    intent.putExtra(QrScannerActivity.EXTRA_SET_NAME, setName);
-    intent.putExtra(QrScannerActivity.EXTRA_USE_CAMERA, true);
-    qrScannerLauncher.launch(intent);
+  private void setupCameraMode() {
+    previewView.setVisibility(View.VISIBLE);
+    qrFrameOverlay.setVisibility(View.VISIBLE);
+    qrPlaceholder.setVisibility(View.GONE);
+    instructionText.setText(R.string.position_qr_within_frame);
+
+    // Initialize camera resources
+    qrParser = new QRParser();
+    cameraExecutor = Executors.newSingleThreadExecutor();
+
+    requestCameraPermission();
   }
 
-  private void showImportDialog() {
-    View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_import_paste, null);
+  // Camera handling methods
+  private void requestCameraPermission() {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+      startCamera();
+    } else {
+      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+    }
+  }
 
-    TextInputLayout pasteIdLayout = dialogView.findViewById(R.id.text_input_layout);
-    TextInputEditText editPasteId = dialogView.findViewById(R.id.edit_paste_id);
-    MaterialButton btnImportPaste = dialogView.findViewById(R.id.btn_import_paste);
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+      if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        startCamera();
+      } else {
+        Toast.makeText(this, "Camera permission is required for QR scanning", Toast.LENGTH_SHORT).show();
+        finish();
+      }
+    }
+  }
 
-    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.title_import_paste)
-            .setView(dialogView)
-            .setNegativeButton(android.R.string.cancel, null);
+  private void startCamera() {
+    ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+    cameraProviderFuture.addListener(() -> {
+      try {
+        ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+        bindCameraUseCases(cameraProvider);
+      } catch (ExecutionException | InterruptedException e) {
+        Log.e(TAG, "Camera initialization failed", e);
+        Toast.makeText(this, "Camera initialization failed", Toast.LENGTH_SHORT).show();
+        finish();
+      }
+    }, ContextCompat.getMainExecutor(this));
+  }
 
-    androidx.appcompat.app.AlertDialog dialog = builder.create();
+  @OptIn(markerClass = ExperimentalGetImage.class)
+  private void bindCameraUseCases(ProcessCameraProvider cameraProvider) {
+    Preview preview = new Preview.Builder().build();
+    preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
-    btnImportPaste.setOnClickListener(view -> {
-      String pasteId = editPasteId.getText().toString().trim();
-      if (pasteId.isEmpty()) {
-        pasteIdLayout.setError(getString(R.string.prompt_paste_id));
+    ResolutionSelector resolutionSelector = new ResolutionSelector.Builder()
+            .setResolutionStrategy(ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY)
+            .build();
+
+    ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+            .setResolutionSelector(resolutionSelector)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build();
+
+    imageAnalysis.setAnalyzer(cameraExecutor, this::analyzeImage);
+
+    CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+
+    try {
+      cameraProvider.unbindAll();
+      cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
+    } catch (Exception e) {
+      Log.e(TAG, "Camera binding failed", e);
+    }
+  }
+
+  @ExperimentalGetImage
+  private void analyzeImage(ImageProxy imageProxy) {
+    if (isProcessing) {
+      imageProxy.close();
+      return;
+    }
+
+    isProcessing = true;
+    Image mediaImage = imageProxy.getImage();
+
+    if (mediaImage != null) {
+      qrParser.getDataFromQR(mediaImage).addOnSuccessListener(result -> {
+        if (result != null && !result.isEmpty()) {
+          handleQRResult(result);
+        }
+        isProcessing = false;
+        imageProxy.close();
+      }).addOnFailureListener(e -> {
+        Log.e(TAG, "QR parsing failed", e);
+        isProcessing = false;
+        imageProxy.close();
+      });
+    } else {
+      isProcessing = false;
+      imageProxy.close();
+    }
+  }
+
+  private void handleQRResult(String qrData) {
+    try {
+      // Parse the QR data into our QRData model
+      QRData data = gson.fromJson(qrData, QRData.class);
+
+      if (data == null || data.getType() == null || data.getUrl() == null) {
+        showError("QR code does not contain valid data format");
         return;
       }
 
-      dialog.dismiss();
-      importFromPasteId(pasteId);
-    });
+      // Validate that this is a request type QR code
+      if (!data.isRequestType()) {
+        showError("Unsupported QR code type: " + data.getType());
+        return;
+      }
 
-    dialog.show();
+      String url = data.getUrl();
+      String pasteId = extractPasteId(url);
+
+      if (pasteId == null) {
+        showError("Invalid URL format in QR code");
+        return;
+      }
+
+      // Process according to the data type
+      if (data.isFlashcardData() || data.isQuizData()) {
+        importFromPasteId(pasteId);
+      } else {
+        showError("Unknown data type: " + data.getDataType());
+      }
+    } catch (Exception e) {
+      Log.e(TAG, "Failed to parse QR data: " + e.getMessage(), e);
+      showError("Failed to parse QR code data");
+    }
+  }
+
+  private String extractPasteId(String url) {
+    if (url == null || url.isEmpty()) return null;
+
+    try {
+      if (url.startsWith("https://paste.rs/")) {
+        String[] parts = url.split("/");
+        return parts.length >= 4 ? parts[3] : null;
+      }
+      if (url.startsWith("https://0x0.st/")) {
+        String[] parts = url.split("/");
+        return parts.length >= 4 ? parts[3] : null;
+      }
+    } catch (Exception e) {
+      Log.e(TAG, "Failed to extract paste ID", e);
+    }
+    return null;
   }
 
   private void importFromPasteId(String pasteId) {
@@ -209,6 +346,37 @@ public class PostImportActivity extends AppCompatActivity {
       db.quizDao().insert(entity);
     }
 
-    showStatus(getString(R.string.import_success, quizzes.size()));
+    showImportSuccessDialog(quizzes.size());
+  }
+
+  private void showImportSuccessDialog(int count) {
+    new MaterialAlertDialogBuilder(this)
+            .setTitle("Import Successful")
+            .setMessage("Successfully imported " + count + " items")
+            .setIcon(R.drawable.ic_check_circle)
+            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+              setResult(RESULT_OK);
+              finish();
+            })
+            .setCancelable(false)
+            .show();
+  }
+
+  private void showError(String message) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+  }
+
+  private void cleanupCamera() {
+    if (cameraExecutor != null) {
+      cameraExecutor.shutdown();
+      cameraExecutor = null;
+    }
+    qrParser = null;
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    cleanupCamera();
   }
 }

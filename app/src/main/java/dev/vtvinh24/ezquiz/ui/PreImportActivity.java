@@ -29,7 +29,6 @@ public class PreImportActivity extends AppCompatActivity {
   private AutoCompleteTextView collectionDropdown;
   private TextInputEditText editSetName;
   private MaterialButton btnScanQR;
-  private MaterialButton btnNext;
   private List<QuizCollectionEntity> collections;
   private ActivityResultLauncher<Intent> qrScannerLauncher;
 
@@ -60,7 +59,6 @@ public class PreImportActivity extends AppCompatActivity {
     collectionDropdown = findViewById(R.id.spinner_collection);
     editSetName = findViewById(R.id.edit_set_name);
     btnScanQR = findViewById(R.id.btn_scan_qr);
-    btnNext = findViewById(R.id.btn_next);
   }
 
   private void setupToolbar() {
@@ -91,25 +89,14 @@ public class PreImportActivity extends AppCompatActivity {
 
   private void setupClickListeners() {
     btnScanQR.setOnClickListener(v -> startQRScanner());
-    btnNext.setOnClickListener(v -> proceedToManualImport());
   }
 
   private void startQRScanner() {
     if (validateInputs()) {
-      Intent intent = new Intent(this, QrScannerActivity.class);
-      intent.putExtra(EXTRA_COLLECTION_ID, getSelectedCollectionId());
-      intent.putExtra(EXTRA_SET_NAME, getSetName());
-      qrScannerLauncher.launch(intent);
-    }
-  }
-
-  private void proceedToManualImport() {
-    if (validateInputs()) {
       Intent intent = new Intent(this, PostImportActivity.class);
       intent.putExtra(EXTRA_COLLECTION_ID, getSelectedCollectionId());
       intent.putExtra(EXTRA_SET_NAME, getSetName());
-      startActivity(intent);
-      finish();
+      qrScannerLauncher.launch(intent);
     }
   }
 

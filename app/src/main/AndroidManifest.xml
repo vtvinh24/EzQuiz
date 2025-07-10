@@ -95,10 +95,6 @@
             android:exported="false" />
 
         <!-- Utility Activities -->
-        <activity
-            android:name=".ui.QrScannerActivity"
-            android:exported="false" />
-
         <receiver
             android:name="dev.vtvinh24.ezquiz.util.ReminderReceiver"
             android:exported="false" />
