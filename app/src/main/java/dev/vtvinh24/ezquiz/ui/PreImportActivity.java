@@ -2,14 +2,19 @@ package dev.vtvinh24.ezquiz.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -23,8 +28,10 @@ public class PreImportActivity extends AppCompatActivity {
   private static final String EXTRA_COLLECTION_ID = "collection_id";
   private static final String EXTRA_SET_NAME = "set_name";
 
-  private Spinner spinnerCollection;
-  private EditText editSetName;
+  private AutoCompleteTextView collectionDropdown;
+  private TextInputEditText editSetName;
+  private MaterialButton btnScanQR;
+  private MaterialButton btnNext;
   private List<QuizCollectionEntity> collections;
   private ActivityResultLauncher<Intent> qrScannerLauncher;
 
@@ -35,7 +42,8 @@ public class PreImportActivity extends AppCompatActivity {
 
     setupActivityResultLauncher();
     initializeViews();
-    setupCollectionSpinner();
+    setupToolbar();
+    setupCollectionDropdown();
     setupClickListeners();
   }
 
@@ -51,26 +59,41 @@ public class PreImportActivity extends AppCompatActivity {
   }
 
   private void initializeViews() {
-    spinnerCollection = findViewById(R.id.spinner_collection);
+    collectionDropdown = findViewById(R.id.spinner_collection);
     editSetName = findViewById(R.id.edit_set_name);
+    btnScanQR = findViewById(R.id.btn_scan_qr);
+    btnNext = findViewById(R.id.btn_next);
   }
 
-  private void setupCollectionSpinner() {
+  private void setupToolbar() {
+    MaterialToolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    toolbar.setNavigationOnClickListener(v -> onBackPressed());
+  }
+
+  private void setupCollectionDropdown() {
     AppDatabase db = AppDatabaseProvider.getDatabase(this);
     QuizCollectionRepository collectionRepo = new QuizCollectionRepository(db);
     collections = collectionRepo.getAllCollections();
 
-    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    for (QuizCollectionEntity c : collections) {
-      adapter.add(c.name);
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+        android.R.layout.simple_dropdown_item_1line);
+
+    for (QuizCollectionEntity collection : collections) {
+      adapter.add(collection.name);
     }
-    spinnerCollection.setAdapter(adapter);
+
+    collectionDropdown.setAdapter(adapter);
+
+    // Select first item by default if available
+    if (!collections.isEmpty()) {
+      collectionDropdown.setText(collections.get(0).name, false);
+    }
   }
 
   private void setupClickListeners() {
-    findViewById(R.id.btn_scan_qr).setOnClickListener(v -> startQRScanner());
-    findViewById(R.id.btn_next).setOnClickListener(v -> proceedToManualImport());
+    btnScanQR.setOnClickListener(v -> startQRScanner());
+    btnNext.setOnClickListener(v -> proceedToManualImport());
   }
 
   private void startQRScanner() {
@@ -101,8 +124,14 @@ public class PreImportActivity extends AppCompatActivity {
   }
 
   private long getSelectedCollectionId() {
-    int selectedIdx = spinnerCollection.getSelectedItemPosition();
-    return collections.get(selectedIdx).id;
+    String selectedCollectionName = collectionDropdown.getText().toString();
+    for (QuizCollectionEntity collection : collections) {
+      if (collection.name.equals(selectedCollectionName)) {
+        return collection.id;
+      }
+    }
+    // Return first collection id as fallback
+    return collections.get(0).id;
   }
 
   private String getSetName() {

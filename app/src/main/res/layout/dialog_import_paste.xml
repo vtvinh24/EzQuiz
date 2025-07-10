@@ -1,21 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp">
 
-    <EditText
-        android:id="@+id/edit_paste_id"
+    <!-- Instructions text -->
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="username"
-        android:hint="@string/hint_dialog_paste_id"
-        android:inputType="text" />
+        android:layout_marginBottom="16dp"
+        android:text="Enter the ID of the paste containing quiz content"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
-    <Button
+    <!-- Paste ID input field -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:hint="Paste ID"
+        app:helperText="Example: AJ2Emxd4"
+        app:helperTextEnabled="true"
+        app:startIconDrawable="@drawable/ic_edit"
+        app:startIconTint="?attr/colorPrimary"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_paste_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Import button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_import_paste"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_import" />
+        android:paddingVertical="12dp"
+        android:text="Import Content"
+        style="@style/Widget.Material3.Button" />
+
 </LinearLayout>

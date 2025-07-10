@@ -1,12 +1,10 @@
 package dev.vtvinh24.ezquiz.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,9 +22,13 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -38,6 +40,7 @@ import dev.vtvinh24.ezquiz.data.db.AppDatabase;
 import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
+import dev.vtvinh24.ezquiz.data.model.QRData;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
 import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 import dev.vtvinh24.ezquiz.network.QuizImporter;
@@ -48,11 +51,14 @@ public class QrScannerActivity extends AppCompatActivity {
   public static final String EXTRA_SET_NAME = "set_name";
   private static final String TAG = "QrScannerActivity";
   private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+  private final Gson gson = new Gson();
   private ExecutorService cameraExecutor;
   private QRParser qrParser;
   private boolean isProcessing = false;
   private PreviewView previewView;
-
+  private MaterialToolbar toolbar;
+  private MaterialButton textInputButton;
+  private MaterialButton submitButton;
   private long collectionId;
   private String setName;
 
@@ -62,7 +68,8 @@ public class QrScannerActivity extends AppCompatActivity {
     setContentView(R.layout.activity_qr_scanner);
 
     getIntentData();
-    initializeComponents();
+    initializeViews();
+    setupToolbar();
     setupClickListeners();
     requestCameraPermission();
   }
@@ -77,24 +84,42 @@ public class QrScannerActivity extends AppCompatActivity {
     }
   }
 
-  private void initializeComponents() {
+  private void initializeViews() {
     previewView = findViewById(R.id.camera_preview);
+    toolbar = findViewById(R.id.toolbar);
+    textInputButton = findViewById(R.id.text_input_button);
+    submitButton = findViewById(R.id.submit_button);
     qrParser = new QRParser();
     cameraExecutor = Executors.newSingleThreadExecutor();
   }
 
+  private void setupToolbar() {
+    setSupportActionBar(toolbar);
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+    toolbar.setNavigationOnClickListener(v -> onBackPressed());
+  }
+
   private void setupClickListeners() {
-    findViewById(R.id.text_input_button).setOnClickListener(v -> showManualInputDialog());
-    findViewById(R.id.submit_button).setOnClickListener(v -> finish());
+    textInputButton.setOnClickListener(v -> showManualInputDialog());
+    submitButton.setOnClickListener(v -> finish());
   }
 
   private void showManualInputDialog() {
-    EditText editText = new EditText(this);
-    editText.setHint("Enter QR code data manually");
+    // Create layout for dialog
+    TextInputLayout textInputLayout = new TextInputLayout(this);
+    textInputLayout.setHint("Enter QR code data manually");
+    textInputLayout.setPadding(48, 32, 48, 32);
+    textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
 
-    new AlertDialog.Builder(this)
+    TextInputEditText editText = new TextInputEditText(this);
+    textInputLayout.addView(editText);
+
+    new MaterialAlertDialogBuilder(this)
             .setTitle("Manual QR Input")
-            .setView(editText)
+            .setView(textInputLayout)
             .setPositiveButton("Process", (dialog, which) -> {
               String qrData = editText.getText().toString().trim();
               if (!qrData.isEmpty()) {
@@ -144,14 +169,9 @@ public class QrScannerActivity extends AppCompatActivity {
     Preview preview = new Preview.Builder().build();
     preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
-    ResolutionSelector resolutionSelector = new ResolutionSelector.Builder()
-            .setResolutionStrategy(ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY)
-            .build();
+    ResolutionSelector resolutionSelector = new ResolutionSelector.Builder().setResolutionStrategy(ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY).build();
 
-    ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
-            .setResolutionSelector(resolutionSelector)
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build();
+    ImageAnalysis imageAnalysis = new ImageAnalysis.Builder().setResolutionSelector(resolutionSelector).setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
 
     imageAnalysis.setAnalyzer(cameraExecutor, this::analyzeImage);
 
@@ -176,19 +196,17 @@ public class QrScannerActivity extends AppCompatActivity {
     Image mediaImage = imageProxy.getImage();
 
     if (mediaImage != null) {
-      qrParser.getDataFromQR(mediaImage)
-              .addOnSuccessListener(result -> {
-                if (result != null && !result.isEmpty()) {
-                  handleQRResult(result);
-                }
-                isProcessing = false;
-                imageProxy.close();
-              })
-              .addOnFailureListener(e -> {
-                Log.e(TAG, "QR parsing failed", e);
-                isProcessing = false;
-                imageProxy.close();
-              });
+      qrParser.getDataFromQR(mediaImage).addOnSuccessListener(result -> {
+        if (result != null && !result.isEmpty()) {
+          handleQRResult(result);
+        }
+        isProcessing = false;
+        imageProxy.close();
+      }).addOnFailureListener(e -> {
+        Log.e(TAG, "QR parsing failed", e);
+        isProcessing = false;
+        imageProxy.close();
+      });
     } else {
       isProcessing = false;
       imageProxy.close();
@@ -197,24 +215,60 @@ public class QrScannerActivity extends AppCompatActivity {
 
   private void handleQRResult(String qrData) {
     try {
-      JsonObject obj = JsonParser.parseString(qrData).getAsJsonObject();
+      // Parse the QR data into our QRData model
+      QRData data = gson.fromJson(qrData, QRData.class);
 
-      if (obj.has("type") && "request".equals(obj.get("type").getAsString()) && obj.has("url")) {
-        String url = obj.get("url").getAsString();
-        String pasteId = extractPasteId(url);
+      if (data == null || data.getType() == null || data.getUrl() == null) {
+        showError("QR code does not contain valid data format");
+        return;
+      }
 
-        if (pasteId != null) {
-          importFlashcardsFromPaste(pasteId);
-        } else {
-          showError("Invalid paste.rs URL format");
-        }
+      // Validate that this is a request type QR code
+      if (!data.isRequestType()) {
+        showError("Unsupported QR code type: " + data.getType());
+        return;
+      }
+
+      String url = data.getUrl();
+      String pasteId = extractPasteId(url);
+
+      if (pasteId == null) {
+        showError("Invalid URL format in QR code");
+        return;
+      }
+
+      // Process according to the data type
+      if (data.isFlashcardData()) {
+        importFlashcardsFromPaste(pasteId);
+      } else if (data.isQuizData()) {
+        importQuizzesFromPaste(pasteId);
       } else {
-        showError("QR code does not contain a valid request format");
+        showError("Unknown data type: " + data.getDataType());
       }
     } catch (Exception e) {
-      Log.e(TAG, "Failed to parse QR data", e);
+      Log.e(TAG, "Failed to parse QR data: " + e.getMessage(), e);
       showError("Failed to parse QR code data");
     }
+  }
+
+  private void importQuizzesFromPaste(String pasteId) {
+    new Thread(() -> {
+      try {
+        QuizImporter importer = new QuizImporter();
+        List<Quiz> quizzes = importer.importQuizzes(pasteId);
+
+        runOnUiThread(() -> {
+          if (!quizzes.isEmpty()) {
+            saveQuizzesToDatabase(quizzes);
+          } else {
+            showError(getString(R.string.error_no_items_imported));
+          }
+        });
+      } catch (Exception e) {
+        Log.e(TAG, "Import failed", e);
+        runOnUiThread(() -> showError("Failed to import quizzes"));
+      }
+    }).start();
   }
 
   private void importFlashcardsFromPaste(String pasteId) {
@@ -233,6 +287,41 @@ public class QrScannerActivity extends AppCompatActivity {
       } catch (Exception e) {
         Log.e(TAG, "Import failed", e);
         runOnUiThread(() -> showError("Failed to import flashcards"));
+      }
+    }).start();
+  }
+
+  private void saveQuizzesToDatabase(List<Quiz> quizzes) {
+    new Thread(() -> {
+      try {
+        AppDatabase db = AppDatabaseProvider.getDatabase(this);
+        QuizSetRepository setRepo = new QuizSetRepository(db);
+
+        QuizSetEntity set = new QuizSetEntity();
+        set.name = setName;
+        set.description = "Imported quizzes from QR code";
+        set.collectionId = collectionId;
+        set.createdAt = System.currentTimeMillis();
+        set.updatedAt = System.currentTimeMillis();
+
+        long setId = setRepo.insertWithDefaultCollectionIfNeeded(set);
+
+        for (Quiz quiz : quizzes) {
+          QuizEntity entity = new QuizEntity();
+          entity.question = quiz.getQuestion();
+          entity.answers = quiz.getAnswers();
+          entity.correctAnswerIndices = quiz.getCorrectAnswerIndices();
+          entity.type = quiz.getType();
+          entity.quizSetId = setId;
+          entity.createdAt = System.currentTimeMillis();
+          entity.updatedAt = System.currentTimeMillis();
+          db.quizDao().insert(entity);
+        }
+
+        runOnUiThread(() -> showImportSuccessDialog(quizzes.size(), "quizzes"));
+      } catch (Exception e) {
+        Log.e(TAG, "Database save failed", e);
+        runOnUiThread(() -> showError("Failed to save quizzes to database"));
       }
     }).start();
   }
@@ -264,7 +353,7 @@ public class QrScannerActivity extends AppCompatActivity {
           db.quizDao().insert(entity);
         }
 
-        runOnUiThread(() -> showImportSuccessDialog(quizzes.size()));
+        runOnUiThread(() -> showImportSuccessDialog(quizzes.size(), "flashcards"));
       } catch (Exception e) {
         Log.e(TAG, "Database save failed", e);
         runOnUiThread(() -> showError("Failed to save flashcards to database"));
@@ -280,16 +369,21 @@ public class QrScannerActivity extends AppCompatActivity {
         String[] parts = url.split("/");
         return parts.length >= 4 ? parts[3] : null;
       }
+      if (url.startsWith("https://0x0.st/")) {
+        String[] parts = url.split("/");
+        return parts.length >= 4 ? parts[3] : null;
+      }
     } catch (Exception e) {
       Log.e(TAG, "Failed to extract paste ID", e);
     }
     return null;
   }
 
-  private void showImportSuccessDialog(int count) {
-    new AlertDialog.Builder(this)
+  private void showImportSuccessDialog(int count, String type) {
+    new MaterialAlertDialogBuilder(this)
             .setTitle("Import Successful")
-            .setMessage("Successfully imported " + count + " flashcards")
+            .setMessage("Successfully imported " + count + " " + type)
+            .setIcon(R.drawable.ic_check_circle)
             .setPositiveButton(android.R.string.ok, (dialog, which) -> {
               setResult(RESULT_OK);
               finish();

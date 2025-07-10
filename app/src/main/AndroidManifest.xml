@@ -56,21 +56,32 @@
             android:name=".ui.QuizListActivity"
             android:exported="false" />
 
+        <!-- Quiz Import -->
+        <activity
+            android:name=".ui.PreImportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PostImportActivity"
+            android:exported="false" />
+
         <!-- Practice and Testing -->
         <activity
             android:name=".ui.PracticeActivity"
             android:exported="false" />
 
-        <activity android:name=".ui.TestConfigActivity"
-            android:exported="false"   />
-
-
-        <activity android:name=".ui.TestActivity"
+        <activity
+            android:name=".ui.TestConfigActivity"
             android:exported="false" />
 
 
-        <activity android:name=".ui.TestResultActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".ui.TestActivity"
+            android:exported="false" />
+
+
+        <activity
+            android:name=".ui.TestResultActivity"
+            android:exported="false" />
 
 
         <activity
