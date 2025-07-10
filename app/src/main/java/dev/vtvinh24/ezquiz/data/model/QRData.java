@@ -1,6 +1,10 @@
 package dev.vtvinh24.ezquiz.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class QRData {
+  // Use SerializedName annotation to handle hyphenated JSON field name
+  @SerializedName("data-type")
   private String dataType;  // "quizzes" or "flashcards"
   private String type;      // "request" or other future types
   private String url;       // URL to fetch the data from

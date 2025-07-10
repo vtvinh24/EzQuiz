@@ -3,12 +3,15 @@ package dev.vtvinh24.ezquiz.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,6 +39,7 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -77,6 +81,9 @@ public class PostImportActivity extends AppCompatActivity {
   private MaterialCardView qrPlaceholder;
   private View qrFrameOverlay;
   private MaterialTextView instructionText;
+  private View loadingOverlay;
+
+  private boolean isCameraActive = true;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +118,16 @@ public class PostImportActivity extends AppCompatActivity {
     textStatus = findViewById(R.id.text_import_status);
     statusCard = findViewById(R.id.status_card);
     cancelButton = findViewById(R.id.import_button);
+
+    // Create and add a loading overlay to camera container
+    FrameLayout cameraContainer = findViewById(R.id.camera_container);
+    loadingOverlay = new View(this);
+    loadingOverlay.setLayoutParams(new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT));
+    loadingOverlay.setBackgroundColor(Color.parseColor("#80000000")); // Semi-transparent black
+    loadingOverlay.setVisibility(View.GONE);
+    cameraContainer.addView(loadingOverlay);
 
     // Set up Chrome extension link
     MaterialTextView chromeExtensionLink = findViewById(R.id.chrome_extension_link);
@@ -217,7 +234,7 @@ public class PostImportActivity extends AppCompatActivity {
 
   @ExperimentalGetImage
   private void analyzeImage(ImageProxy imageProxy) {
-    if (isProcessing) {
+    if (isProcessing || !isCameraActive) {
       imageProxy.close();
       return;
     }
@@ -228,9 +245,13 @@ public class PostImportActivity extends AppCompatActivity {
     if (mediaImage != null) {
       qrParser.getDataFromQR(mediaImage).addOnSuccessListener(result -> {
         if (result != null && !result.isEmpty()) {
+          // Temporarily disable camera processing when QR code is detected
+          isCameraActive = false;
+          showLoadingState(true);
           handleQRResult(result);
+        } else {
+          isProcessing = false;
         }
-        isProcessing = false;
         imageProxy.close();
       }).addOnFailureListener(e -> {
         Log.e(TAG, "QR parsing failed", e);
@@ -243,6 +264,21 @@ public class PostImportActivity extends AppCompatActivity {
     }
   }
 
+  // Add a method to show/hide loading state
+  private void showLoadingState(boolean isLoading) {
+    runOnUiThread(() -> {
+      if (isLoading) {
+        loadingOverlay.setVisibility(View.VISIBLE);
+        instructionText.setText(R.string.processing_qr_code);
+      } else {
+        loadingOverlay.setVisibility(View.GONE);
+        instructionText.setText(R.string.position_qr_within_frame);
+        isCameraActive = true;
+        isProcessing = false;
+      }
+    });
+  }
+
   private void handleQRResult(String qrData) {
     try {
       // Parse the QR data into our QRData model
@@ -250,12 +286,14 @@ public class PostImportActivity extends AppCompatActivity {
 
       if (data == null || data.getType() == null || data.getUrl() == null) {
         showError("QR code does not contain valid data format");
+        showLoadingState(false);
         return;
       }
 
       // Validate that this is a request type QR code
       if (!data.isRequestType()) {
         showError("Unsupported QR code type: " + data.getType());
+        showLoadingState(false);
         return;
       }
 
@@ -264,18 +302,23 @@ public class PostImportActivity extends AppCompatActivity {
 
       if (pasteId == null) {
         showError("Invalid URL format in QR code");
+        showLoadingState(false);
         return;
       }
 
       // Process according to the data type
-      if (data.isFlashcardData() || data.isQuizData()) {
-        importFromPasteId(pasteId);
+      if (data.isFlashcardData()) {
+        importFromPasteId(pasteId, true);
+      } else if (data.isQuizData()) {
+        importFromPasteId(pasteId, false);
       } else {
         showError("Unknown data type: " + data.getDataType());
+        showLoadingState(false);
       }
     } catch (Exception e) {
       Log.e(TAG, "Failed to parse QR data: " + e.getMessage(), e);
       showError("Failed to parse QR code data");
+      showLoadingState(false);
     }
   }
 
@@ -285,6 +328,7 @@ public class PostImportActivity extends AppCompatActivity {
     try {
       if (url.startsWith("https://paste.rs/")) {
         String[] parts = url.split("/");
+        Log.w(TAG, "Extracting paste ID from URL: " + url);
         return parts.length >= 4 ? parts[3] : null;
       }
       if (url.startsWith("https://0x0.st/")) {
@@ -297,17 +341,24 @@ public class PostImportActivity extends AppCompatActivity {
     return null;
   }
 
-  private void importFromPasteId(String pasteId) {
+  private void importFromPasteId(String pasteId, boolean isFlashcard) {
     showStatus(getString(R.string.importing_please_wait));
 
     Handler mainHandler = new Handler(Looper.getMainLooper());
     Executors.newSingleThreadExecutor().execute(() -> {
       QuizImporter importer = new QuizImporter();
-      List<Quiz> quizzes = importer.importFlashcards(pasteId);
+      List<Quiz> quizzes;
+
+      if (isFlashcard) {
+        quizzes = importer.importFlashcards(pasteId);
+      } else {
+        quizzes = importer.importQuizzes(pasteId);
+      }
 
       mainHandler.post(() -> {
         if (quizzes.isEmpty()) {
           showStatus(getString(R.string.error_no_items_imported));
+          showLoadingState(false);
           return;
         }
 
@@ -316,40 +367,68 @@ public class PostImportActivity extends AppCompatActivity {
     });
   }
 
+  /**
+   * Saves imported quizzes to the database and creates a new quiz set
+   * based on the selected collection and provided name
+   */
+  private void saveQuizzesToDatabase(List<Quiz> quizzes, String pasteId) {
+    AppDatabase db = AppDatabaseProvider.getDatabase(this);
+
+    // Create quiz set with the imported items
+    QuizSetEntity quizSet = new QuizSetEntity();
+    quizSet.collectionId = selectedCollectionId;
+    quizSet.name = setName;
+    quizSet.createdAt = System.currentTimeMillis();
+    quizSet.updatedAt = System.currentTimeMillis();
+
+    Executors.newSingleThreadExecutor().execute(() -> {
+      try {
+        // Insert the quiz set directly via DAO
+        long quizSetId = db.quizSetDao().insert(quizSet);
+
+        // Prepare quiz entities
+        List<QuizEntity> quizEntities = new ArrayList<>();
+        for (int i = 0; i < quizzes.size(); i++) {
+          Quiz quiz = quizzes.get(i);
+          QuizEntity quizEntity = new QuizEntity();
+          quizEntity.quizSetId = quizSetId;
+          quizEntity.question = quiz.getQuestion();
+          quizEntity.answers = quiz.getAnswers();
+          quizEntity.correctAnswerIndices = quiz.getCorrectAnswerIndices();
+          quizEntity.type = quiz.getType();
+          quizEntity.order = i;
+          quizEntity.createdAt = System.currentTimeMillis();
+          quizEntity.updatedAt = System.currentTimeMillis();
+
+          // Insert each quiz entity individually using the DAO
+          db.quizDao().insert(quizEntity);
+        }
+
+        // Show success UI on main thread
+        new Handler(Looper.getMainLooper()).post(() -> {
+          showImportSuccessDialog(quizzes.size());
+        });
+      } catch (Exception e) {
+        Log.e(TAG, "Error saving quizzes to database", e);
+        new Handler(Looper.getMainLooper()).post(() -> {
+          showError("Failed to save imported quizzes");
+          showLoadingState(false);
+        });
+      }
+    });
+  }
+
   private void showStatus(String message) {
     statusCard.setVisibility(View.VISIBLE);
     textStatus.setText(message);
   }
 
-  private void saveQuizzesToDatabase(List<Quiz> quizzes, String pasteId) {
-    AppDatabase db = AppDatabaseProvider.getDatabase(this);
-    QuizSetEntity set = new QuizSetEntity();
-    set.name = setName;
-    set.description = getString(R.string.imported_set_description, pasteId);
-    set.collectionId = selectedCollectionId;
-    set.createdAt = System.currentTimeMillis();
-    set.updatedAt = System.currentTimeMillis();
-
-    QuizSetRepository setRepo = new QuizSetRepository(db);
-    long setId = setRepo.insertWithDefaultCollectionIfNeeded(set);
-    set = setRepo.getSet(setId);
-
-    for (Quiz quiz : quizzes) {
-      QuizEntity entity = new QuizEntity();
-      entity.question = quiz.getQuestion();
-      entity.answers = quiz.getAnswers();
-      entity.correctAnswerIndices = quiz.getCorrectAnswerIndices();
-      entity.type = quiz.getType();
-      entity.quizSetId = setId;
-      entity.createdAt = System.currentTimeMillis();
-      entity.updatedAt = System.currentTimeMillis();
-      db.quizDao().insert(entity);
-    }
-
-    showImportSuccessDialog(quizzes.size());
+  private void showError(String message) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
   }
 
   private void showImportSuccessDialog(int count) {
+    // Keep loading state until user dismisses the dialog
     new MaterialAlertDialogBuilder(this)
             .setTitle("Import Successful")
             .setMessage("Successfully imported " + count + " items")
@@ -358,25 +437,8 @@ public class PostImportActivity extends AppCompatActivity {
               setResult(RESULT_OK);
               finish();
             })
+            .setOnDismissListener(dialog -> showLoadingState(false))
             .setCancelable(false)
             .show();
-  }
-
-  private void showError(String message) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-  }
-
-  private void cleanupCamera() {
-    if (cameraExecutor != null) {
-      cameraExecutor.shutdown();
-      cameraExecutor = null;
-    }
-    qrParser = null;
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    cleanupCamera();
   }
 }

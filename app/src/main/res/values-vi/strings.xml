@@ -129,5 +129,6 @@
     <string name="position_qr_within_frame">Đặt mã QR trong khung</string>
     <string name="chrome_extension_suggestion">Cần mã QR từ trang web? Thử tiện ích mở rộng Chrome của chúng tôi</string>
     <string name="scan_qr_code">Quét mã QR</string>
+    <string name="processing_qr_code">Processing...</string>
 
 </resources>
