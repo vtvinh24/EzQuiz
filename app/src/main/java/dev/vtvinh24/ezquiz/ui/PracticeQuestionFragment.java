@@ -1,29 +1,20 @@
 package dev.vtvinh24.ezquiz.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.card.MaterialCardView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
 
@@ -32,8 +23,9 @@ public class PracticeQuestionFragment extends Fragment {
     private PracticeViewModel viewModel;
     private Quiz quiz;
     private long quizId;
+
     private LinearLayout answersContainer;
-    private List<MaterialCardView> optionsViews; // Change type from CompoundButton to MaterialCardView
+    private List<MaterialCardView> optionsViews;
 
     public static PracticeQuestionFragment newInstance(long quizId, Quiz quiz) {
         PracticeQuestionFragment fragment = new PracticeQuestionFragment();
@@ -52,6 +44,7 @@ public class PracticeQuestionFragment extends Fragment {
             quizId = getArguments().getLong("quiz_id");
             quiz = (Quiz) getArguments().getSerializable("quiz_data");
         }
+        optionsViews = new ArrayList<>();
     }
 
     @Nullable
@@ -66,16 +59,27 @@ public class PracticeQuestionFragment extends Fragment {
 
         TextView textQuestion = view.findViewById(R.id.text_practice_question);
         answersContainer = view.findViewById(R.id.practice_answers_container);
-        optionsViews = new ArrayList<>();
 
         textQuestion.setText(quiz.getQuestion());
         setupAnswerOptions();
 
         viewModel.isAnswerChecked.observe(getViewLifecycleOwner(), isChecked -> {
-            if(isChecked){
+            if (isChecked && viewModel.getCurrentPosition() == getAdapterPosition()) {
                 showResults();
             }
         });
+    }
+
+    private int getAdapterPosition() {
+        List<PracticeViewModel.PracticeItem> items = viewModel.quizItems.getValue();
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).id == quizId) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     private void setupAnswerOptions() {
@@ -84,44 +88,29 @@ public class PracticeQuestionFragment extends Fragment {
         List<String> answers = quiz.getAnswers();
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
+        for (int i = 0; i < answers.size(); i++) {
+            MaterialCardView cardView = (MaterialCardView) inflater.inflate(R.layout.item_practice_answer, answersContainer, false);
+            TextView textAnswer = cardView.findViewById(R.id.text_answer_option);
+            textAnswer.setText(answers.get(i));
+
+            final int position = i;
+            cardView.setOnClickListener(v -> handleAnswerClick(cardView, position));
+
+            optionsViews.add(cardView);
+            answersContainer.addView(cardView);
+        }
+    }
+
+    private void handleAnswerClick(MaterialCardView clickedCard, int position) {
         if (quiz.getType() == Quiz.Type.SINGLE_CHOICE) {
-            for (int i = 0; i < answers.size(); i++) {
-                MaterialCardView cardView = (MaterialCardView) inflater.inflate(
-                    R.layout.item_practice_answer, answersContainer, false);
-
-                TextView textAnswer = cardView.findViewById(R.id.text_answer_option);
-                textAnswer.setText(answers.get(i));
-
-                final int position = i;
-                cardView.setOnClickListener(v -> {
-                    // Uncheck all other cards
-                    for (MaterialCardView option : optionsViews) {
-                        option.setChecked(false);
-                    }
-                    cardView.setChecked(true);
-                    viewModel.onAnswerSelected(quizId, Collections.singletonList(position));
-                });
-
-                optionsViews.add(cardView);
-                answersContainer.addView(cardView);
+            for (MaterialCardView card : optionsViews) {
+                card.setChecked(false);
             }
+            clickedCard.setChecked(true);
+            viewModel.onAnswerSelected(quizId, Collections.singletonList(position));
         } else { // MULTIPLE_CHOICE
-            for (int i = 0; i < answers.size(); i++) {
-                MaterialCardView cardView = (MaterialCardView) inflater.inflate(
-                    R.layout.item_practice_answer, answersContainer, false);
-
-                TextView textAnswer = cardView.findViewById(R.id.text_answer_option);
-                textAnswer.setText(answers.get(i));
-
-                final int position = i;
-                cardView.setOnClickListener(v -> {
-                    cardView.setChecked(!cardView.isChecked());
-                    updateViewModelWithMultipleChoices();
-                });
-
-                optionsViews.add(cardView);
-                answersContainer.addView(cardView);
-            }
+            clickedCard.setChecked(!clickedCard.isChecked());
+            updateViewModelWithMultipleChoices();
         }
     }
 
@@ -135,6 +124,11 @@ public class PracticeQuestionFragment extends Fragment {
         viewModel.onAnswerSelected(quizId, selectedIndices);
     }
 
+    /**
+     * === CẬP NHẬT PHƯƠNG THỨC NÀY ===
+     * Hiển thị kết quả sau khi người dùng nhấn "Check Answer".
+     * Bao gồm tô màu viền card và hiển thị nhãn "Đúng"/"Sai".
+     */
     private void showResults() {
         List<Integer> correctAnswers = quiz.getCorrectAnswerIndices();
         int colorCorrect = ContextCompat.getColor(requireContext(), R.color.correct_answer);
@@ -142,16 +136,30 @@ public class PracticeQuestionFragment extends Fragment {
 
         for (int i = 0; i < optionsViews.size(); i++) {
             MaterialCardView cardView = optionsViews.get(i);
-            cardView.setEnabled(false);
+            // Lấy TextView trạng thái từ bên trong card
+            TextView statusText = cardView.findViewById(R.id.text_answer_status);
 
-            if (correctAnswers.contains(i)) {
+            cardView.setEnabled(false); // Vô hiệu hóa click sau khi đã kiểm tra
+
+            boolean isCorrectAnswer = correctAnswers.contains(i);
+            boolean isUserSelected = cardView.isChecked();
+
+            if (isCorrectAnswer) {
+                // Nếu là đáp án đúng
                 cardView.setStrokeColor(colorCorrect);
-                cardView.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
-            }
+                cardView.setChecked(true); // Hiển thị icon check cho mọi đáp án đúng
 
-            if (cardView.isChecked() && !correctAnswers.contains(i)) {
+                statusText.setText("Đúng");
+                statusText.setTextColor(colorCorrect);
+                statusText.setVisibility(View.VISIBLE);
+
+            } else if (isUserSelected) {
+                // Nếu là đáp án sai mà người dùng đã chọn
                 cardView.setStrokeColor(colorIncorrect);
-                cardView.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
+
+                statusText.setText("Sai");
+                statusText.setTextColor(colorIncorrect);
+                statusText.setVisibility(View.VISIBLE);
             }
         }
     }

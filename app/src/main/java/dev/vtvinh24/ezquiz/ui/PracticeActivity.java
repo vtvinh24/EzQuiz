@@ -1,43 +1,30 @@
 package dev.vtvinh24.ezquiz.ui;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
+import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.button.MaterialButton;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import dev.vtvinh24.ezquiz.R;
-import dev.vtvinh24.ezquiz.data.model.Quiz;
-import dev.vtvinh24.ezquiz.util.QuizAttemptResult;
 
 public class PracticeActivity extends AppCompatActivity {
 
     public static final String EXTRA_SET_ID = "setId";
 
     private PracticeViewModel viewModel;
+    private PracticeAdapter practiceAdapter;
+
+    private ViewPager2 viewPager;
     private TextView textProgress;
-    private TextView textQuestion;
     private ProgressBar progressBar;
-    private MaterialButton btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4;
-    private MaterialButton btnNextQuestion;
-    private TextView[] answerStatusTexts;
-    private List<MaterialButton> answerButtons;
-    private int selectedAnswerIndex = -1;
+    private MaterialButton btnCheckAnswer, btnNextQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,142 +33,79 @@ public class PracticeActivity extends AppCompatActivity {
 
         long setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
         if (setId == -1) {
-            Toast.makeText(this, getString(R.string.error_invalid_set_id), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error: Invalid Set ID", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         initializeViews();
-        setupAnswerButtons();
-
-        viewModel = new ViewModelProvider(this).get(PracticeViewModel.class);
+        setupViewModel();
+        setupViewPager();
+        setupClickListeners();
         setupObservers();
+
         viewModel.startSession(setId);
     }
 
     private void initializeViews() {
         textProgress = findViewById(R.id.text_practice_progress);
-        textQuestion = findViewById(R.id.text_practice_question);
         progressBar = findViewById(R.id.progress_bar);
-        btnAnswer1 = findViewById(R.id.btn_answer_1);
-        btnAnswer2 = findViewById(R.id.btn_answer_2);
-        btnAnswer3 = findViewById(R.id.btn_answer_3);
-        btnAnswer4 = findViewById(R.id.btn_answer_4);
+        viewPager = findViewById(R.id.view_pager_practice);
+        btnCheckAnswer = findViewById(R.id.btn_check_answer);
         btnNextQuestion = findViewById(R.id.btn_next_question);
 
-        answerButtons = Arrays.asList(btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4);
-
-        answerStatusTexts = new TextView[]{
-                findViewById(R.id.text_answer_status_1),
-                findViewById(R.id.text_answer_status_2),
-                findViewById(R.id.text_answer_status_3),
-                findViewById(R.id.text_answer_status_4)
-        };
+        // Ngăn người dùng tự vuốt để chuyển câu hỏi
+        viewPager.setUserInputEnabled(false);
     }
 
-    private void onAnswerSelected(int index) {
-        selectedAnswerIndex = index;
-        for (MaterialButton btn : answerButtons) {
-            btn.setEnabled(false);
-        }
-
-        MaterialButton selectedButton = answerButtons.get(index);
-        Quiz currentQuiz = viewModel.getCurrentQuiz();
-        if (currentQuiz == null) return;
-
-        List<Integer> correctAnswers = currentQuiz.getCorrectAnswerIndices();
-        int colorCorrect = getColor(R.color.correct_answer);
-        int colorIncorrect = getColor(R.color.incorrect_answer);
-
-        if (correctAnswers.contains(index)) {
-            selectedButton.setStrokeColor(ColorStateList.valueOf(colorCorrect));
-            selectedButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
-            selectedButton.setIcon(getDrawable(R.drawable.ic_check_correct));
-
-            answerStatusTexts[index].setText(getString(R.string.label_correct));
-            answerStatusTexts[index].setTextColor(colorCorrect);
-            answerStatusTexts[index].setVisibility(View.VISIBLE);
-        } else {
-            selectedButton.setStrokeColor(ColorStateList.valueOf(colorIncorrect));
-            selectedButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
-            selectedButton.setIcon(getDrawable(R.drawable.ic_cross_incorrect));
-
-            answerStatusTexts[index].setText(getString(R.string.wrong_answer));
-            answerStatusTexts[index].setTextColor(colorIncorrect);
-            answerStatusTexts[index].setVisibility(View.VISIBLE);
-
-            for (Integer correctIndex : correctAnswers) {
-                if (correctIndex >= 0 && correctIndex < answerButtons.size()) {
-                    MaterialButton correctButton = answerButtons.get(correctIndex);
-                    correctButton.setStrokeColor(ColorStateList.valueOf(colorCorrect));
-                    correctButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
-                    correctButton.setIcon(getDrawable(R.drawable.ic_check_correct));
-
-                    answerStatusTexts[correctIndex].setText(getString(R.string.label_correct));
-                    answerStatusTexts[correctIndex].setTextColor(colorCorrect);
-                    answerStatusTexts[correctIndex].setVisibility(View.VISIBLE);
-                } else {
-                    Log.e("PracticeActivity", "Invalid correct answer index found: " + correctIndex);
-                }
-            }
-        }
-
-        btnNextQuestion.setVisibility(View.VISIBLE);
-        btnNextQuestion.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
-        btnNextQuestion.setEnabled(true);
-
-        viewModel.onAnswerSelected(viewModel.getCurrentQuizId(), Collections.singletonList(index));
-        viewModel.checkCurrentAnswer();
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(PracticeViewModel.class);
     }
 
-    private void setupAnswerButtons() {
-        for (int i = 0; i < answerButtons.size(); i++) {
-            final int index = i;
-            answerButtons.get(i).setOnClickListener(v -> onAnswerSelected(index));
-        }
+    private void setupViewPager() {
+        practiceAdapter = new PracticeAdapter(this);
+        viewPager.setAdapter(practiceAdapter);
+    }
+
+    private void setupClickListeners() {
+        btnCheckAnswer.setOnClickListener(v -> viewModel.checkCurrentAnswer());
         btnNextQuestion.setOnClickListener(v -> viewModel.moveToNextQuestion());
-    }
-
-    private void resetAnswerButtons() {
-        selectedAnswerIndex = -1;
-        for (int i = 0; i < answerButtons.size(); i++) {
-            MaterialButton btn = answerButtons.get(i);
-            btn.setEnabled(true);
-            btn.setStrokeColor(ColorStateList.valueOf(getColor(R.color.outline)));
-            btn.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width));
-            btn.setIcon(null);
-            answerStatusTexts[i].setVisibility(View.GONE);
-        }
-        btnNextQuestion.setVisibility(View.GONE);
     }
 
     private void setupObservers() {
         viewModel.quizItems.observe(this, items -> {
             if (items != null && !items.isEmpty()) {
-                updateQuestion(items.get(0));
+                practiceAdapter.submitList(items);
+                updateProgress();
             } else {
-                Toast.makeText(this, getString(R.string.toast_no_quizzes_for_practice), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No quizzes available for practice.", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
 
         viewModel.currentQuestionPosition.observe(this, position -> {
             if (position != null) {
-                List<PracticeViewModel.PracticeItem> items = viewModel.quizItems.getValue();
-                if (items != null && items.size() > position) {
-                    updateQuestion(items.get(position));
-                    resetAnswerButtons();
-
-                    int progress = (int) (((position + 1) * 100.0f) / items.size());
-                    progressBar.setProgress(progress);
-                    textProgress.setText(String.format("%d/%d", position + 1, items.size()));
-                }
+                viewPager.setCurrentItem(position, false); // Chuyển trang không cần hiệu ứng
+                updateProgress();
+                btnCheckAnswer.setVisibility(View.VISIBLE);
+                btnNextQuestion.setVisibility(View.GONE);
             }
+        });
+
+        viewModel.isAnswerChecked.observe(this, isChecked -> {
+            if (isChecked) {
+                btnCheckAnswer.setVisibility(View.GONE);
+                btnNextQuestion.setVisibility(View.VISIBLE);
+            }
+        });
+
+        viewModel.canCheckAnswer.observe(this, canCheck -> {
+            btnCheckAnswer.setEnabled(canCheck);
         });
 
         viewModel.sessionFinished.observe(this, event -> {
             if (event.getContentIfNotHandled() != null) {
-                Intent intent = new Intent(this, ScoreActivity.class);
+                Intent intent = new Intent(this, ScoreActivity.class); // Giả sử có ScoreActivity
                 intent.putExtra("results", (Serializable) new ArrayList<>(event.peekContent()));
                 intent.putExtra("quiz_set_id", getIntent().getLongExtra(EXTRA_SET_ID, -1));
                 startActivity(intent);
@@ -190,19 +114,14 @@ public class PracticeActivity extends AppCompatActivity {
         });
     }
 
-    private void updateQuestion(PracticeViewModel.PracticeItem item) {
-        textQuestion.setText(item.quiz.getQuestion());
-        List<String> answers = item.quiz.getAnswers();
-        for (int i = 0; i < Math.min(answers.size(), answerButtons.size()); i++) {
-            MaterialButton btn = answerButtons.get(i);
-            btn.setVisibility(View.VISIBLE);
-            btn.setText(answers.get(i));
-            answerStatusTexts[i].setVisibility(View.GONE);
-        }
+    private void updateProgress() {
+        Integer position = viewModel.currentQuestionPosition.getValue();
+        int total = practiceAdapter.getItemCount();
 
-        for (int i = answers.size(); i < answerButtons.size(); i++) {
-            answerButtons.get(i).setVisibility(View.GONE);
-            answerStatusTexts[i].setVisibility(View.GONE);
+        if (position != null && total > 0) {
+            int progressValue = (int) (((position + 1) * 100.0f) / total);
+            progressBar.setProgress(progressValue);
+            textProgress.setText(String.format("%d/%d", position + 1, total));
         }
     }
 }

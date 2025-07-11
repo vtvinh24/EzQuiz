@@ -4,43 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:paddingHorizontal="16dp">
 
+        <!-- === PHẦN CÂU HỎI ĐÃ CẢI THIỆN === -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="#E8E5FB"> <!-- Màu tím nhạt -->
 
             <TextView
                 android:id="@+id/text_practice_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:textSize="20sp"
-                android:textColor="@color/text_primary"
+                android:padding="24dp"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textColor="#3F3D56"
+                android:textStyle="bold"
                 android:lineSpacingMultiplier="1.2"
-                tools:text="What is the capital of Vietnam?" />
+                tools:text="Hình nào dưới đây có 3 cạnh?" />
 
         </com.google.android.material.card.MaterialCardView>
+        <!-- === KẾT THÚC PHẦN CẢI THIỆN === -->
 
+
+        <!-- Tiêu đề phụ (nếu cần) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="Chọn câu trả lời đúng"
+            android:textSize="16sp"
+            android:textColor="#757575"/>
+
+
+        <!-- Container cho các đáp án -->
         <LinearLayout
             android:id="@+id/practice_answers_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:animateLayoutChanges="true">
-
-            <!-- Answer options will be added here dynamically -->
-
-        </LinearLayout>
+            android:animateLayoutChanges="true"/>
 
     </LinearLayout>
 </ScrollView>

@@ -120,7 +120,7 @@
     <string name="placeholder_tf_question_content">Câu lệnh `final` trong Java có thể được áp dụng cho biến, phương thức và lớp.</string>
     <string name="label_suggested_answer">Câu trả lời đề xuất:</string>
     <string name="placeholder_random_answer">Đây là một câu trả lời được chọn ngẫu nhiên.</string>
-    <string name="prompt_is_answer_true_or_false">Câu trả lời trên là Đúng hay Sai?</string>
+    <string name="prompt_is_answer_true_or_false">Câu trả lời trên là Sai hay Đúng?</string>
     <string name="title_scan_qr_code">Quét mã QR</string>
     <string name="import_content">Nhập nội dung</string>
     <string name="import_quiz">Nhập Quiz</string>
@@ -149,4 +149,11 @@
     <string name="flashcard_summary_known_format">Bạn đã biết %1$d / %2$d thẻ!</string>
     <string name="flashcard_summary_study_unknown_format">Học lại %d thẻ chưa biết</string>
     <string name="flashcard_summary_no_results">Không có kết quả để hiển thị.</string>
+
+    <string name="choose_the_correct_answer">Chọn câu trả lời đúng</string>
+    <string name="action_check">Kiểm tra</string>
+    <string name="action_next">Tiếp theo</string>
+    <string name="action_finish_practice">Hoàn thành</string>
+
+
 </resources>

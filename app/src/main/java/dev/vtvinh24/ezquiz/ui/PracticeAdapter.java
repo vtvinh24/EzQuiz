@@ -4,18 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PracticeAdapter extends FragmentStateAdapter {
 
     private List<PracticeViewModel.PracticeItem> items = new ArrayList<>();
-    private final PracticeViewModel viewModel;
 
-    public PracticeAdapter(@NonNull FragmentActivity fragmentActivity, PracticeViewModel viewModel) {
+    public PracticeAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
-        this.viewModel = viewModel;
     }
 
     @NonNull
@@ -31,7 +28,7 @@ public class PracticeAdapter extends FragmentStateAdapter {
     }
 
     public void submitList(List<PracticeViewModel.PracticeItem> newItems) {
-        this.items = newItems;
+        this.items = new ArrayList<>(newItems);
         notifyDataSetChanged();
     }
 }

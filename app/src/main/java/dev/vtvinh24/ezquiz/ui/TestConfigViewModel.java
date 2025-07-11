@@ -56,14 +56,18 @@ public class TestConfigViewModel extends AndroidViewModel {
 
                     availableTfCount++;
 
-                    if (quiz.answers.size() > 2) {
+
                         availableMcCount++;
-                    }
+
                 }
             }
 
             _mcCount.postValue(availableMcCount);
             _tfCount.postValue(availableTfCount);
+
+
+
+
 
         });
     }

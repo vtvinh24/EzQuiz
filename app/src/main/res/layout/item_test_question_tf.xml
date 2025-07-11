@@ -82,7 +82,7 @@
             android:background="?attr/colorOutlineVariant"
             android:layout_marginBottom="16dp"/>
 
-        <!-- === PHẦN NÚT QUYẾT ĐỊNH ĐÚNG/SAI === -->
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
