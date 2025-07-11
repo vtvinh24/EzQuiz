@@ -3,6 +3,7 @@ package dev.vtvinh24.ezquiz.ui;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
@@ -45,7 +46,7 @@ public class PracticeActivity extends AppCompatActivity {
 
         long setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
         if (setId == -1) {
-            Toast.makeText(this, "Error: Invalid Set ID.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_invalid_set_id), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -70,18 +71,16 @@ public class PracticeActivity extends AppCompatActivity {
 
         answerButtons = Arrays.asList(btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4);
 
-        // Initialize status text array
         answerStatusTexts = new TextView[]{
-            findViewById(R.id.text_answer_status_1),
-            findViewById(R.id.text_answer_status_2),
-            findViewById(R.id.text_answer_status_3),
-            findViewById(R.id.text_answer_status_4)
+                findViewById(R.id.text_answer_status_1),
+                findViewById(R.id.text_answer_status_2),
+                findViewById(R.id.text_answer_status_3),
+                findViewById(R.id.text_answer_status_4)
         };
     }
 
     private void onAnswerSelected(int index) {
         selectedAnswerIndex = index;
-        // Disable all buttons immediately after selection
         for (MaterialButton btn : answerButtons) {
             btn.setEnabled(false);
         }
@@ -94,47 +93,43 @@ public class PracticeActivity extends AppCompatActivity {
         int colorCorrect = getColor(R.color.correct_answer);
         int colorIncorrect = getColor(R.color.incorrect_answer);
 
-        // If answer is correct
         if (correctAnswers.contains(index)) {
             selectedButton.setStrokeColor(ColorStateList.valueOf(colorCorrect));
             selectedButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
             selectedButton.setIcon(getDrawable(R.drawable.ic_check_correct));
 
-            // Show "Đúng" text
-            answerStatusTexts[index].setText("Đúng");
+            answerStatusTexts[index].setText(getString(R.string.label_correct));
             answerStatusTexts[index].setTextColor(colorCorrect);
             answerStatusTexts[index].setVisibility(View.VISIBLE);
         } else {
-            // If answer is wrong
             selectedButton.setStrokeColor(ColorStateList.valueOf(colorIncorrect));
             selectedButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
             selectedButton.setIcon(getDrawable(R.drawable.ic_cross_incorrect));
 
-            // Show "Sai" text
-            answerStatusTexts[index].setText("Sai");
+            answerStatusTexts[index].setText(getString(R.string.wrong_answer));
             answerStatusTexts[index].setTextColor(colorIncorrect);
             answerStatusTexts[index].setVisibility(View.VISIBLE);
 
-            // Show the correct answer(s)
             for (Integer correctIndex : correctAnswers) {
-                MaterialButton correctButton = answerButtons.get(correctIndex);
-                correctButton.setStrokeColor(ColorStateList.valueOf(colorCorrect));
-                correctButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
-                correctButton.setIcon(getDrawable(R.drawable.ic_check_correct));
+                if (correctIndex >= 0 && correctIndex < answerButtons.size()) {
+                    MaterialButton correctButton = answerButtons.get(correctIndex);
+                    correctButton.setStrokeColor(ColorStateList.valueOf(colorCorrect));
+                    correctButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.button_stroke_width_selected));
+                    correctButton.setIcon(getDrawable(R.drawable.ic_check_correct));
 
-                // Show "Đúng" text for correct answer
-                answerStatusTexts[correctIndex].setText("Đúng");
-                answerStatusTexts[correctIndex].setTextColor(colorCorrect);
-                answerStatusTexts[correctIndex].setVisibility(View.VISIBLE);
+                    answerStatusTexts[correctIndex].setText(getString(R.string.label_correct));
+                    answerStatusTexts[correctIndex].setTextColor(colorCorrect);
+                    answerStatusTexts[correctIndex].setVisibility(View.VISIBLE);
+                } else {
+                    Log.e("PracticeActivity", "Invalid correct answer index found: " + correctIndex);
+                }
             }
         }
 
-        // Show next button with animation
         btnNextQuestion.setVisibility(View.VISIBLE);
         btnNextQuestion.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
         btnNextQuestion.setEnabled(true);
 
-        // Update the ViewModel
         viewModel.onAnswerSelected(viewModel.getCurrentQuizId(), Collections.singletonList(index));
         viewModel.checkCurrentAnswer();
     }
@@ -144,7 +139,6 @@ public class PracticeActivity extends AppCompatActivity {
             final int index = i;
             answerButtons.get(i).setOnClickListener(v -> onAnswerSelected(index));
         }
-
         btnNextQuestion.setOnClickListener(v -> viewModel.moveToNextQuestion());
     }
 
@@ -166,7 +160,7 @@ public class PracticeActivity extends AppCompatActivity {
             if (items != null && !items.isEmpty()) {
                 updateQuestion(items.get(0));
             } else {
-                Toast.makeText(this, "No quizzes found for practice.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.toast_no_quizzes_for_practice), Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -174,11 +168,10 @@ public class PracticeActivity extends AppCompatActivity {
         viewModel.currentQuestionPosition.observe(this, position -> {
             if (position != null) {
                 List<PracticeViewModel.PracticeItem> items = viewModel.quizItems.getValue();
-                if (items != null && !items.isEmpty()) {
+                if (items != null && items.size() > position) {
                     updateQuestion(items.get(position));
                     resetAnswerButtons();
 
-                    // Update progress
                     int progress = (int) (((position + 1) * 100.0f) / items.size());
                     progressBar.setProgress(progress);
                     textProgress.setText(String.format("%d/%d", position + 1, items.size()));
@@ -206,9 +199,10 @@ public class PracticeActivity extends AppCompatActivity {
             btn.setText(answers.get(i));
             answerStatusTexts[i].setVisibility(View.GONE);
         }
-        // Hide unused buttons
+
         for (int i = answers.size(); i < answerButtons.size(); i++) {
             answerButtons.get(i).setVisibility(View.GONE);
+            answerStatusTexts[i].setVisibility(View.GONE);
         }
     }
 }
