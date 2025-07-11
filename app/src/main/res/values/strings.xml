@@ -131,4 +131,23 @@
     <string name="placeholder_random_answer">This is a randomly selected answer.</string>
     <string name="prompt_is_answer_true_or_false">Is the above statement True or False?</string>
     <string name="processing_qr_code">Processing...</string>
+
+    <string name="error_invalid_set_id">Error: Invalid Set ID.</string>
+    <string name="toast_no_quizzes_for_practice">No quizzes found for practice.</string>
+    <string name="toast_restarting_session">Restarting session…</string>
+    <string name="toast_studying_unknown">Studying unknown cards…</string>
+    <string name="toast_no_flashcards_in_set">No flashcards found in this set.</string>
+    <string name="text_tap_to_hide_answer">Tap to hide answer</string>
+    <string name="toast_no_cards_to_jump_to">No cards to jump to.</string>
+    <string name="dialog_title_jump_to_card">Jump to card</string>
+    <string name="dialog_hint_jump_to_card">Enter card number (1 - %1$d)</string>
+    <string name="dialog_btn_go">Go</string>
+    <string name="toast_error_invalid_card_number">Invalid number. Please enter a value between 1 and %1$d</string>
+    <string name="toast_error_invalid_input_number">Invalid input. Please enter a number.</string>
+
+    <string name="flashcard_answer_bullet_format">• %s</string>
+    <string name="flashcard_no_correct_answer_specified">No correct answer specified.</string>
+    <string name="flashcard_summary_known_format">You knew %1$d / %2$d cards!</string>
+    <string name="flashcard_summary_study_unknown_format">Study %d unknown cards</string>
+    <string name="flashcard_summary_no_results">No results to display.</string>
 </resources>

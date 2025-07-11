@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.Serializable;
@@ -21,7 +20,6 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
   public static final String EXTRA_RESULTS = "flashcard_results";
   public static final String EXTRA_UNKNOWN_CARD_IDS = "unknown_card_ids";
 
-  // Các mã kết quả
   public static final int RESULT_DONE = 100;
   public static final int RESULT_RESTART = 101;
   public static final int RESULT_STUDY_UNKNOWN = 102;
@@ -39,22 +37,19 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
     Button btnStudyUnknown = findViewById(R.id.btn_study_unknown_again);
 
     List<FlashcardResult> results = (List<FlashcardResult>) getIntent().getSerializableExtra(EXTRA_RESULTS);
-
-    // Danh sách để chứa ID của các thẻ chưa biết
-    final ArrayList<Long> unknownCardIds = new ArrayList<>();
+    ArrayList<Long> unknownCardIds = new ArrayList<>();
 
     if (results != null && !results.isEmpty()) {
       long knownCount = results.stream().filter(FlashcardResult::wasKnown).count();
-      long unknownCount = results.stream().filter(r -> !r.wasKnown()).count();
+      long unknownCount = results.size() - knownCount;
       int totalCount = results.size();
-      String summary = String.format("Bạn đã biết %d / %d thẻ!", knownCount, totalCount);
+
+      String summary = getString(R.string.flashcard_summary_known_format, knownCount, totalCount);
       textSummary.setText(summary);
 
-      // Đếm số thẻ đã biết và chưa biết
       textKnownCount.setText(String.valueOf(knownCount));
       textUnknownCount.setText(String.valueOf(unknownCount));
 
-      // Lọc ra các ID chưa biết
       unknownCardIds.addAll(
               results.stream()
                       .filter(r -> !r.wasKnown())
@@ -62,22 +57,19 @@ public class FlashcardSummaryActivity extends AppCompatActivity {
                       .collect(Collectors.toList())
       );
 
-      // Chỉ hiện nút "Học lại" nếu có thẻ chưa biết
       if (!unknownCardIds.isEmpty()) {
         btnStudyUnknown.setVisibility(View.VISIBLE);
-        btnStudyUnknown.setText(String.format("Học lại %d thẻ chưa biết", unknownCardIds.size()));
+        btnStudyUnknown.setText(getString(R.string.flashcard_summary_study_unknown_format, unknownCardIds.size()));
       } else {
         btnStudyUnknown.setVisibility(View.GONE);
       }
 
     } else {
-      textSummary.setText("Không có kết quả để hiển thị.");
+      textSummary.setText(R.string.flashcard_summary_no_results);
       textKnownCount.setText("0");
       textUnknownCount.setText("0");
       btnStudyUnknown.setVisibility(View.GONE);
     }
-
-    // --- SỬA LẠI LOGIC CÁC NÚT ---
 
     btnDone.setOnClickListener(v -> {
       setResult(RESULT_DONE);

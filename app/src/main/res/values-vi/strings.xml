@@ -131,4 +131,22 @@
     <string name="scan_qr_code">Quét mã QR</string>
     <string name="processing_qr_code">Processing...</string>
 
+    <string name="error_invalid_set_id">Lỗi: ID bộ thẻ không hợp lệ.</string>
+    <string name="toast_no_quizzes_for_practice">Không tìm thấy quiz để luyện tập.</string>
+    <string name="toast_restarting_session">Đang khởi động lại phiên học…</string>
+    <string name="toast_studying_unknown">Đang học các thẻ chưa biết…</string>
+    <string name="toast_no_flashcards_in_set">Không tìm thấy thẻ ghi nhớ nào trong bộ này.</string>
+    <string name="text_tap_to_hide_answer">Chạm để ẩn đáp án</string>
+    <string name="toast_no_cards_to_jump_to">Không có thẻ nào để chuyển đến.</string>
+    <string name="dialog_title_jump_to_card">Chuyển đến thẻ</string>
+    <string name="dialog_hint_jump_to_card">Nhập số thẻ (1 - %1$d)</string>
+    <string name="dialog_btn_go">Đi</string>
+    <string name="toast_error_invalid_card_number">Số không hợp lệ. Vui lòng nhập giá trị từ 1 đến %1$d</string>
+    <string name="toast_error_invalid_input_number">Đầu vào không hợp lệ. Vui lòng nhập một số.</string>
+
+    <string name="flashcard_answer_bullet_format">• %s</string>
+    <string name="flashcard_no_correct_answer_specified">Không có đáp án đúng được chỉ định.</string>
+    <string name="flashcard_summary_known_format">Bạn đã biết %1$d / %2$d thẻ!</string>
+    <string name="flashcard_summary_study_unknown_format">Học lại %d thẻ chưa biết</string>
+    <string name="flashcard_summary_no_results">Không có kết quả để hiển thị.</string>
 </resources>
