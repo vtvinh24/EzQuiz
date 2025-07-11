@@ -21,7 +21,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#E8E5FB"> <!-- Màu tím nhạt -->
+            app:cardBackgroundColor="#E8E5FB">
 
             <TextView
                 android:id="@+id/text_practice_question"
@@ -48,8 +48,7 @@
             android:textSize="16sp"
             android:textColor="#757575"/>
 
-
-        <!-- Container cho các đáp án -->
+        
         <LinearLayout
             android:id="@+id/practice_answers_container"
             android:layout_width="match_parent"
