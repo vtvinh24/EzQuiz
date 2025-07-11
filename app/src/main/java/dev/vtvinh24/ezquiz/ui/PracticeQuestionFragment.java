@@ -26,6 +26,7 @@ public class PracticeQuestionFragment extends Fragment {
 
     private LinearLayout answersContainer;
     private List<MaterialCardView> optionsViews;
+    private TextView textAnswerInstruction;
 
     public static PracticeQuestionFragment newInstance(long quizId, Quiz quiz) {
         PracticeQuestionFragment fragment = new PracticeQuestionFragment();
@@ -59,8 +60,18 @@ public class PracticeQuestionFragment extends Fragment {
 
         TextView textQuestion = view.findViewById(R.id.text_practice_question);
         answersContainer = view.findViewById(R.id.practice_answers_container);
+        textAnswerInstruction = view.findViewById(R.id.text_answer_instruction);
 
         textQuestion.setText(quiz.getQuestion());
+
+        // === CẬP NHẬT LOGIC ĐỂ SỬ DỤNG STRING RESOURCES ===
+        if (quiz.getType() == Quiz.Type.MULTIPLE_CHOICE) {
+            textAnswerInstruction.setText(R.string.prompt_select_multiple_answers);
+        } else { // Mặc định cho SINGLE_CHOICE
+            textAnswerInstruction.setText(R.string.prompt_select_one_answer);
+        }
+
+
         setupAnswerOptions();
 
         viewModel.isAnswerChecked.observe(getViewLifecycleOwner(), isChecked -> {
@@ -124,11 +135,6 @@ public class PracticeQuestionFragment extends Fragment {
         viewModel.onAnswerSelected(quizId, selectedIndices);
     }
 
-    /**
-     * === CẬP NHẬT PHƯƠNG THỨC NÀY ===
-     * Hiển thị kết quả sau khi người dùng nhấn "Check Answer".
-     * Bao gồm tô màu viền card và hiển thị nhãn "Đúng"/"Sai".
-     */
     private void showResults() {
         List<Integer> correctAnswers = quiz.getCorrectAnswerIndices();
         int colorCorrect = ContextCompat.getColor(requireContext(), R.color.correct_answer);
@@ -136,28 +142,22 @@ public class PracticeQuestionFragment extends Fragment {
 
         for (int i = 0; i < optionsViews.size(); i++) {
             MaterialCardView cardView = optionsViews.get(i);
-            // Lấy TextView trạng thái từ bên trong card
             TextView statusText = cardView.findViewById(R.id.text_answer_status);
 
-            cardView.setEnabled(false); // Vô hiệu hóa click sau khi đã kiểm tra
+            cardView.setEnabled(false);
 
             boolean isCorrectAnswer = correctAnswers.contains(i);
             boolean isUserSelected = cardView.isChecked();
 
             if (isCorrectAnswer) {
-                // Nếu là đáp án đúng
                 cardView.setStrokeColor(colorCorrect);
-                cardView.setChecked(true); // Hiển thị icon check cho mọi đáp án đúng
-
-                statusText.setText("Đúng");
+                cardView.setChecked(true);
+                statusText.setText(R.string.label_correct);
                 statusText.setTextColor(colorCorrect);
                 statusText.setVisibility(View.VISIBLE);
-
             } else if (isUserSelected) {
-                // Nếu là đáp án sai mà người dùng đã chọn
                 cardView.setStrokeColor(colorIncorrect);
-
-                statusText.setText("Sai");
+                statusText.setText(R.string.wrong_answer);
                 statusText.setTextColor(colorIncorrect);
                 statusText.setVisibility(View.VISIBLE);
             }

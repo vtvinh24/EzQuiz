@@ -15,7 +15,6 @@
         android:paddingBottom="16dp"
         android:paddingHorizontal="16dp">
 
-        <!-- === PHẦN CÂU HỎI ĐÃ CẢI THIỆN === -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,16 +36,15 @@
                 tools:text="Hình nào dưới đây có 3 cạnh?" />
 
         </com.google.android.material.card.MaterialCardView>
-        <!-- === KẾT THÚC PHẦN CẢI THIỆN === -->
 
 
-        <!-- Tiêu đề phụ (nếu cần) -->
         <TextView
+            android:id="@+id/text_answer_instruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            android:text="Chọn câu trả lời đúng"
+            tools:text="Chọn câu trả lời đúng"
             android:textSize="16sp"
             android:textColor="#757575"/>
 
