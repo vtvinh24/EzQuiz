@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -10,10 +11,10 @@
     android:checkable="true"
     app:cardCornerRadius="12dp"
     app:cardElevation="1dp"
-    app:strokeWidth="1dp"
+    app:strokeWidth="1.5dp"
     app:strokeColor="#E0E0E0"
     app:checkedIcon="@drawable/ic_check_circle"
-    app:checkedIconTint="@color/correct_answer">
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +30,22 @@
             android:layout_weight="1"
             android:textSize="16sp"
             android:textColor="@color/text_primary"
-            android:lineSpacingMultiplier="1.2" />
+            android:lineSpacingMultiplier="1.2"
+            tools:text="This is a potential answer"/>
+
+        <!-- === THÊM MỚI: TextView cho trạng thái Đúng/Sai === -->
+        <TextView
+            android:id="@+id/text_answer_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="Đúng"
+            tools:textColor="@color/correct_answer"
+            tools:visibility="visible"/>
+        <!-- === KẾT THÚC THÊM MỚI === -->
 
     </LinearLayout>
 

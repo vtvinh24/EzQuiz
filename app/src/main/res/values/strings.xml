@@ -129,7 +129,7 @@
     <string name="placeholder_tf_question_content">The `final` keyword in Java can be applied to variables, methods, and classes.</string>
     <string name="label_suggested_answer">Suggested answer:</string>
     <string name="placeholder_random_answer">This is a randomly selected answer.</string>
-    <string name="prompt_is_answer_true_or_false">Is the above statement True or False?</string>
+    <string name="prompt_is_answer_true_or_false">Is the above statement False or True?</string>
     <string name="processing_qr_code">Processing...</string>
 
     <string name="error_invalid_set_id">Error: Invalid Set ID.</string>
@@ -150,4 +150,10 @@
     <string name="flashcard_summary_known_format">You knew %1$d / %2$d cards!</string>
     <string name="flashcard_summary_study_unknown_format">Study %d unknown cards</string>
     <string name="flashcard_summary_no_results">No results to display.</string>
+
+    <string name="choose_the_correct_answer">Choose the correct answer</string>
+    <string name="action_check">Check</string>
+    <string name="action_next">Next</string>
+    <string name="action_finish_practice">Finish</string>
+
 </resources>

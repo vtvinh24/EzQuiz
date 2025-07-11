@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="#F7F8FA"
+    tools:context=".ui.PracticeActivity">
 
-    <!-- Progress Section -->
+    <!-- Phần tiến trình -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,225 +20,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textColor="@color/practice_progress_text"
-            tools:text="1/10" />
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#555555"
+            tools:text="1/7" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="8dp"
             android:layout_marginTop="8dp"
+            android:max="100"
+            app:trackCornerRadius="4dp"
+            app:trackColor="#E0E0E0"
             android:progressTint="@color/practice_title"
-            android:progressBackgroundTint="@color/practice_answer_stroke"
-            tools:progress="30" />
+        tools:progress="14" />
     </LinearLayout>
 
-    <!-- Question Section -->
-    <TextView
-        android:id="@+id/text_practice_question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:textSize="20sp"
-        android:textColor="@color/practice_question"
-        android:gravity="start"
-        android:lineSpacingExtra="4dp"
-        android:textStyle="bold"
-        tools:text="What is the capital of Vietnam?" />
-
-    <!-- Answer Section Title -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Choose the correct answer"
-        android:textSize="16sp"
-        android:textColor="@color/practice_title"
-        android:gravity="start"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:paddingHorizontal="24dp" />
-
-    <!-- Answer Options Container -->
-    <LinearLayout
-        android:id="@+id/answer_options_container"
+    <!-- ViewPager và các nút điều khiển -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_practice"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:layout_weight="1" />
 
-        <!-- Answer Option 1 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:id="@+id/text_answer_status_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đúng"
-                android:textColor="@color/correct_answer"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="6dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_answer_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/practice_answer_text"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/practice_answer_stroke"
-                app:strokeWidth="1dp"
-                app:icon="@null"
-                app:iconGravity="end"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                tools:text="Answer 1" />
-        </LinearLayout>
-
-        <!-- Answer Option 2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:id="@+id/text_answer_status_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đúng"
-                android:textColor="@color/correct_answer"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="6dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_answer_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/practice_answer_text"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/practice_answer_stroke"
-                app:strokeWidth="1dp"
-                app:icon="@null"
-                app:iconGravity="end"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                tools:text="Answer 2" />
-        </LinearLayout>
-
-        <!-- Answer Option 3 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:id="@+id/text_answer_status_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đúng"
-                android:textColor="@color/correct_answer"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="6dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_answer_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/practice_answer_text"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/practice_answer_stroke"
-                app:strokeWidth="1dp"
-                app:icon="@null"
-                app:iconGravity="end"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                tools:text="Answer 3" />
-        </LinearLayout>
-
-        <!-- Answer Option 4 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:id="@+id/text_answer_status_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đúng"
-                android:textColor="@color/correct_answer"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="6dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_answer_4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/practice_answer_text"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/practice_answer_stroke"
-                app:strokeWidth="1dp"
-                app:icon="@null"
-                app:iconGravity="end"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                tools:text="Answer 4" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- Bottom Control Button -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="36dp"
-        android:paddingTop="0dp"
-        android:paddingBottom="40dp"
-        android:layout_marginTop="-8dp">
+        android:padding="16dp"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_check_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Check Answer"
+            android:enabled="false"
+            android:layout_marginHorizontal="20dp"
+            android:paddingVertical="12dp"
+            android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_next_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-8dp"
-            android:text="Next"
+            android:text="Next Question"
+            android:layout_marginHorizontal="20dp"
+            android:paddingVertical="12dp"
             android:textSize="16sp"
             android:visibility="gone"
-            android:backgroundTint="@color/practice_title"
-            app:cornerRadius="8dp"
             tools:visibility="visible" />
     </LinearLayout>
 
