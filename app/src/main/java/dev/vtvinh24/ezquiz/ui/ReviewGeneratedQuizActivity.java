@@ -44,6 +44,7 @@ import dev.vtvinh24.ezquiz.ui.adapter.EditableQuizAdapter;
 public class ReviewGeneratedQuizActivity extends AppCompatActivity implements EditableQuizAdapter.OnQuizChangeListener {
 
   public static final String EXTRA_GENERATED_QUIZZES = "EXTRA_GENERATED_QUIZZES";
+  public static final String EXTRA_CLEAR_GENERATE_DATA = "EXTRA_CLEAR_GENERATE_DATA";
   private static final String TAG = "ReviewQuizActivity";
 
   private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
@@ -59,6 +60,8 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
   private List<QuizCollectionEntity> collections;
   private AppDatabase db;
   private ItemTouchHelper itemTouchHelper;
+  private boolean isQuizSaved = false;
+  private boolean hasUnsavedChanges = false;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,12 +90,43 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
     MaterialButton btnPreview = findViewById(R.id.btn_preview);
 
     if (btnBack != null) {
-      btnBack.setOnClickListener(v -> finish());
+      btnBack.setOnClickListener(v -> handleBackPressed());
     }
 
     if (btnPreview != null) {
       btnPreview.setOnClickListener(v -> showPreviewDialog());
     }
+  }
+
+  private void handleBackPressed() {
+    if (!isQuizSaved && (hasUnsavedChanges || adapter.getItemCount() > 0)) {
+      showExitConfirmationDialog();
+    } else {
+      finishWithResult(false);
+    }
+  }
+
+  private void showExitConfirmationDialog() {
+    new MaterialAlertDialogBuilder(this)
+        .setTitle("Bạn có chắc muốn thoát?")
+        .setMessage("Bạn chưa lưu bộ quiz này. Tất cả câu hỏi sẽ bị mất và dữ liệu tạo quiz sẽ được xóa.")
+        .setPositiveButton("Thoát", (dialog, which) -> {
+          finishWithResult(true);
+        })
+        .setNegativeButton("Ở lại", null)
+        .setNeutralButton("Lưu trước", (dialog, which) -> {
+          saveQuizSet();
+        })
+        .show();
+  }
+
+  private void finishWithResult(boolean shouldClearData) {
+    if (shouldClearData) {
+      setResult(RESULT_OK, getIntent().putExtra(EXTRA_CLEAR_GENERATE_DATA, true));
+    } else {
+      setResult(RESULT_CANCELED);
+    }
+    finish();
   }
 
   private void showPreviewDialog() {
@@ -206,6 +240,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
         int fromPosition = viewHolder.getAdapterPosition();
         int toPosition = target.getAdapterPosition();
         adapter.moveQuiz(fromPosition, toPosition);
+        hasUnsavedChanges = true;
         return true;
       }
 
@@ -238,10 +273,12 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
         .setPositiveButton("Add at End", (dialog, which) -> {
           adapter.addNewQuiz(adapter.getItemCount());
           updateQuestionCount();
+          hasUnsavedChanges = true;
         })
         .setNeutralButton("Add at Beginning", (dialog, which) -> {
           adapter.addNewQuiz(0);
           updateQuestionCount();
+          hasUnsavedChanges = true;
         })
         .setNegativeButton("Cancel", null)
         .show();
@@ -254,6 +291,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
         .setPositiveButton("Delete", (dialog, which) -> {
           adapter.removeQuiz(position);
           updateQuestionCount();
+          hasUnsavedChanges = true;
         })
         .setNegativeButton("Cancel", (dialog, which) -> {
           adapter.notifyItemChanged(position);
@@ -271,19 +309,27 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
   @Override
   public void onQuizChanged() {
     updateQuestionCount();
+    hasUnsavedChanges = true;
   }
 
   @Override
   public void onQuizDeleted(int position) {
     updateQuestionCount();
+    hasUnsavedChanges = true;
     Toast.makeText(this, "Question deleted", Toast.LENGTH_SHORT).show();
   }
 
   @Override
   public void onQuizAdded(int position) {
     updateQuestionCount();
+    hasUnsavedChanges = true;
     Toast.makeText(this, "Question added", Toast.LENGTH_SHORT).show();
     recyclerView.scrollToPosition(position);
+  }
+
+  @Override
+  public void onBackPressed() {
+    handleBackPressed();
   }
 
   private void loadCollections() {
@@ -361,6 +407,8 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
 
         runOnUiThread(() -> {
           Toast.makeText(this, "Quiz set saved successfully!", Toast.LENGTH_SHORT).show();
+          isQuizSaved = true;
+          hasUnsavedChanges = false;
           finish();
         });
       } catch (Exception e) {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
+    android:background="?attr/colorSurface"
     tools:context=".ui.FlashcardActivity">
 
     <!-- Enhanced Progress bar -->
@@ -43,6 +43,8 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:elevation="8dp"
+        android:clickable="false"
+        android:focusable="false"
         tools:text="1 / 100" />
 
     <!-- Hidden jump button -->

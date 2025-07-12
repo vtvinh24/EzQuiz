@@ -70,7 +70,6 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     QuizSetEntity quizSet = quizSets.get(position);
     Context itemContext = holder.itemView.getContext();
 
-
     holder.textName.setText(quizSet.name != null ? quizSet.name : "Unnamed Quiz Set");
     String description = quizSet.description;
     if (description == null || description.trim().isEmpty()) {
@@ -78,11 +77,9 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
     }
     holder.textDescription.setText(description);
 
-
     setGradientBackground(holder.iconBackground, position, itemContext);
 
     // --- Get actual quiz count from database ---
-
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler mainHandler = new Handler(Looper.getMainLooper());
     executor.execute(() -> {
@@ -94,6 +91,11 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       });
     });
 
+    // Ensure chips are not clickable or focusable
+    holder.chipQuizCount.setClickable(false);
+    holder.chipQuizCount.setFocusable(false);
+    holder.chipDifficulty.setClickable(false);
+    holder.chipDifficulty.setFocusable(false);
 
     // --- Set difficulty ---
     String difficulty = getDifficultyText(quizSet.difficulty);

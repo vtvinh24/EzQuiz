@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F7F8FA"
+    android:background="?attr/colorSurface"
     tools:context=".ui.PracticeActivity">
 
     <!-- Phần tiến trình -->
@@ -22,7 +22,9 @@
             android:layout_gravity="center"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#555555"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:clickable="false"
+            android:focusable="false"
             tools:text="1/7" />
 
         <ProgressBar
@@ -33,9 +35,9 @@
             android:layout_marginTop="8dp"
             android:max="100"
             app:trackCornerRadius="4dp"
-            app:trackColor="#E0E0E0"
+            app:trackColor="?attr/colorOutlineVariant"
             android:progressTint="@color/practice_title"
-        tools:progress="14" />
+            tools:progress="14" />
     </LinearLayout>
 
     <!-- ViewPager và các nút điều khiển -->

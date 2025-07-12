@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ import dev.vtvinh24.ezquiz.ui.PreImportActivity;
 import dev.vtvinh24.ezquiz.ui.QuizCollectionAdapter;
 import dev.vtvinh24.ezquiz.ui.QuizSetListActivity;
 
-public class CollectionsFragment extends Fragment implements QuizCollectionAdapter.OnItemClickListener {
+public class CollectionsFragment extends Fragment implements QuizCollectionAdapter.OnSelectionModeListener {
 
   private final List<QuizCollectionEntity> collections = new ArrayList<>();
   private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -38,7 +41,13 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
   private QuizCollectionAdapter adapter;
   private ExtendedFloatingActionButton fabAddCollection;
   private ExtendedFloatingActionButton fabImport;
+  private Chip chipTotalCollections;
   private AppDatabase db;
+  private View selectionToolbar;
+  private TextView selectionTitle;
+  private ImageView btnCloseSelection;
+  private ImageView btnDeleteSelected;
+  private ImageView btnEditSelected;
 
   @Nullable
   @Override
@@ -60,7 +69,39 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
     recyclerView = view.findViewById(R.id.recyclerView);
     fabAddCollection = view.findViewById(R.id.fab_add_collection);
     fabImport = view.findViewById(R.id.fab_import);
+    chipTotalCollections = view.findViewById(R.id.chip_total_collections);
     db = AppDatabaseProvider.getDatabase(requireContext());
+    selectionToolbar = view.findViewById(R.id.selection_toolbar);
+    selectionTitle = view.findViewById(R.id.selection_title);
+    btnCloseSelection = view.findViewById(R.id.btn_close_selection);
+    btnDeleteSelected = view.findViewById(R.id.btn_delete_selected);
+    btnEditSelected = view.findViewById(R.id.btn_edit_selected);
+
+    // Make sure the total collections chip is not clickable
+    if (chipTotalCollections != null) {
+      chipTotalCollections.setClickable(false);
+      chipTotalCollections.setFocusable(false);
+    }
+
+    btnCloseSelection.setOnClickListener(v -> {
+      adapter.clearSelection();
+    });
+
+    btnDeleteSelected.setOnClickListener(v -> {
+      List<QuizCollectionEntity> selectedItems = adapter.getSelectedCollections();
+      if (!selectedItems.isEmpty()) {
+        showDeleteConfirmationDialog(selectedItems);
+      }
+    });
+
+    btnEditSelected.setOnClickListener(v -> {
+      List<QuizCollectionEntity> selectedItems = adapter.getSelectedCollections();
+      if (selectedItems.size() == 1) {
+        showEditCollectionDialog(selectedItems.get(0));
+      } else {
+        Toast.makeText(getContext(), "Please select only one collection to edit", Toast.LENGTH_SHORT).show();
+      }
+    });
   }
 
   private void setupRecyclerView() {
@@ -112,6 +153,7 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
         collections.clear();
         collections.addAll(loadedCollections);
         adapter.notifyDataSetChanged();
+        updateCollectionCount();
       });
     });
   }
@@ -150,9 +192,17 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
       requireActivity().runOnUiThread(() -> {
         collections.add(collection);
         adapter.notifyItemInserted(collections.size() - 1);
+        updateCollectionCount();
         Toast.makeText(getContext(), "Collection created successfully", Toast.LENGTH_SHORT).show();
       });
     });
+  }
+
+  private void updateCollectionCount() {
+    if (chipTotalCollections != null) {
+      int count = collections.size();
+      chipTotalCollections.setText(String.valueOf(count));
+    }
   }
 
   @Override
@@ -169,5 +219,109 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
     if (executor != null && !executor.isShutdown()) {
       executor.shutdown();
     }
+  }
+
+  @Override
+  public void onSelectionModeStarted() {
+    if (selectionToolbar != null) {
+      selectionToolbar.setVisibility(View.VISIBLE);
+    }
+    // Hide FABs during selection mode
+    fabAddCollection.setVisibility(View.GONE);
+    fabImport.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void onSelectionModeEnded() {
+    if (selectionToolbar != null) {
+      selectionToolbar.setVisibility(View.GONE);
+    }
+    // Show FABs again
+    fabAddCollection.setVisibility(View.VISIBLE);
+    fabImport.setVisibility(View.VISIBLE);
+  }
+
+  @Override
+  public void onSelectionChanged(int selectedCount) {
+    if (selectionTitle != null) {
+      selectionTitle.setText(selectedCount + " selected");
+    }
+
+    // Show/hide edit button based on selection count
+    if (btnEditSelected != null) {
+      btnEditSelected.setVisibility(selectedCount == 1 ? View.VISIBLE : View.GONE);
+    }
+  }
+
+  private void showDeleteConfirmationDialog(List<QuizCollectionEntity> selectedItems) {
+    String message = selectedItems.size() == 1
+        ? "Are you sure you want to delete \"" + selectedItems.get(0).name + "\"?"
+        : "Are you sure you want to delete " + selectedItems.size() + " collections?";
+
+    new AlertDialog.Builder(requireContext())
+        .setTitle("Delete Collections")
+        .setMessage(message)
+        .setPositiveButton("Delete", (dialog, which) -> deleteSelectedCollections(selectedItems))
+        .setNegativeButton("Cancel", null)
+        .show();
+  }
+
+  private void deleteSelectedCollections(List<QuizCollectionEntity> selectedItems) {
+    executor.execute(() -> {
+      for (QuizCollectionEntity collection : selectedItems) {
+        db.quizCollectionDao().delete(collection);
+      }
+
+      requireActivity().runOnUiThread(() -> {
+        collections.removeAll(selectedItems);
+        adapter.notifyDataSetChanged();
+        updateCollectionCount();
+        adapter.clearSelection();
+
+        String message = selectedItems.size() == 1
+            ? "Collection deleted successfully"
+            : selectedItems.size() + " collections deleted successfully";
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+      });
+    });
+  }
+
+  private void showEditCollectionDialog(QuizCollectionEntity collection) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+    builder.setTitle("Edit Collection");
+
+    View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_collection, null);
+    EditText editCollectionName = dialogView.findViewById(R.id.edit_collection_name);
+    editCollectionName.setText(collection.name);
+    editCollectionName.setSelection(collection.name.length());
+    builder.setView(dialogView);
+
+    builder.setPositiveButton("Save", (dialog, which) -> {
+      String newName = editCollectionName.getText().toString().trim();
+      if (!newName.isEmpty() && !newName.equals(collection.name)) {
+        updateCollectionName(collection, newName);
+      } else if (newName.isEmpty()) {
+        Toast.makeText(getContext(), "Please enter a collection name", Toast.LENGTH_SHORT).show();
+      } else {
+        adapter.clearSelection();
+      }
+    });
+
+    builder.setNegativeButton("Cancel", (dialog, which) -> adapter.clearSelection());
+    builder.show();
+  }
+
+  private void updateCollectionName(QuizCollectionEntity collection, String newName) {
+    executor.execute(() -> {
+      collection.name = newName;
+      collection.updatedAt = System.currentTimeMillis();
+      db.quizCollectionDao().update(collection);
+
+      requireActivity().runOnUiThread(() -> {
+        adapter.notifyDataSetChanged();
+        adapter.clearSelection();
+        Toast.makeText(getContext(), "Collection name updated successfully", Toast.LENGTH_SHORT).show();
+      });
+    });
   }
 }
