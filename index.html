@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>EzQuiz - Master Any Subject</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="assets/images/icon.png"
+    />
+    <link
+      rel="stylesheet"
+      href="styles.css"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <img
+            src="assets/images/icon.png"
+            alt="EzQuiz Icon"
+            class="logo-icon"
+          />
+          <h1>EzQuiz</h1>
+        </div>
+        <nav class="nav">
+          <a href="#features">Features</a>
+          <a href="#download">Download</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <button
+          class="mobile-menu-toggle"
+          onclick="toggleMobileMenu()"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </header>
+
+      <!-- Hero Section -->
+      <main class="hero">
+        <div class="hero-content">
+          <div class="hero-text">
+            <h2>Master Any Subject with <span class="gradient-text">EzQuiz</span></h2>
+            <p>The ultimate quiz app that makes learning fun and effective. Create custom quizzes, track your progress, and compete with friends.</p>
+
+            <!-- App Store Buttons -->
+            <div class="download-buttons">
+              <a
+                href="#"
+                class="app-store-btn ios"
+              >
+                <img
+                  src="https://placehold.co/180x60/000000/ffffff/png?text=App+Store"
+                  alt="Download on App Store"
+                />
+              </a>
+              <a
+                href="#"
+                class="app-store-btn android"
+              >
+                <img
+                  src="https://placehold.co/180x60/34a853/ffffff/png?text=Google+Play"
+                  alt="Get it on Google Play"
+                />
+              </a>
+            </div>
+          </div>
+
+          <!-- Steam-style Media Gallery -->
+          <div class="media-section">
+            <div class="steam-gallery">
+              <!-- Main Display Area -->
+              <div class="main-display">
+                <div
+                  class="main-content"
+                  id="mainContent"
+                >
+                  <!-- Demo Video (Initially Active) -->
+                  <div
+                    class="media-item active"
+                    data-type="video"
+                    data-index="0"
+                  >
+                    <div class="video-container">
+                      <img
+                        src="https://placehold.co/600x338/667eea/ffffff/png?text=Demo+Video"
+                        alt="Demo Video"
+                      />
+                      <div
+                        class="play-button"
+                        onclick="playVideo()"
+                      >
+                        <svg
+                          width="32"
+                          height="32"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                      <div class="media-label">Demo Video</div>
+                    </div>
+                  </div>
+
+                  <!-- Screenshots -->
+                  <div
+                    class="media-item"
+                    data-type="image"
+                    data-index="1"
+                  >
+                    <img
+                      src="https://placehold.co/600x338/667eea/ffffff/png?text=Quiz+Screen"
+                      alt="Quiz Screen"
+                    />
+                    <div class="media-label">Quiz Interface</div>
+                  </div>
+
+                  <div
+                    class="media-item"
+                    data-type="image"
+                    data-index="2"
+                  >
+                    <img
+                      src="https://placehold.co/600x338/764ba2/ffffff/png?text=Progress+Tracking"
+                      alt="Progress Tracking"
+                    />
+                    <div class="media-label">Progress Analytics</div>
+                  </div>
+
+                  <div
+                    class="media-item"
+                    data-type="image"
+                    data-index="3"
+                  >
+                    <img
+                      src="https://placehold.co/600x338/4f46e5/ffffff/png?text=Leaderboard"
+                      alt="Leaderboard"
+                    />
+                    <div class="media-label">Leaderboard</div>
+                  </div>
+
+                  <div
+                    class="media-item"
+                    data-type="image"
+                    data-index="4"
+                  >
+                    <img
+                      src="https://placehold.co/600x338/10b981/ffffff/png?text=Study+Mode"
+                      alt="Study Mode"
+                    />
+                    <div class="media-label">Study Mode</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Thumbnail Strip -->
+              <div class="thumbnail-strip">
+                <div class="thumbnail-scroll">
+                  <div
+                    class="thumbnail active"
+                    data-index="0"
+                    onclick="showMedia(0)"
+                  >
+                    <img
+                      src="https://placehold.co/120x68/667eea/ffffff/png?text=Video"
+                      alt="Demo Video"
+                    />
+                    <div class="video-indicator">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div
+                    class="thumbnail"
+                    data-index="1"
+                    onclick="showMedia(1)"
+                  >
+                    <img
+                      src="https://placehold.co/120x68/667eea/ffffff/png?text=Quiz"
+                      alt="Quiz Screen"
+                    />
+                  </div>
+
+                  <div
+                    class="thumbnail"
+                    data-index="2"
+                    onclick="showMedia(2)"
+                  >
+                    <img
+                      src="https://placehold.co/120x68/764ba2/ffffff/png?text=Progress"
+                      alt="Progress"
+                    />
+                  </div>
+
+                  <div
+                    class="thumbnail"
+                    data-index="3"
+                    onclick="showMedia(3)"
+                  >
+                    <img
+                      src="https://placehold.co/120x68/4f46e5/ffffff/png?text=Board"
+                      alt="Leaderboard"
+                    />
+                  </div>
+
+                  <div
+                    class="thumbnail"
+                    data-index="4"
+                    onclick="showMedia(4)"
+                  >
+                    <img
+                      src="https://placehold.co/120x68/10b981/ffffff/png?text=Study"
+                      alt="Study Mode"
+                    />
+                  </div>
+                </div>
+
+                <!-- Scroll buttons for thumbnails -->
+                <button
+                  class="scroll-btn left"
+                  onclick="scrollThumbnails(-1)"
+                >
+                  ‹
+                </button>
+                <button
+                  class="scroll-btn right"
+                  onclick="scrollThumbnails(1)"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Features Section -->
+      <section
+        class="features"
+        id="features"
+      >
+        <h3>Why Choose EzQuiz?</h3>
+        <div class="features-grid">
+          <div class="feature">
+            <div class="feature-icon">📚</div>
+            <h4>Smart Learning</h4>
+            <p>AI-powered questions that adapt to your learning pace</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">📊</div>
+            <h4>Progress Tracking</h4>
+            <p>Detailed analytics to monitor your improvement</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🏆</div>
+            <h4>Compete & Win</h4>
+            <p>Challenge friends and climb the leaderboards</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      let currentMediaIndex = 0;
+      const mediaItems = document.querySelectorAll(".media-item");
+      const thumbnails = document.querySelectorAll(".thumbnail");
+
+      function showMedia(index) {
+        // Hide all media items
+        mediaItems.forEach((item, i) => {
+          item.classList.toggle("active", i === index);
+        });
+
+        // Update thumbnail selection
+        thumbnails.forEach((thumb, i) => {
+          thumb.classList.toggle("active", i === index);
+        });
+
+        currentMediaIndex = index;
+      }
+
+      function scrollThumbnails(direction) {
+        const thumbnailScroll = document.querySelector(".thumbnail-scroll");
+        const scrollAmount = 130; // Thumbnail width + gap
+        const currentScroll = thumbnailScroll.scrollLeft;
+
+        thumbnailScroll.scrollTo({
+          left: currentScroll + direction * scrollAmount,
+          behavior: "smooth",
+        });
+      }
+
+      function playVideo() {
+        alert("Demo video would play here in a real implementation!");
+      }
+
+      function toggleMobileMenu() {
+        const nav = document.querySelector(".nav");
+        const toggle = document.querySelector(".mobile-menu-toggle");
+        nav.classList.toggle("nav-open");
+        toggle.classList.toggle("active");
+      }
+
+      // Auto-advance through media (optional)
+      setInterval(() => {
+        const nextIndex = (currentMediaIndex + 1) % mediaItems.length;
+        showMedia(nextIndex);
+      }, 6000);
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        showMedia(0);
+      });
+    </script>
+  </body>
+</html>
