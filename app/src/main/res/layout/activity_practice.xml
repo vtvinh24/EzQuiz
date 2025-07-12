@@ -8,36 +8,106 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.PracticeActivity">
 
+    <!-- Header với nút back -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Quay lại"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Luyện tập"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="?attr/colorOnSurface" />
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
     <!-- Phần tiến trình -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="8dp">
 
-        <TextView
-            android:id="@+id/text_practice_progress"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:clickable="false"
-            android:focusable="false"
-            tools:text="1/7" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/text_practice_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:clickable="false"
+                android:focusable="false"
+                tools:text="1/7" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_progress_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:clickable="false"
+                android:focusable="false"
+                tools:text="14%" />
+
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="16dp"
             android:max="100"
-            app:trackCornerRadius="4dp"
-            app:trackColor="?attr/colorOutlineVariant"
-            android:progressTint="@color/practice_title"
+            android:progressDrawable="@drawable/practice_progress_bar"
+            android:elevation="2dp"
             tools:progress="14" />
+
+        <!-- Motivational text -->
+        <TextView
+            android:id="@+id/text_motivation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:alpha="0.8"
+            tools:text="Bạn đang làm rất tốt!" />
+
     </LinearLayout>
 
     <!-- ViewPager và các nút điều khiển -->
@@ -58,7 +128,7 @@
             android:id="@+id/btn_check_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Check Answer"
+            android:text="Kiểm tra đáp án"
             android:enabled="false"
             android:layout_marginHorizontal="20dp"
             android:paddingVertical="12dp"
@@ -68,7 +138,7 @@
             android:id="@+id/btn_next_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next Question"
+            android:text="Câu hỏi tiếp theo"
             android:layout_marginHorizontal="20dp"
             android:paddingVertical="12dp"
             android:textSize="16sp"

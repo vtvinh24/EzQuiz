@@ -330,6 +330,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
   @Override
   public void onBackPressed() {
     handleBackPressed();
+    super.onBackPressed();
   }
 
   private void loadCollections() {

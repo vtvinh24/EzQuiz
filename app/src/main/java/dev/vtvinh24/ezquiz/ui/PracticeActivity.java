@@ -1,8 +1,13 @@
 package dev.vtvinh24.ezquiz.ui;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +17,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.button.MaterialButton;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import dev.vtvinh24.ezquiz.R;
 
 public class PracticeActivity extends AppCompatActivity {
@@ -23,17 +31,34 @@ public class PracticeActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
     private TextView textProgress;
+    private TextView textProgressPercentage;
+    private TextView textMotivation;
     private ProgressBar progressBar;
     private MaterialButton btnCheckAnswer, btnNextQuestion;
+    private ImageButton btnBack;
+    private long setId;
+
+    private List<String> motivationalMessages = Arrays.asList(
+        "Bạn đang làm rất tốt!",
+        "Tiếp tục như vậy!",
+        "Tuyệt vời!",
+        "Bạn đang tiến bộ!",
+        "Xuất sắc!",
+        "Cố gắng lên!",
+        "Gần đến đích rồi!",
+        "Hoàn hảo!",
+        "Bạn thật giỏi!",
+        "Sắp hoàn thành rồi!"
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
 
-        long setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
+        setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
         if (setId == -1) {
-            Toast.makeText(this, "Error: Invalid Set ID", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Lỗi: ID bộ câu hỏi không hợp lệ", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -49,13 +74,18 @@ public class PracticeActivity extends AppCompatActivity {
 
     private void initializeViews() {
         textProgress = findViewById(R.id.text_practice_progress);
+        textProgressPercentage = findViewById(R.id.text_progress_percentage);
+        textMotivation = findViewById(R.id.text_motivation);
         progressBar = findViewById(R.id.progress_bar);
         viewPager = findViewById(R.id.view_pager_practice);
         btnCheckAnswer = findViewById(R.id.btn_check_answer);
         btnNextQuestion = findViewById(R.id.btn_next_question);
+        btnBack = findViewById(R.id.btn_back);
 
-        // Ngăn người dùng tự vuốt để chuyển câu hỏi
         viewPager.setUserInputEnabled(false);
+
+        // Initialize with motivational message
+        updateMotivationalMessage();
     }
 
     private void setupViewModel() {
@@ -69,7 +99,12 @@ public class PracticeActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         btnCheckAnswer.setOnClickListener(v -> viewModel.checkCurrentAnswer());
-        btnNextQuestion.setOnClickListener(v -> viewModel.moveToNextQuestion());
+        btnNextQuestion.setOnClickListener(v -> {
+            viewModel.moveToNextQuestion();
+            // Add celebration animation when moving to next question
+            animateProgressUpdate();
+        });
+        btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     private void setupObservers() {
@@ -78,15 +113,15 @@ public class PracticeActivity extends AppCompatActivity {
                 practiceAdapter.submitList(items);
                 updateProgress();
             } else {
-                Toast.makeText(this, "No quizzes available for practice.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Không có câu hỏi nào để luyện tập.", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
 
         viewModel.currentQuestionPosition.observe(this, position -> {
             if (position != null) {
-                viewPager.setCurrentItem(position, false); // Chuyển trang không cần hiệu ứng
-                updateProgress();
+                viewPager.setCurrentItem(position, false);
+                updateProgressWithAnimation();
                 btnCheckAnswer.setVisibility(View.VISIBLE);
                 btnNextQuestion.setVisibility(View.GONE);
             }
@@ -96,6 +131,8 @@ public class PracticeActivity extends AppCompatActivity {
             if (isChecked) {
                 btnCheckAnswer.setVisibility(View.GONE);
                 btnNextQuestion.setVisibility(View.VISIBLE);
+                // Update motivational message when answer is checked
+                updateMotivationalMessage();
             }
         });
 
@@ -105,13 +142,37 @@ public class PracticeActivity extends AppCompatActivity {
 
         viewModel.sessionFinished.observe(this, event -> {
             if (event.getContentIfNotHandled() != null) {
-                Intent intent = new Intent(this, ScoreActivity.class); // Giả sử có ScoreActivity
+                Intent intent = new Intent(this, ScoreActivity.class);
                 intent.putExtra("results", (Serializable) new ArrayList<>(event.peekContent()));
-                intent.putExtra("quiz_set_id", getIntent().getLongExtra(EXTRA_SET_ID, -1));
+                intent.putExtra("quiz_set_id", setId);
                 startActivity(intent);
                 finish();
             }
         });
+
+        viewModel.hasExistingProgress.observe(this, hasProgress -> {
+            if (hasProgress) {
+                showResumeDialog();
+            } else {
+                viewModel.startNewSession(setId);
+            }
+        });
+    }
+
+    private void showResumeDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Tiếp tục luyện tập")
+                .setMessage("Bạn có muốn tiếp tục từ vị trí đã dừng hay bắt đầu lại từ đầu?")
+                .setPositiveButton("Tiếp tục", (dialog, which) -> {
+                    viewModel.resumeSession(setId);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Bắt đầu lại", (dialog, which) -> {
+                    viewModel.startNewSession(setId);
+                    dialog.dismiss();
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void updateProgress() {
@@ -122,6 +183,104 @@ public class PracticeActivity extends AppCompatActivity {
             int progressValue = (int) (((position + 1) * 100.0f) / total);
             progressBar.setProgress(progressValue);
             textProgress.setText(String.format("%d/%d", position + 1, total));
+            textProgressPercentage.setText(String.format("%d%%", progressValue));
+        }
+    }
+
+    private void updateProgressWithAnimation() {
+        Integer position = viewModel.currentQuestionPosition.getValue();
+        int total = practiceAdapter.getItemCount();
+
+        if (position != null && total > 0) {
+            int newProgressValue = (int) (((position + 1) * 100.0f) / total);
+            int currentProgress = progressBar.getProgress();
+
+            // Animate progress bar
+            ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", currentProgress, newProgressValue);
+            progressAnimator.setDuration(800);
+            progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            progressAnimator.start();
+
+            // Animate percentage text
+            ValueAnimator percentageAnimator = ValueAnimator.ofInt(currentProgress, newProgressValue);
+            percentageAnimator.setDuration(800);
+            percentageAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            percentageAnimator.addUpdateListener(animation -> {
+                int animatedValue = (int) animation.getAnimatedValue();
+                textProgressPercentage.setText(String.format("%d%%", animatedValue));
+            });
+            percentageAnimator.start();
+
+            // Update progress text immediately
+            textProgress.setText(String.format("%d/%d", position + 1, total));
+
+            // Add scale animation to progress text
+            textProgress.animate()
+                    .scaleX(1.2f)
+                    .scaleY(1.2f)
+                    .setDuration(200)
+                    .withEndAction(() -> {
+                        textProgress.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(200)
+                                .start();
+                    })
+                    .start();
+        }
+    }
+
+    private void animateProgressUpdate() {
+        // Add a bounce animation to the progress bar
+        progressBar.animate()
+                .scaleY(1.3f)
+                .setDuration(200)
+                .withEndAction(() -> {
+                    progressBar.animate()
+                            .scaleY(1f)
+                            .setDuration(200)
+                            .start();
+                })
+                .start();
+    }
+
+    private void updateMotivationalMessage() {
+        Random random = new Random();
+        String message = motivationalMessages.get(random.nextInt(motivationalMessages.size()));
+        textMotivation.setText(message);
+
+        // Add fade in animation
+        textMotivation.setAlpha(0f);
+        textMotivation.animate()
+                .alpha(1f)
+                .setDuration(500)
+                .start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (viewModel != null) {
+            viewModel.saveProgress();
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Thoát luyện tập")
+                .setMessage("Bạn có chắc muốn thoát? Tiến độ đã được lưu lại.")
+                .setPositiveButton("Thoát", (dialog, which) -> {
+                    super.onBackPressed();
+                })
+                .setNegativeButton("Tiếp tục", (dialog, which) -> dialog.dismiss())
+                .setOnCancelListener(dialog -> {
+                    // If user cancels dialog, don't exit
+                })
+                .show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (viewModel != null) {
+            viewModel.saveProgress();
         }
     }
 }
