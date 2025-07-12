@@ -32,12 +32,12 @@ public class FlashcardActivity extends AppCompatActivity {
 
   private FlashcardViewModel viewModel;
   private SwipeableCardView swipeableCard;
-  private TextView tvQuestion, tvAnswer, tvTapToReveal, tvCardCounter;
+  private TextView tvQuestion, tvAnswer, tvCardCounter;
   private View cardFront, cardBack;
   private ProgressBar progressBar;
   private TextView btnKnow, btnDontKnow;
   private Button btnJumpTo;
-  private ImageButton btnPreviousCard, btnNextCard;
+  private ImageButton btnPreviousCard, btnBack;
 
   private QuizDisplayItem currentCard;
   private boolean isAnswerRevealed = false;
@@ -91,7 +91,6 @@ public class FlashcardActivity extends AppCompatActivity {
     swipeableCard = findViewById(R.id.swipeable_card);
     tvQuestion = findViewById(R.id.tv_question);
     tvAnswer = findViewById(R.id.tv_answer);
-    tvTapToReveal = findViewById(R.id.tv_tap_to_reveal);
     tvCardCounter = findViewById(R.id.tv_card_counter);
 
     cardFront = findViewById(R.id.card_front);
@@ -102,7 +101,7 @@ public class FlashcardActivity extends AppCompatActivity {
     btnDontKnow = findViewById(R.id.btn_dont_know);
     btnJumpTo = findViewById(R.id.btn_jump_to);
     btnPreviousCard = findViewById(R.id.btn_previous_card);
-    btnNextCard = findViewById(R.id.btn_next_card);
+    btnBack = findViewById(R.id.btn_back);
 
     setupEntryAnimations();
   }
@@ -127,22 +126,12 @@ public class FlashcardActivity extends AppCompatActivity {
 
     btnPreviousCard.setScaleX(0f);
     btnPreviousCard.setScaleY(0f);
-    btnNextCard.setScaleX(0f);
-    btnNextCard.setScaleY(0f);
 
     btnPreviousCard.animate()
             .scaleX(1f)
             .scaleY(1f)
             .setDuration(500)
             .setStartDelay(400)
-            .setInterpolator(new OvershootInterpolator(1.5f))
-            .start();
-
-    btnNextCard.animate()
-            .scaleX(1f)
-            .scaleY(1f)
-            .setDuration(500)
-            .setStartDelay(500)
             .setInterpolator(new OvershootInterpolator(1.5f))
             .start();
 
@@ -206,10 +195,7 @@ public class FlashcardActivity extends AppCompatActivity {
       viewModel.goToPreviousCard();
     });
 
-    btnNextCard.setOnClickListener(v -> {
-      animateNavigationButton(btnNextCard);
-      viewModel.goToNextCard();
-    });
+    btnBack.setOnClickListener(v -> onBackPressed());
   }
 
   private void setupObservers() {
@@ -305,7 +291,6 @@ public class FlashcardActivity extends AppCompatActivity {
   private void updateNavigationButtons() {
     if (viewModel.flashcards.getValue() == null || viewModel.flashcards.getValue().size() <= 1) {
       btnPreviousCard.setVisibility(View.GONE);
-      btnNextCard.setVisibility(View.GONE);
       return;
     }
 
@@ -313,7 +298,6 @@ public class FlashcardActivity extends AppCompatActivity {
     if (currentPos != null) {
       int totalCards = viewModel.flashcards.getValue().size();
       btnPreviousCard.setVisibility(currentPos == 0 ? View.INVISIBLE : View.VISIBLE);
-      btnNextCard.setVisibility(currentPos == totalCards - 1 ? View.INVISIBLE : View.VISIBLE);
       updateProgressAndCounter(currentPos, totalCards);
     }
   }
@@ -412,7 +396,6 @@ public class FlashcardActivity extends AppCompatActivity {
     if (progressBar != null) progressBar.clearAnimation();
     if (tvCardCounter != null) tvCardCounter.clearAnimation();
     if (btnPreviousCard != null) btnPreviousCard.clearAnimation();
-    if (btnNextCard != null) btnNextCard.clearAnimation();
     if (btnKnow != null) btnKnow.clearAnimation();
     if (btnDontKnow != null) btnDontKnow.clearAnimation();
     if (cardFront != null) cardFront.clearAnimation();

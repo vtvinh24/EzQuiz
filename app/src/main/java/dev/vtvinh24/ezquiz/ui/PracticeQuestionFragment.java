@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -99,28 +100,74 @@ public class PracticeQuestionFragment extends Fragment {
         List<String> answers = quiz.getAnswers();
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
+        // Debug logging
+        android.util.Log.d("PracticeFragment", "Quiz question: " + quiz.getQuestion());
+        android.util.Log.d("PracticeFragment", "Number of answers: " + (answers != null ? answers.size() : 0));
+        if (answers != null) {
+            for (int j = 0; j < answers.size(); j++) {
+                android.util.Log.d("PracticeFragment", "Answer " + j + ": " + answers.get(j));
+            }
+        }
+
+        if (answers == null || answers.isEmpty()) {
+            android.util.Log.e("PracticeFragment", "No answers found for quiz!");
+            return;
+        }
+
         for (int i = 0; i < answers.size(); i++) {
             MaterialCardView cardView = (MaterialCardView) inflater.inflate(R.layout.item_practice_answer, answersContainer, false);
             TextView textAnswer = cardView.findViewById(R.id.text_answer_option);
+            ImageView choiceIndicator = cardView.findViewById(R.id.choice_indicator);
+            LinearLayout container = cardView.findViewById(R.id.choice_indicator).getParent() instanceof LinearLayout ?
+                (LinearLayout) cardView.findViewById(R.id.choice_indicator).getParent() : null;
+
             textAnswer.setText(answers.get(i));
+
+            // Set appropriate choice indicator based on question type
+            if (quiz.getType() == Quiz.Type.MULTIPLE_CHOICE) {
+                choiceIndicator.setImageResource(R.drawable.selector_checkbox_practice);
+            } else {
+                choiceIndicator.setImageResource(R.drawable.selector_radio_practice);
+            }
 
             final int position = i;
             cardView.setOnClickListener(v -> handleAnswerClick(cardView, position));
 
             optionsViews.add(cardView);
             answersContainer.addView(cardView);
+
+            android.util.Log.d("PracticeFragment", "Added answer view " + i + " to container");
         }
+
+        android.util.Log.d("PracticeFragment", "Total views added: " + optionsViews.size());
+        android.util.Log.d("PracticeFragment", "Container child count: " + answersContainer.getChildCount());
     }
 
     private void handleAnswerClick(MaterialCardView clickedCard, int position) {
+        ImageView choiceIndicator = clickedCard.findViewById(R.id.choice_indicator);
+        LinearLayout container = (LinearLayout) choiceIndicator.getParent();
+
         if (quiz.getType() == Quiz.Type.SINGLE_CHOICE) {
+            // Reset all cards for single choice
             for (MaterialCardView card : optionsViews) {
                 card.setChecked(false);
+                ImageView indicator = card.findViewById(R.id.choice_indicator);
+                LinearLayout cardContainer = (LinearLayout) indicator.getParent();
+                indicator.setSelected(false);
+                cardContainer.setSelected(false);
             }
+
+            // Select clicked card
             clickedCard.setChecked(true);
+            choiceIndicator.setSelected(true);
+            container.setSelected(true);
             viewModel.onAnswerSelected(quizId, Collections.singletonList(position));
         } else { // MULTIPLE_CHOICE
-            clickedCard.setChecked(!clickedCard.isChecked());
+            // Toggle selection for multiple choice
+            boolean isCurrentlySelected = clickedCard.isChecked();
+            clickedCard.setChecked(!isCurrentlySelected);
+            choiceIndicator.setSelected(!isCurrentlySelected);
+            container.setSelected(!isCurrentlySelected);
             updateViewModelWithMultipleChoices();
         }
     }
@@ -150,13 +197,16 @@ public class PracticeQuestionFragment extends Fragment {
             boolean isUserSelected = cardView.isChecked();
 
             if (isCorrectAnswer) {
+                // Đáp án đúng: luôn hiển thị "Correct" màu xanh
                 cardView.setStrokeColor(colorCorrect);
-                cardView.setChecked(true);
+                cardView.setStrokeWidth(3);
                 statusText.setText(R.string.label_correct);
                 statusText.setTextColor(colorCorrect);
                 statusText.setVisibility(View.VISIBLE);
             } else if (isUserSelected) {
+                // Đáp án sai mà user đã chọn: hiển thị "Wrong" màu đỏ
                 cardView.setStrokeColor(colorIncorrect);
+                cardView.setStrokeWidth(3);
                 statusText.setText(R.string.wrong_answer);
                 statusText.setTextColor(colorIncorrect);
                 statusText.setVisibility(View.VISIBLE);

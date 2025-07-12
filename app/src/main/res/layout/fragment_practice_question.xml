@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:fillViewport="false"
     android:clipToPadding="false">
 
     <LinearLayout
@@ -18,19 +18,20 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#E8E5FB">
+            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/text_practice_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="24dp"
+                android:padding="20dp"
                 android:gravity="center"
-                android:textSize="22sp"
-                android:textColor="#3F3D56"
+                android:textSize="18sp"
+                android:textColor="?attr/colorOnPrimaryContainer"
                 android:textStyle="bold"
                 android:lineSpacingMultiplier="1.2"
                 tools:text="Hình nào dưới đây có 3 cạnh?" />
@@ -42,19 +43,17 @@
             android:id="@+id/text_answer_instruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
             tools:text="Chọn câu trả lời đúng"
-            android:textSize="16sp"
-            android:textColor="#757575"/>
+            android:textSize="14sp"
+            android:textColor="?attr/colorOnSurfaceVariant"/>
 
-        
+
         <LinearLayout
             android:id="@+id/practice_answers_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"/>
+            android:orientation="vertical"/>
 
     </LinearLayout>
 </ScrollView>
