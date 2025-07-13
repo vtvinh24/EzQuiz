@@ -57,6 +57,8 @@ public class PracticeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_practice);
 
         setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
+        boolean shouldContinueSession = getIntent().getBooleanExtra("continueSession", false);
+
         if (setId == -1) {
             Toast.makeText(this, "Lỗi: ID bộ câu hỏi không hợp lệ", Toast.LENGTH_SHORT).show();
             finish();
@@ -69,7 +71,11 @@ public class PracticeActivity extends AppCompatActivity {
         setupClickListeners();
         setupObservers();
 
-        viewModel.startSession(setId);
+        if (shouldContinueSession) {
+            viewModel.continueExistingSession(setId);
+        } else {
+            viewModel.startSession(setId);
+        }
     }
 
     private void initializeViews() {

@@ -124,8 +124,11 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
 
 
     holder.btnTest.setOnClickListener(v -> {
+      android.util.Log.d("QuizSetAdapter", "Test button clicked for quizSet: " + quizSet.name + ", ID: " + quizSet.id);
       if (testClickListener != null) {
         testClickListener.onTestClick(quizSet.id);
+      } else {
+        android.util.Log.w("QuizSetAdapter", "testClickListener is null!");
       }
     });
   }

@@ -94,6 +94,18 @@ public class PracticeViewModel extends AndroidViewModel {
         checkForExistingProgress(quizSetId);
     }
 
+    public void continueExistingSession(long quizSetId) {
+        this.currentQuizSetId = quizSetId;
+        executor.execute(() -> {
+            boolean hasProgress = database.practiceProgressDao().hasPracticeProgress(quizSetId);
+            if (hasProgress) {
+                loadQuizItems(quizSetId, true);
+            } else {
+                loadQuizItems(quizSetId, false);
+            }
+        });
+    }
+
     private void loadQuizItems(long quizSetId, boolean isResume) {
         List<QuizEntity> quizEntities = quizRepository.getQuizzesOfSet(quizSetId);
 

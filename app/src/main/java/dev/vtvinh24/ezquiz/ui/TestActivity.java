@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
+import dev.vtvinh24.ezquiz.data.model.DetailedSessionResult;
+import dev.vtvinh24.ezquiz.util.SessionHistoryHelper;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -155,11 +157,62 @@ public class TestActivity extends AppCompatActivity {
 
     private void navigateToResultScreen(TestViewModel.TestResult result) {
         long setId = getIntent().getLongExtra(EXTRA_SET_ID, -1);
+
+        // Lưu lịch sử test session
+        saveTestSessionHistory(setId, result);
+
         Intent intent = new Intent(this, TestResultActivity.class);
         intent.putExtra("test_result", result);
         intent.putExtra("quiz_set_id", setId);
         startActivity(intent);
         finish();
+    }
+
+    private void saveTestSessionHistory(long quizSetId, TestViewModel.TestResult result) {
+        // Tạo danh sách kết quả chi tiết cho từng câu hỏi
+        List<DetailedSessionResult.QuestionResult> questionResults = new ArrayList<>();
+
+        for (TestViewModel.TestQuestionItem item : currentTestItems) {
+            boolean isCorrect = item.userAnswerIndices.equals(item.quiz.getCorrectAnswerIndices());
+
+            String userAnswer = "";
+            String correctAnswer = "";
+
+            // Tạo chuỗi đáp án của user
+            if (!item.userAnswerIndices.isEmpty()) {
+                userAnswer = item.userAnswerIndices.stream()
+                        .map(index -> item.quiz.getAnswers().get(index))
+                        .collect(Collectors.joining(", "));
+            }
+
+            // Tạo chuỗi đáp án đúng
+            if (item.quiz.getCorrectAnswerIndices() != null) {
+                correctAnswer = item.quiz.getCorrectAnswerIndices().stream()
+                        .map(index -> item.quiz.getAnswers().get(index))
+                        .collect(Collectors.joining(", "));
+            }
+
+            questionResults.add(new DetailedSessionResult.QuestionResult(
+                    item.id,
+                    item.quiz.getQuestion(),
+                    userAnswer,
+                    correctAnswer,
+                    isCorrect,
+                    0 // timeSpent per question - có thể thêm tracking sau
+            ));
+        }
+
+        // Tính thời gian test (giả sử test bắt đầu khi viewModel.startTest được gọi)
+        long timeSpent = viewModel.getTestDuration();
+
+        SessionHistoryHelper.saveTestSession(
+                this,
+                quizSetId,
+                result.totalCount,
+                result.correctCount,
+                timeSpent,
+                questionResults
+        );
     }
 
     @Override

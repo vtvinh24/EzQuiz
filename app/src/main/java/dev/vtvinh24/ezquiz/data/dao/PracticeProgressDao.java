@@ -8,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 import dev.vtvinh24.ezquiz.data.entity.PracticeProgressEntity;
 
+import java.util.List;
+
 @Dao
 public interface PracticeProgressDao {
 
@@ -28,4 +30,13 @@ public interface PracticeProgressDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM practice_progress WHERE quizSetId = :quizSetId)")
     boolean hasPracticeProgress(long quizSetId);
+
+    @Query("SELECT * FROM practice_progress ORDER BY updatedAt DESC")
+    List<PracticeProgressEntity> getAllPracticeProgress();
+
+    @Query("SELECT * FROM practice_progress WHERE currentPosition < LENGTH(quizIds) - LENGTH(REPLACE(quizIds, ',', '')) ORDER BY updatedAt DESC")
+    List<PracticeProgressEntity> getIncompletePracticeProgress();
+
+    @Query("SELECT * FROM practice_progress WHERE currentPosition >= LENGTH(quizIds) - LENGTH(REPLACE(quizIds, ',', '')) ORDER BY updatedAt DESC")
+    List<PracticeProgressEntity> getCompletedPracticeProgress();
 }
