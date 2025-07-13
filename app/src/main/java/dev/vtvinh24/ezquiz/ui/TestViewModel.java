@@ -51,6 +51,7 @@ public class TestViewModel extends AndroidViewModel {
 
     private final QuizRepository quizRepository;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private long testStartTime = 0;
 
 
     private final MutableLiveData<List<TestQuestionItem>> _questions = new MutableLiveData<>();
@@ -76,6 +77,7 @@ public class TestViewModel extends AndroidViewModel {
     }
 
     public void startTest(long quizSetId, int totalCount, boolean isMcChecked, boolean isTfChecked) {
+        testStartTime = System.currentTimeMillis(); // Bắt đầu đếm thời gian
         executor.execute(() -> {
             ArrayList<Quiz.Type> typesToFetch = new ArrayList<>();
             typesToFetch.add(Quiz.Type.SINGLE_CHOICE);
@@ -172,6 +174,13 @@ public class TestViewModel extends AndroidViewModel {
 
     public void forceSubmitTest() {
         gradeTest();
+    }
+
+    public long getTestDuration() {
+        if (testStartTime == 0) {
+            return 0;
+        }
+        return System.currentTimeMillis() - testStartTime;
     }
 
     private void gradeTest() {

@@ -4,7 +4,7 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="6dp" />
-            <solid android:color="#E0E0E0" />
+            <solid android:color="?attr/colorOutlineVariant" />
         </shape>
     </item>
 
@@ -14,12 +14,11 @@
             <shape>
                 <corners android:radius="6dp" />
                 <gradient
-                    android:startColor="#4CAF50"
-                    android:centerColor="#2196F3"
-                    android:endColor="#9C27B0"
+                    android:startColor="?attr/colorPrimary"
+                    android:centerColor="?attr/colorSecondary"
+                    android:endColor="?attr/colorTertiary"
                     android:type="linear" />
             </shape>
         </clip>
     </item>
 </layer-list>
-

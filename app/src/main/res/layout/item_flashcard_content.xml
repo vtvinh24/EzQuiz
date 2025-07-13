@@ -16,24 +16,12 @@
         <TextView
             android:id="@+id/tv_question"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="?android:attr/textColorPrimary"
             android:lineSpacingExtra="4dp"
             android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/tv_tap_to_reveal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tap to reveal answer"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorTertiary"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:background="?android:attr/selectableItemBackground" />
 
     </LinearLayout>
 
@@ -50,23 +38,12 @@
         <TextView
             android:id="@+id/tv_answer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="18sp"
             android:textColor="?android:attr/textColorSecondary"
             android:lineSpacingExtra="4dp"
             android:textAlignment="center" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tap to hide answer"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorTertiary"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:background="?android:attr/selectableItemBackground" />
 
     </LinearLayout>
 

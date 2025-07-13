@@ -109,6 +109,20 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
             }
     );
 
+    private final ActivityResultLauncher<Intent> reviewQuizLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    boolean shouldClearData = result.getData().getBooleanExtra(
+                            ReviewGeneratedQuizActivity.EXTRA_CLEAR_GENERATE_DATA, false);
+                    if (shouldClearData) {
+                        clearGenerateData();
+                        Toast.makeText(this, "Đã xóa dữ liệu tạo quiz", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -355,11 +369,10 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
 
                         if (quizzes != null && !quizzes.isEmpty()) {
                             Intent intent = new Intent(GenerateQuizAIActivity.this, ReviewGeneratedQuizActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             String quizzesJson = new Gson().toJson(quizzes);
                             Log.d(TAG, "Success. Sending JSON to ReviewActivity: " + quizzesJson);
                             intent.putExtra(ReviewGeneratedQuizActivity.EXTRA_GENERATED_QUIZZES, quizzesJson);
-                            startActivity(intent);
+                            reviewQuizLauncher.launch(intent);
                         } else {
                             Log.e(TAG, "Response successful but quizzes list is null or empty");
                             Toast.makeText(GenerateQuizAIActivity.this,
@@ -430,5 +443,10 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                 Toast.makeText(this, "Cần quyền ghi âm để sử dụng tính năng giọng nói", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void clearGenerateData() {
+        editAiPrompt.setText("");
+        removeSelectedImage();
     }
 }

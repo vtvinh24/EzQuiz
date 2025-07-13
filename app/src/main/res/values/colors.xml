@@ -35,7 +35,6 @@
 
     <color name="unanswered_highlight">#FFAB00</color>
 
-
     <color name="surface_container_lowest">#FFFFFF</color> <!-- Màu nền sáng nhất, thường là trắng -->
     <color name="on_surface">#1F1F21</color> <!-- Màu chữ chính trên nền -->
     <color name="outline_variant">#E2E8F0</color> <!-- Màu viền hoặc nền phụ, rất nhạt -->
@@ -44,5 +43,6 @@
 
     <color name="correct_answer_stroke">@color/correct_answer</color>
     <color name="incorrect_answer_stroke">@color/incorrect_answer</color>
+
 
 </resources>

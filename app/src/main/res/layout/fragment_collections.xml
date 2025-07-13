@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_surface_background">
+    android:background="?attr/colorSurface">
 
     <!-- Header Card with Gradient -->
     <com.google.android.material.card.MaterialCardView
@@ -67,7 +67,76 @@
                 android:textColor="@color/gradient_blue_start"
                 app:chipBackgroundColor="@android:color/white"
                 app:chipStrokeWidth="0dp"
+                android:clickable="false"
+                android:focusable="false"
                 style="@style/Widget.Material3.Chip.Filter" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Selection Toolbar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selection_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        android:backgroundTint="?attr/colorPrimary"
+        style="@style/Widget.Material3.CardView.Elevated">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <!-- Close Selection Button -->
+            <ImageView
+                android:id="@+id/btn_close_selection"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_close"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                app:tint="@android:color/white"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Selection Title -->
+            <TextView
+                android:id="@+id/selection_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0 selected"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <!-- Edit Button -->
+            <ImageView
+                android:id="@+id/btn_edit_selected"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_edit"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                app:tint="@android:color/white"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone" />
+
+            <!-- Delete Button -->
+            <ImageView
+                android:id="@+id/btn_delete_selected"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_delete"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                app:tint="@android:color/white" />
 
         </LinearLayout>
 

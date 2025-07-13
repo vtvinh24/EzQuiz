@@ -78,12 +78,27 @@ public class QuizSetListActivity extends AppCompatActivity
 
   private void refreshQuizSets() {
     executor.execute(() -> {
+      // Debug: Log database contents
+      android.util.Log.d("QuizSetListActivity", "=== DATABASE DEBUG ===");
+      android.util.Log.d("QuizSetListActivity", "Current collection ID: " + currentCollectionId);
+
+      // Kiểm tra tổng số quiz sets trong database
+      final List<dev.vtvinh24.ezquiz.data.entity.QuizSetEntity> allSets = db.quizSetDao().getAll();
+      android.util.Log.d("QuizSetListActivity", "Total quiz sets in database: " + allSets.size());
+      for (dev.vtvinh24.ezquiz.data.entity.QuizSetEntity set : allSets) {
+        android.util.Log.d("QuizSetListActivity", "Set ID: " + set.id + ", Name: " + set.name + ", CollectionID: " + set.collectionId);
+      }
+
       final List<QuizSetEntity> newSets = db.quizSetDao().getByCollectionId(currentCollectionId);
+      android.util.Log.d("QuizSetListActivity", "Quiz sets for collection " + currentCollectionId + ": " + newSets.size());
+
       mainThreadHandler.post(() -> {
         quizSets.clear();
         quizSets.addAll(newSets);
         adapter.notifyDataSetChanged();
         updateEmptyView();
+
+        android.util.Log.d("QuizSetListActivity", "UI updated with " + quizSets.size() + " quiz sets");
       });
     });
   }
@@ -150,6 +165,15 @@ public class QuizSetListActivity extends AppCompatActivity
 
   @Override
   public void onTestClick(long quizSetId) {
+    // Debug logging để kiểm tra ID được truyền
+    android.util.Log.d("QuizSetListActivity", "onTestClick called with quizSetId: " + quizSetId);
+
+    if (quizSetId <= 0) {
+      Toast.makeText(this, "Lỗi: ID bộ câu hỏi không hợp lệ (ID: " + quizSetId + ")", Toast.LENGTH_LONG).show();
+      android.util.Log.e("QuizSetListActivity", "Invalid quizSetId: " + quizSetId);
+      return;
+    }
+
     Toast.makeText(this, getString(R.string.toast_starting_test_mode, quizSetId), Toast.LENGTH_SHORT).show();
 
 

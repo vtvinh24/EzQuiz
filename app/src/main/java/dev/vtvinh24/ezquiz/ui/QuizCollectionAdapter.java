@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +29,8 @@ public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAd
   private final List<QuizCollectionEntity> collections;
   private final OnItemClickListener listener;
   private final Context context;
+  private final List<Long> selectedItems = new ArrayList<>();
+  private boolean isSelectionMode = false;
 
   // Array of gradient colors for collection icons
   private final int[][] gradientColors = {
@@ -84,11 +87,34 @@ public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAd
     String lastUpdated = formatLastUpdated(collection.updatedAt);
     holder.chipLastUpdated.setText(lastUpdated);
 
-    // Set click listener
+    // Ensure chips are not clickable or focusable
+    holder.chipQuizCount.setClickable(false);
+    holder.chipQuizCount.setFocusable(false);
+    holder.chipLastUpdated.setClickable(false);
+    holder.chipLastUpdated.setFocusable(false);
+
+    // Handle selection state
+    boolean isSelected = selectedItems.contains(collection.id);
+    holder.itemView.setSelected(isSelected);
+
+    // Set alpha for visual feedback
+    holder.itemView.setAlpha(isSelected ? 0.7f : 1.0f);
+
+    // Set click listeners
     holder.itemView.setOnClickListener(v -> {
-      if (listener != null) {
+      if (isSelectionMode) {
+        toggleSelection(collection.id, position);
+      } else if (listener != null) {
         listener.onItemClick(collection);
       }
+    });
+
+    holder.itemView.setOnLongClickListener(v -> {
+      if (!isSelectionMode) {
+        startSelectionMode(collection.id, position);
+        return true;
+      }
+      return false;
     });
   }
 
@@ -147,8 +173,93 @@ public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAd
     }
   }
 
+  public void startSelectionMode(long itemId, int position) {
+    isSelectionMode = true;
+    selectedItems.clear();
+    selectedItems.add(itemId);
+    notifyItemChanged(position);
+
+    if (listener instanceof OnSelectionModeListener) {
+      ((OnSelectionModeListener) listener).onSelectionModeStarted();
+    }
+  }
+
+  public void toggleSelection(long itemId, int position) {
+    if (selectedItems.contains(itemId)) {
+      selectedItems.remove(itemId);
+    } else {
+      selectedItems.add(itemId);
+    }
+    notifyItemChanged(position);
+
+    if (listener instanceof OnSelectionModeListener) {
+      ((OnSelectionModeListener) listener).onSelectionChanged(selectedItems.size());
+    }
+
+    if (selectedItems.isEmpty()) {
+      exitSelectionMode();
+    }
+  }
+
+  public void exitSelectionMode() {
+    isSelectionMode = false;
+    selectedItems.clear();
+    notifyDataSetChanged();
+
+    if (listener instanceof OnSelectionModeListener) {
+      ((OnSelectionModeListener) listener).onSelectionModeEnded();
+    }
+  }
+
+  public List<Long> getSelectedItems() {
+    return new ArrayList<>(selectedItems);
+  }
+
+  public List<QuizCollectionEntity> getSelectedCollections() {
+    List<QuizCollectionEntity> selectedCollections = new ArrayList<>();
+    for (Long id : selectedItems) {
+      for (QuizCollectionEntity collection : collections) {
+        if (collection.id == id) {
+          selectedCollections.add(collection);
+          break;
+        }
+      }
+    }
+    return selectedCollections;
+  }
+
+  public void clearSelection() {
+    exitSelectionMode();
+  }
+
+  public int getSelectedCount() {
+    return selectedItems.size();
+  }
+
+  public boolean isSelectionMode() {
+    return isSelectionMode;
+  }
+
+  public void selectAll() {
+    selectedItems.clear();
+    for (QuizCollectionEntity collection : collections) {
+      selectedItems.add(collection.id);
+    }
+    notifyDataSetChanged();
+
+    if (listener instanceof OnSelectionModeListener) {
+      ((OnSelectionModeListener) listener).onSelectionChanged(selectedItems.size());
+    }
+  }
+
   public interface OnItemClickListener {
     void onItemClick(QuizCollectionEntity collection);
+  }
+
+  public interface OnSelectionModeListener extends OnItemClickListener {
+    void onSelectionModeStarted();
+    void onSelectionModeEnded();
+    void onSelectionChanged(int selectedCount);
   }
 
   static class ViewHolder extends RecyclerView.ViewHolder {

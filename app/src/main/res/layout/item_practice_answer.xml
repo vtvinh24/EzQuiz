@@ -5,47 +5,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginHorizontal="2dp"
     android:clickable="true"
     android:focusable="true"
     android:checkable="true"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
-    app:strokeWidth="1.5dp"
-    app:strokeColor="#E0E0E0"
-    app:checkedIcon="@drawable/ic_check_circle"
-    app:cardBackgroundColor="@android:color/white">
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:background="@drawable/selector_answer_card_background">
+
+        <!-- Choice indicator (checkbox or radio) -->
+        <ImageView
+            android:id="@+id/choice_indicator"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/selector_checkbox_practice" />
 
         <TextView
             android:id="@+id/text_answer_option"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:textColor="@color/text_primary"
-            android:lineSpacingMultiplier="1.2"
-            tools:text="This is a potential answer"/>
+            android:textSize="14sp"
+            android:textColor="?attr/colorOnSurface"
+            android:lineSpacingMultiplier="1.1"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="This is a potential answer that might be a bit longer"/>
 
-        <!-- === THÊM MỚI: TextView cho trạng thái Đúng/Sai === -->
+
+        <!-- Status text chỉ hiển thị khi submit -->
         <TextView
             android:id="@+id/text_answer_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="gone"
-            tools:text="Đúng"
-            tools:textColor="@color/correct_answer"
-            tools:visibility="visible"/>
-        <!-- === KẾT THÚC THÊM MỚI === -->
+            tools:text="Correct"
+            tools:textColor="@color/correct_answer" />
 
     </LinearLayout>
 
