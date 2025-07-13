@@ -52,7 +52,6 @@ public class AppDatabaseProvider {
               AppDatabase.class,
               "ezquiz-db-v3"
       ).addMigrations(MIGRATION_1_2, MIGRATION_2_3)
-       .fallbackToDestructiveMigration()
        .allowMainThreadQueries().build();
     }
     return instance;
