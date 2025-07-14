@@ -1,9 +1,11 @@
 package dev.vtvinh24.ezquiz.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,15 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        // Start animated gradient background
+        ScrollView scrollView = findViewById(android.R.id.content).findViewById(android.R.id.content).getRootView().findViewById(R.id.scrollViewRegister);
+        if (scrollView != null && scrollView.getBackground() instanceof AnimationDrawable) {
+            AnimationDrawable animationDrawable = (AnimationDrawable) scrollView.getBackground();
+            animationDrawable.setEnterFadeDuration(1000);
+            animationDrawable.setExitFadeDuration(2000);
+            animationDrawable.start();
+        }
 
         initViews();
         initViewModel();
