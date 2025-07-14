@@ -14,7 +14,11 @@
     />
     <link
       rel="stylesheet"
-      href="styles.css"
+      href="css/styles.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
     <link
       rel="preconnect"
@@ -31,9 +35,9 @@
     />
   </head>
   <body>
-    <div class="container">
-      <!-- Header -->
-      <header class="header">
+    <!-- Afloat Navbar/Header -->
+    <header class="header afloat">
+      <div class="header-content">
         <div class="logo">
           <img
             src="assets/images/icon.png"
@@ -43,9 +47,9 @@
           <h1>EzQuiz</h1>
         </div>
         <nav class="nav">
-          <a href="#features">Features</a>
-          <a href="#download">Download</a>
-          <a href="#contact">Contact</a>
+          <a href="https://forms.gle/gYV2We7wRFxgvVct6">
+            <div>Join Beta</div>
+          </a>
         </nav>
         <button
           class="mobile-menu-toggle"
@@ -55,291 +59,338 @@
           <span></span>
           <span></span>
         </button>
-      </header>
+      </div>
+    </header>
 
-      <!-- Hero Section -->
-      <main class="hero">
-        <div class="hero-content">
-          <div class="hero-text">
-            <h2>Master Any Subject with <span class="gradient-text">EzQuiz</span></h2>
-            <p>The ultimate quiz app that makes learning fun and effective. Create custom quizzes, track your progress, and compete with friends.</p>
+    <!-- Hero Section -->
+    <section
+      class="section hero-section"
+      id="hero"
+    >
+      <div class="container">
+        <main class="hero">
+          <div class="hero-content">
+            <div class="hero-text blur-bg">
+              <h2>Master Any Subject with <span class="gradient-text">EzQuiz</span></h2>
+              <p>The ultimate quiz app that makes learning fun and effective. Create custom quizzes, track your progress, and compete with friends.</p>
 
-            <!-- App Store Buttons -->
-            <div class="download-buttons">
-              <a
-                href="#"
-                class="app-store-btn ios"
-              >
-                <img
-                  src="https://placehold.co/180x60/000000/ffffff/png?text=App+Store"
-                  alt="Download on App Store"
-                />
-              </a>
-              <a
-                href="#"
-                class="app-store-btn android"
-              >
-                <img
-                  src="https://placehold.co/180x60/34a853/ffffff/png?text=Google+Play"
-                  alt="Get it on Google Play"
-                />
-              </a>
-            </div>
-          </div>
-
-          <!-- Steam-style Media Gallery -->
-          <div class="media-section">
-            <div class="steam-gallery">
-              <!-- Main Display Area -->
-              <div class="main-display">
-                <div
-                  class="main-content"
-                  id="mainContent"
+              <!-- App Store Buttons -->
+              <div class="download-buttons">
+                <a
+                  href="#"
+                  class="app-store-btn ios"
                 >
-                  <!-- Demo Video (Initially Active) -->
+                  <i class="fa-brands fa-apple"></i>
+                  <div>
+                    <div style="font-size: 0.75rem; opacity: 0.8">Download on the</div>
+                    <div style="font-size: 1rem; font-weight: 700">App Store</div>
+                  </div>
+                </a>
+                <a
+                  href="https://forms.gle/gYV2We7wRFxgvVct6"
+                  class="app-store-btn android"
+                >
+                  <i class="fa-brands fa-android"></i>
+                  <div>
+                    <div style="font-size: 0.75rem; opacity: 0.8">Android Beta</div>
+                    <div style="font-size: 1rem; font-weight: 700">Join Now!</div>
+                  </div>
+                </a>
+                <a
+                  href="https://chromewebstore.google.com/detail/quiz-qr-extractor/oeefhcndpdcphhbbadpnagbneoklkhlm"
+                  class="extension-btn"
+                >
+                  <i class="fa-solid fa-puzzle-piece"></i>
+                  Get Browser Extension
+                </a>
+              </div>
+            </div>
+
+            <!-- Steam-style Media Gallery -->
+            <div class="media-section">
+              <div class="steam-gallery">
+                <!-- Main Display Area -->
+                <div class="main-display">
                   <div
-                    class="media-item active"
-                    data-type="video"
-                    data-index="0"
+                    class="main-content"
+                    id="mainContent"
                   >
-                    <div class="video-container">
+                    <!-- Demo Video (Initially Active) -->
+                    <div
+                      class="media-item active"
+                      data-type="video"
+                      data-index="0"
+                    >
+                      <div class="video-container">
+                        <img
+                          src="https://placehold.co/600x338/667eea/ffffff/png?text=Demo+Video"
+                          alt="Demo Video"
+                        />
+                        <div
+                          class="play-button"
+                          onclick="playVideo()"
+                        >
+                          <svg
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                        <div class="media-label">Demo Video</div>
+                      </div>
+                    </div>
+
+                    <!-- Screenshots -->
+                    <div
+                      class="media-item"
+                      data-type="image"
+                      data-index="1"
+                    >
                       <img
-                        src="https://placehold.co/600x338/667eea/ffffff/png?text=Demo+Video"
+                        src="https://placehold.co/600x338/667eea/ffffff/png?text=Quiz+Screen"
+                        alt="Quiz Screen"
+                      />
+                      <div class="media-label">Quiz Interface</div>
+                    </div>
+
+                    <div
+                      class="media-item"
+                      data-type="image"
+                      data-index="2"
+                    >
+                      <img
+                        src="https://placehold.co/600x338/764ba2/ffffff/png?text=Progress+Tracking"
+                        alt="Progress Tracking"
+                      />
+                      <div class="media-label">Progress Analytics</div>
+                    </div>
+
+                    <div
+                      class="media-item"
+                      data-type="image"
+                      data-index="3"
+                    >
+                      <img
+                        src="https://placehold.co/600x338/10b981/ffffff/png?text=Study+Mode"
+                        alt="Study Mode"
+                      />
+                      <div class="media-label">Study Mode</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Thumbnail Strip -->
+                <div class="thumbnail-strip">
+                  <div class="thumbnail-scroll">
+                    <div
+                      class="thumbnail active"
+                      data-index="0"
+                      onclick="showMedia(0)"
+                    >
+                      <img
+                        src="https://placehold.co/120x68/667eea/ffffff/png?text=Video"
                         alt="Demo Video"
                       />
-                      <div
-                        class="play-button"
-                        onclick="playVideo()"
-                      >
+                      <div class="video-indicator">
                         <svg
-                          width="32"
-                          height="32"
+                          width="12"
+                          height="12"
                           viewBox="0 0 24 24"
-                          fill="currentColor"
+                          fill="white"
                         >
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </div>
-                      <div class="media-label">Demo Video</div>
+                    </div>
+
+                    <div
+                      class="thumbnail"
+                      data-index="1"
+                      onclick="showMedia(1)"
+                    >
+                      <img
+                        src="https://placehold.co/120x68/667eea/ffffff/png?text=Quiz"
+                        alt="Quiz Screen"
+                      />
+                    </div>
+
+                    <div
+                      class="thumbnail"
+                      data-index="2"
+                      onclick="showMedia(2)"
+                    >
+                      <img
+                        src="https://placehold.co/120x68/764ba2/ffffff/png?text=Progress"
+                        alt="Progress"
+                      />
+                    </div>
+
+                    <div
+                      class="thumbnail"
+                      data-index="4"
+                      onclick="showMedia(3)"
+                    >
+                      <img
+                        src="https://placehold.co/120x68/10b981/ffffff/png?text=Study"
+                        alt="Study Mode"
+                      />
                     </div>
                   </div>
-
-                  <!-- Screenshots -->
-                  <div
-                    class="media-item"
-                    data-type="image"
-                    data-index="1"
-                  >
-                    <img
-                      src="https://placehold.co/600x338/667eea/ffffff/png?text=Quiz+Screen"
-                      alt="Quiz Screen"
-                    />
-                    <div class="media-label">Quiz Interface</div>
-                  </div>
-
-                  <div
-                    class="media-item"
-                    data-type="image"
-                    data-index="2"
-                  >
-                    <img
-                      src="https://placehold.co/600x338/764ba2/ffffff/png?text=Progress+Tracking"
-                      alt="Progress Tracking"
-                    />
-                    <div class="media-label">Progress Analytics</div>
-                  </div>
-
-                  <div
-                    class="media-item"
-                    data-type="image"
-                    data-index="3"
-                  >
-                    <img
-                      src="https://placehold.co/600x338/4f46e5/ffffff/png?text=Leaderboard"
-                      alt="Leaderboard"
-                    />
-                    <div class="media-label">Leaderboard</div>
-                  </div>
-
-                  <div
-                    class="media-item"
-                    data-type="image"
-                    data-index="4"
-                  >
-                    <img
-                      src="https://placehold.co/600x338/10b981/ffffff/png?text=Study+Mode"
-                      alt="Study Mode"
-                    />
-                    <div class="media-label">Study Mode</div>
-                  </div>
                 </div>
-              </div>
-
-              <!-- Thumbnail Strip -->
-              <div class="thumbnail-strip">
-                <div class="thumbnail-scroll">
-                  <div
-                    class="thumbnail active"
-                    data-index="0"
-                    onclick="showMedia(0)"
-                  >
-                    <img
-                      src="https://placehold.co/120x68/667eea/ffffff/png?text=Video"
-                      alt="Demo Video"
-                    />
-                    <div class="video-indicator">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="white"
-                      >
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div
-                    class="thumbnail"
-                    data-index="1"
-                    onclick="showMedia(1)"
-                  >
-                    <img
-                      src="https://placehold.co/120x68/667eea/ffffff/png?text=Quiz"
-                      alt="Quiz Screen"
-                    />
-                  </div>
-
-                  <div
-                    class="thumbnail"
-                    data-index="2"
-                    onclick="showMedia(2)"
-                  >
-                    <img
-                      src="https://placehold.co/120x68/764ba2/ffffff/png?text=Progress"
-                      alt="Progress"
-                    />
-                  </div>
-
-                  <div
-                    class="thumbnail"
-                    data-index="3"
-                    onclick="showMedia(3)"
-                  >
-                    <img
-                      src="https://placehold.co/120x68/4f46e5/ffffff/png?text=Board"
-                      alt="Leaderboard"
-                    />
-                  </div>
-
-                  <div
-                    class="thumbnail"
-                    data-index="4"
-                    onclick="showMedia(4)"
-                  >
-                    <img
-                      src="https://placehold.co/120x68/10b981/ffffff/png?text=Study"
-                      alt="Study Mode"
-                    />
-                  </div>
-                </div>
-
-                <!-- Scroll buttons for thumbnails -->
-                <button
-                  class="scroll-btn left"
-                  onclick="scrollThumbnails(-1)"
-                >
-                  ‹
-                </button>
-                <button
-                  class="scroll-btn right"
-                  onclick="scrollThumbnails(1)"
-                >
-                  ›
-                </button>
               </div>
             </div>
           </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- Manage Quiz Section -->
+    <section
+      class="section feature-section"
+      id="manage"
+    >
+      <div class="container">
+        <div class="feature-content">
+          <div class="feature-text blur-bg">
+            <h2>Manage Quiz and Flashcards</h2>
+            <p>Organize your learning materials with ease. Create, edit, and manage your quizzes and flashcards in one centralized location.</p>
+            <ul class="feature-list">
+              <li><i class="fa fa-layer-group"></i> Create unlimited quizzes and flashcard sets</li>
+              <li><i class="fa fa-list-ul"></i> Organize by subjects and topics</li>
+              <li><i class="fa fa-edit"></i> Edit and update content anytime</li>
+              <li><i class="fa fa-bookmark"></i> Bookmark your favorite sets</li>
+              <li><i class="fa fa-search"></i> Quick search and filtering</li>
+            </ul>
+          </div>
+          <div class="feature-visual">
+            <div class="feature-placeholder">📚 Quiz Management Interface</div>
+          </div>
         </div>
-      </main>
+      </div>
+    </section>
 
-      <!-- Features Section -->
-      <section
-        class="features"
-        id="features"
-      >
-        <h3>Why Choose EzQuiz?</h3>
-        <div class="features-grid">
-          <div class="feature">
-            <div class="feature-icon">📚</div>
-            <h4>Smart Learning</h4>
-            <p>AI-powered questions that adapt to your learning pace</p>
+    <!-- Import Section -->
+    <section
+      class="section feature-section"
+      id="import"
+    >
+      <div class="container">
+        <div class="feature-content">
+          <div class="feature-visual">
+            <div class="feature-placeholder">🔄 Import from Multiple Sources</div>
           </div>
-          <div class="feature">
-            <div class="feature-icon">📊</div>
-            <h4>Progress Tracking</h4>
-            <p>Detailed analytics to monitor your improvement</p>
-          </div>
-          <div class="feature">
-            <div class="feature-icon">🏆</div>
-            <h4>Compete & Win</h4>
-            <p>Challenge friends and climb the leaderboards</p>
+          <div class="feature-text blur-bg">
+            <h2>Import from Various Sources</h2>
+            <p>Seamlessly import your existing content from popular platforms. Our browser extension makes it even easier!</p>
+            <ul class="feature-list">
+              <li><i class="fa fa-download"></i> Import from Quizlet sets</li>
+              <li><i class="fa fa-download"></i> Convert Quizizz quizzes</li>
+              <li><i class="fa fa-download"></i> Import Socrative activities</li>
+              <li><i class="fa fa-download"></i> Support for Google Forms</li>
+            </ul>
+            <div
+              class="download-buttons"
+              style="margin-top: 30px"
+            >
+              <a
+                href="https://chromewebstore.google.com/detail/quiz-qr-extractor/oeefhcndpdcphhbbadpnagbneoklkhlm"
+                class="extension-btn"
+              >
+                <i class="fa-solid fa-puzzle-piece"></i> Download Browser Extension
+              </a>
+            </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
 
-    <script>
-      let currentMediaIndex = 0;
-      const mediaItems = document.querySelectorAll(".media-item");
-      const thumbnails = document.querySelectorAll(".thumbnail");
+    <!-- AI Generate Section -->
+    <section
+      class="section feature-section"
+      id="ai-generate"
+    >
+      <div class="container">
+        <div class="feature-content">
+          <div class="feature-text blur-bg">
+            <h2>Generate Quiz with AI</h2>
+            <p>Harness the power of artificial intelligence to create engaging quizzes instantly. Just provide text or an image, and watch the magic happen!</p>
+            <ul class="feature-list">
+              <li><i class="fa fa-robot"></i> Generate from any text content</li>
+              <li><i class="fa fa-image"></i> Create quizzes from single images</li>
+              <li><i class="fa fa-list-ul"></i> Multiple question types supported</li>
+              <li><i class="fa fa-gift"></i> 3 free quiz sets daily</li>
+              <li><i class="fa fa-sliders-h"></i> Smart difficulty adjustment</li>
+            </ul>
+          </div>
+          <div class="feature-visual">
+            <div class="feature-placeholder">🤖 AI Quiz Generation</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      function showMedia(index) {
-        // Hide all media items
-        mediaItems.forEach((item, i) => {
-          item.classList.toggle("active", i === index);
-        });
+    <!-- Coming Soon Section -->
+    <section
+      class="section coming-soon-section"
+      id="coming-soon"
+    >
+      <div class="container">
+        <div class="coming-soon-content blur-bg">
+          <h2>More Coming Soon</h2>
+          <p>We're constantly working on new features to enhance your learning experience. Here's what's on the horizon:</p>
 
-        // Update thumbnail selection
-        thumbnails.forEach((thumb, i) => {
-          thumb.classList.toggle("active", i === index);
-        });
+          <div class="coming-soon-features">
+            <div class="coming-soon-feature">
+              <h4>👥 Share with Friends</h4>
+              <p>Collaborate on quiz sets and share your favorite learning materials with classmates and study groups.</p>
+            </div>
 
-        currentMediaIndex = index;
-      }
+            <div class="coming-soon-feature">
+              <h4>🧠 Advanced Learning</h4>
+              <p>Spaced repetition algorithms that optimize your study schedule for maximum retention and efficiency.</p>
+            </div>
 
-      function scrollThumbnails(direction) {
-        const thumbnailScroll = document.querySelector(".thumbnail-scroll");
-        const scrollAmount = 130; // Thumbnail width + gap
-        const currentScroll = thumbnailScroll.scrollLeft;
+            <div class="coming-soon-feature">
+              <h4>📈 Track Progress</h4>
+              <p>Detailed analytics and performance tracking to monitor your learning journey and identify areas for improvement.</p>
+            </div>
 
-        thumbnailScroll.scrollTo({
-          left: currentScroll + direction * scrollAmount,
-          behavior: "smooth",
-        });
-      }
+            <div class="coming-soon-feature">
+              <h4><i class="fa-brands fa-apple"></i> iOS App</h4>
+              <p>Native iOS app for seamless mobile experience. Coming soon!</p>
+            </div>
 
-      function playVideo() {
-        alert("Demo video would play here in a real implementation!");
-      }
+            <div class="coming-soon-feature">
+              <h4><i class="fa-solid fa-layer-group"></i> Batch Import</h4>
+              <p>Import multiple sets at once for faster onboarding. Coming soon!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      function toggleMobileMenu() {
-        const nav = document.querySelector(".nav");
-        const toggle = document.querySelector(".mobile-menu-toggle");
-        nav.classList.toggle("nav-open");
-        toggle.classList.toggle("active");
-      }
+    <!-- Ending Section: Join Beta CTA -->
+    <section
+      class="section ending-section"
+      style="text-align: center; padding: 64px 0; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: #fff"
+    >
+      <div class="container ending-content">
+        <h2 style="font-size: 2.2rem; font-weight: 700; margin-bottom: 18px">Ready to Shape the Future of Learning?</h2>
+        <p style="font-size: 1.15rem; margin-bottom: 32px">Join our Android Beta and help us build the best quiz app for students and lifelong learners. Your feedback matters!</p>
+        <a
+          href="https://forms.gle/gYV2We7wRFxgvVct6"
+          class="app-store-btn android"
+          style="font-size: 1.2rem; padding: 18px 36px; border-radius: 8px; background: #10b981; color: #fff; display: inline-block; font-weight: 600; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1)"
+        >
+          <i class="fa-brands fa-android"></i>
+          <span style="margin-left: 10px">Join Android Beta Now</span>
+        </a>
+      </div>
+    </section>
 
-      // Auto-advance through media (optional)
-      setInterval(() => {
-        const nextIndex = (currentMediaIndex + 1) % mediaItems.length;
-        showMedia(nextIndex);
-      }, 6000);
-
-      // Initialize
-      document.addEventListener("DOMContentLoaded", function () {
-        showMedia(0);
-      });
-    </script>
+    <script src="js/main.js"></script>
   </body>
 </html>
