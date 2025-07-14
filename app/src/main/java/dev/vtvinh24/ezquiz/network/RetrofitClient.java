@@ -93,6 +93,10 @@ public class RetrofitClient {
     return createService(BASE_URL_AI_SERVICE, serviceClass);
   }
 
+  public static <T> T getAuthenticatedAIService(Class<T> serviceClass, Context context) {
+    return createAuthService(BASE_URL_AI_SERVICE, serviceClass, context);
+  }
+
   public static <T> T getAuthService(Class<T> serviceClass, Context context) {
     return createAuthService(BASE_URL_AUTH_SERVICE, serviceClass, context);
   }

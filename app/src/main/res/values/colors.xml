@@ -39,6 +39,22 @@
     <color name="on_surface">#1F1F21</color> <!-- Màu chữ chính trên nền -->
     <color name="outline_variant">#E2E8F0</color> <!-- Màu viền hoặc nền phụ, rất nhạt -->
 
+    <!-- Colors for review interface -->
+    <color name="colorOnSurface">@color/on_surface</color>
+    <color name="gradient_green_start_alpha">#E8F5E8</color>
+
+    <!-- Blue theme colors for auth screens -->
+    <color name="auth_primary_blue">#2196F3</color>
+    <color name="auth_primary_blue_dark">#1976D2</color>
+    <color name="auth_primary_blue_light">#BBDEFB</color>
+    <color name="auth_accent_blue">#03DAC6</color>
+    <color name="auth_background_blue">#F3F8FF</color>
+    <color name="auth_surface_blue">#FFFFFF</color>
+    <color name="auth_text_primary">#1565C0</color>
+    <color name="auth_text_secondary">#64B5F6</color>
+    <color name="auth_text_hint">#90CAF9</color>
+    <color name="auth_divider">#E3F2FD</color>
+
     <!-- Các màu ngữ nghĩa (Semantic Colors) -->
 
     <color name="correct_answer_stroke">@color/correct_answer</color>

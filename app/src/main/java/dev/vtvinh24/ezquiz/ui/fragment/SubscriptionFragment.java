@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
 import dev.vtvinh24.ezquiz.R;
@@ -28,6 +29,7 @@ public class SubscriptionFragment extends Fragment {
     private Button btnMonthlyPlan, btnYearlyPlan, btnRedeemCode, btnLogout;
     private TextInputEditText etGiftCode;
     private ProgressBar progressBarRedeem;
+    private Chip chipUserStatus;
     private AuthViewModel authViewModel;
 
     @Nullable
@@ -55,6 +57,7 @@ public class SubscriptionFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         etGiftCode = view.findViewById(R.id.etGiftCode);
         progressBarRedeem = view.findViewById(R.id.progressBarRedeem);
+        chipUserStatus = view.findViewById(R.id.chip_user_status);
     }
 
     private void initViewModel() {
@@ -75,12 +78,14 @@ public class SubscriptionFragment extends Fragment {
 
                 if (user.isPremium()) {
                     tvPremiumStatus.setText("Premium Active • Unlimited access");
+                    chipUserStatus.setText("Premium");
                     btnMonthlyPlan.setText("Active");
                     btnYearlyPlan.setText("Active");
                     btnMonthlyPlan.setEnabled(false);
                     btnYearlyPlan.setEnabled(false);
                 } else {
                     tvPremiumStatus.setText("Free Plan • 10 prompts, 3 images remaining");
+                    chipUserStatus.setText("Free");
                     btnMonthlyPlan.setText("Choose");
                     btnYearlyPlan.setText("Choose");
                     btnMonthlyPlan.setEnabled(true);

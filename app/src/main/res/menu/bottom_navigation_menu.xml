@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/nav_generate"
-        android:icon="@drawable/ic_auto_awesome"
+        android:icon="@drawable/ic_brain_ai"
         android:title="Generate" />
 
     <item
@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/nav_subscription"
-        android:icon="@drawable/ic_premium"
-        android:title="Premium" />
+        android:icon="@drawable/ic_wallet"
+        android:title="Subscription" />
 
 </menu>

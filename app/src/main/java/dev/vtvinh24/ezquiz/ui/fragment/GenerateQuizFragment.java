@@ -363,7 +363,7 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
     private void proceedWithQuizGeneration(String prompt) {
         showLoading(true);
 
-        AIService aiService = RetrofitClient.getAIService(AIService.class);
+        AIService aiService = RetrofitClient.getAuthenticatedAIService(AIService.class, requireContext());
 
         try {
             if (selectedImageFile != null) {
