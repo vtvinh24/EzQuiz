@@ -1,4 +1,4 @@
-package dev.vtvinh24.ezquiz.ui;
+package dev.vtvinh24.ezquiz.ui.fragment;
 
 import android.Manifest;
 import android.content.Intent;
@@ -8,22 +8,24 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -47,6 +49,7 @@ import dev.vtvinh24.ezquiz.data.model.AIService;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
 import dev.vtvinh24.ezquiz.network.RetrofitClient;
+import dev.vtvinh24.ezquiz.ui.ReviewGeneratedQuizActivity;
 import dev.vtvinh24.ezquiz.ui.adapter.TopicAdapter;
 import dev.vtvinh24.ezquiz.util.UserLimitValidator;
 import dev.vtvinh24.ezquiz.util.UserLimits;
@@ -57,8 +60,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAdapter.OnTopicClickListener {
-    private static final String TAG = "GenerateQuizAIActivity";
+public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTopicClickListener {
+    private static final String TAG = "GenerateQuizFragment";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
     private TextInputEditText editAiPrompt;
@@ -68,8 +71,9 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private MaterialButton btnRemoveImage;
     private CircularProgressIndicator progressBar;
     private TextView textAiStatus;
+    private TextView textPromptsCount;
+    private TextView textImagesCount;
     private MaterialCardView layoutStatus;
-    private MaterialToolbar toolbar;
     private RecyclerView recyclerTopics;
     private MaterialCardView cardImagePreview;
     private ImageView imagePreview;
@@ -82,18 +86,16 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private UserLimitValidator limitValidator;
     private AppDatabase database;
 
-    // Predefined topics for quick selection
     private final List<String> quickTopics = Arrays.asList(
             "Thể thao", "Khoa học", "Lịch sử", "Văn học", "Toán học",
             "Địa lý", "Tiếng Anh", "Công nghệ", "Âm nhạc", "Điện ảnh",
             "Thiên nhiên", "Y học", "Kinh tế", "Chính trị", "Nghệ thuật"
     );
 
-    // Activity result launchers
     private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
                     Uri imageUri = result.getData().getData();
                     if (imageUri != null) {
                         handleSelectedImage(imageUri);
@@ -105,7 +107,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private final ActivityResultLauncher<Intent> voiceInputLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
                     ArrayList<String> results = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (results != null && !results.isEmpty()) {
                         String spokenText = results.get(0);
@@ -120,60 +122,57 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private final ActivityResultLauncher<Intent> reviewQuizLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
                     boolean shouldClearData = result.getData().getBooleanExtra(
                             ReviewGeneratedQuizActivity.EXTRA_CLEAR_GENERATE_DATA, false);
                     if (shouldClearData) {
                         clearGenerateData();
-                        Toast.makeText(this, "Đã xóa dữ liệu tạo quiz", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Đã xóa dữ liệu tạo quiz", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
     );
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generate_quiz_ai);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_generate_quiz, container, false);
+    }
 
-        // Initialize limit validator and database
-        limitValidator = new UserLimitValidator(this);
-        database = AppDatabaseProvider.getDatabase(this);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        initializeViews();
-        setupToolbar();
+        limitValidator = new UserLimitValidator(requireContext());
+        database = AppDatabaseProvider.getDatabase(requireContext());
+
+        initializeViews(view);
         setupTopicSuggestions();
         setupClickListeners();
         updateUIBasedOnUserLimits();
+        updateDailyUsageStats();
     }
 
-    private void initializeViews() {
-        editAiPrompt = findViewById(R.id.edit_ai_prompt);
-        btnGenerateQuiz = findViewById(R.id.btn_generate_quiz);
-        btnVoiceInput = findViewById(R.id.btn_voice_input);
-        btnUploadImage = findViewById(R.id.btn_upload_image);
-        btnRemoveImage = findViewById(R.id.btn_remove_image);
-        progressBar = findViewById(R.id.progress_bar);
-        textAiStatus = findViewById(R.id.text_ai_status);
-        layoutStatus = findViewById(R.id.layout_status);
-        toolbar = findViewById(R.id.topAppBar);
-        recyclerTopics = findViewById(R.id.recycler_topics);
-        cardImagePreview = findViewById(R.id.card_image_preview);
-        imagePreview = findViewById(R.id.image_preview);
-        textImageName = findViewById(R.id.text_image_name);
-    }
-
-    private void setupToolbar() {
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> finish());
+    private void initializeViews(View view) {
+        editAiPrompt = view.findViewById(R.id.edit_ai_prompt);
+        btnGenerateQuiz = view.findViewById(R.id.btn_generate_quiz);
+        btnVoiceInput = view.findViewById(R.id.btn_voice_input);
+        btnUploadImage = view.findViewById(R.id.btn_upload_image);
+        btnRemoveImage = view.findViewById(R.id.btn_remove_image);
+        progressBar = view.findViewById(R.id.progress_bar);
+        textAiStatus = view.findViewById(R.id.text_ai_status);
+        textPromptsCount = view.findViewById(R.id.text_prompts_count);
+        textImagesCount = view.findViewById(R.id.text_images_count);
+        layoutStatus = view.findViewById(R.id.layout_status);
+        recyclerTopics = view.findViewById(R.id.recycler_topics);
+        cardImagePreview = view.findViewById(R.id.card_image_preview);
+        imagePreview = view.findViewById(R.id.image_preview);
+        textImageName = view.findViewById(R.id.text_image_name);
     }
 
     private void setupTopicSuggestions() {
         topicAdapter = new TopicAdapter(quickTopics, this);
-        recyclerTopics.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerTopics.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerTopics.setAdapter(topicAdapter);
     }
 
@@ -200,8 +199,8 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
             return;
         }
 
-        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
-            Toast.makeText(this, "Thiết bị không hỗ trợ nhận dạng giọng nói", Toast.LENGTH_SHORT).show();
+        if (!SpeechRecognizer.isRecognitionAvailable(requireContext())) {
+            Toast.makeText(getContext(), "Thiết bị không hỗ trợ nhận dạng giọng nói", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -221,7 +220,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         editAiPrompt.setText(newText);
         editAiPrompt.setSelection(newText.length());
 
-        Toast.makeText(this, "Đã thêm: " + spokenText, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Đã thêm: " + spokenText, Toast.LENGTH_SHORT).show();
     }
 
     private void updateVoiceButtonState() {
@@ -245,7 +244,6 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         try {
             selectedImageFile = createFileFromUri(imageUri);
             if (selectedImageFile != null) {
-                // Display image preview
                 Glide.with(this)
                         .load(imageUri)
                         .centerCrop()
@@ -254,11 +252,11 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                 textImageName.setText(selectedImageFile.getName());
                 cardImagePreview.setVisibility(View.VISIBLE);
 
-                Toast.makeText(this, "Đã chọn hình ảnh: " + selectedImageFile.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Đã chọn hình ảnh: " + selectedImageFile.getName(), Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             Log.e(TAG, "Error handling selected image", e);
-            Toast.makeText(this, "Lỗi khi xử lý hình ảnh", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Lỗi khi xử lý hình ảnh", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -270,7 +268,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     }
 
     private String getMimeTypeFromUri(Uri uri) {
-        String mimeType = getContentResolver().getType(uri);
+        String mimeType = requireContext().getContentResolver().getType(uri);
         if (mimeType == null || !mimeType.startsWith("image/")) {
             String extension = "";
             String path = uri.getPath();
@@ -292,14 +290,14 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                 case "gif":
                     return "image/gif";
                 default:
-                    return "image/jpeg"; // Default fallback
+                    return "image/jpeg";
             }
         }
         return mimeType;
     }
 
     private File createFileFromUri(Uri uri) throws IOException {
-        InputStream inputStream = getContentResolver().openInputStream(uri);
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
         if (inputStream == null) return null;
 
         String mimeType = getMimeTypeFromUri(uri);
@@ -313,7 +311,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         }
 
         String fileName = "quiz_image_" + System.currentTimeMillis() + extension;
-        File file = new File(getCacheDir(), fileName);
+        File file = new File(requireContext().getCacheDir(), fileName);
 
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             byte[] buffer = new byte[4096];
@@ -332,21 +330,19 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         String prompt = editAiPrompt.getText() != null ? editAiPrompt.getText().toString().trim() : "";
 
         if (prompt.isEmpty() && selectedImageFile == null) {
-            Toast.makeText(this, "Vui lòng nhập nội dung hoặc chọn hình ảnh", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Vui lòng nhập nội dung hoặc chọn hình ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Get current user from database
         new Thread(() -> {
             UserEntity currentUser = database.userDao().getCurrentUserSync();
 
-            runOnUiThread(() -> {
+            requireActivity().runOnUiThread(() -> {
                 if (currentUser == null) {
-                    Toast.makeText(this, "Vui lòng đăng nhập để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Vui lòng đăng nhập để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Validate user limits before making API call
                 int requestedQuestions = currentUser.isPremium() ?
                     UserLimits.PREMIUM_MAX_QUIZ_QUESTIONS :
                     UserLimits.FREE_MAX_QUIZ_QUESTIONS;
@@ -359,7 +355,6 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                     return;
                 }
 
-                // If validation passes, proceed with API call
                 proceedWithQuizGeneration(prompt);
             });
         }).start();
@@ -372,8 +367,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
 
         try {
             if (selectedImageFile != null) {
-                // Determine proper MIME type based on file extension
-                String mimeType = "image/jpeg"; // Default
+                String mimeType = "image/jpeg";
                 String fileName = selectedImageFile.getName().toLowerCase();
                 if (fileName.endsWith(".png")) {
                     mimeType = "image/png";
@@ -389,19 +383,18 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
 
                 aiService.generateQuiz(promptBody, imagePart).enqueue(createQuizCallback());
             } else {
-                // Generate quiz with text only
                 RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), prompt);
                 aiService.generateQuizTextOnly(promptBody).enqueue(createQuizCallback());
             }
         } catch (Exception e) {
             Log.e(TAG, "Error creating request", e);
             showLoading(false);
-            Toast.makeText(this, "Lỗi khi tạo yêu cầu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Lỗi khi tạo yêu cầu", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showPremiumUpgradeDialog(String message) {
-        new androidx.appcompat.app.AlertDialog.Builder(this)
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
                 .setTitle("Nâng cấp Premium")
                 .setMessage(message + "\n\nTài khoản Premium sẽ có những lợi ích sau:\n" +
                         "• Không giới hạn số câu hỏi\n" +
@@ -424,14 +417,18 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                         List<GeneratedQuizItem> quizzes = body.getQuizzes();
 
                         if (quizzes != null && !quizzes.isEmpty()) {
-                            Intent intent = new Intent(GenerateQuizAIActivity.this, ReviewGeneratedQuizActivity.class);
+                            // Record successful usage
+                            limitValidator.recordSuccessfulRequest(selectedImageFile != null);
+                            updateDailyUsageStats();
+
+                            Intent intent = new Intent(getContext(), ReviewGeneratedQuizActivity.class);
                             String quizzesJson = new Gson().toJson(quizzes);
                             Log.d(TAG, "Success. Sending JSON to ReviewActivity: " + quizzesJson);
                             intent.putExtra(ReviewGeneratedQuizActivity.EXTRA_GENERATED_QUIZZES, quizzesJson);
                             reviewQuizLauncher.launch(intent);
                         } else {
                             Log.e(TAG, "Response successful but quizzes list is null or empty");
-                            Toast.makeText(GenerateQuizAIActivity.this,
+                            Toast.makeText(getContext(),
                                     "Không thể tạo câu hỏi. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -447,12 +444,12 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                                 + " | Message: " + response.message()
                                 + " | Error Body: " + errorBody);
 
-                        Toast.makeText(GenerateQuizAIActivity.this,
+                        Toast.makeText(getContext(),
                                 "Lỗi từ server: " + response.code(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error processing response", e);
-                    Toast.makeText(GenerateQuizAIActivity.this,
+                    Toast.makeText(getContext(),
                             "Lỗi khi xử lý phản hồi từ server", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -461,7 +458,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
             public void onFailure(Call<GenerateQuizResponse> call, Throwable t) {
                 showLoading(false);
                 Log.e(TAG, "Network call failed", t);
-                Toast.makeText(GenerateQuizAIActivity.this,
+                Toast.makeText(getContext(),
                         "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -471,46 +468,44 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         if (isLoading) {
             layoutStatus.setVisibility(View.VISIBLE);
             btnGenerateQuiz.setEnabled(false);
-            textAiStatus.setText("Đang tạo câu hỏi...");
         } else {
             layoutStatus.setVisibility(View.GONE);
             btnGenerateQuiz.setEnabled(true);
         }
     }
 
-    private boolean checkAudioPermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED;
-    }
+    private void updateDailyUsageStats() {
+        new Thread(() -> {
+            UserEntity currentUser = database.userDao().getCurrentUserSync();
 
-    private void requestAudioPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.RECORD_AUDIO},
-                REQUEST_RECORD_AUDIO_PERMISSION);
-    }
+            requireActivity().runOnUiThread(() -> {
+                if (currentUser == null) {
+                    textPromptsCount.setText("0/0");
+                    textImagesCount.setText("0/0");
+                    return;
+                }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startVoiceInput();
-            } else {
-                Toast.makeText(this, "Cần quyền ghi âm để sử dụng tính năng giọng nói", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+                UserLimitValidator.LimitStatus status = limitValidator.getCurrentLimitStatus(currentUser.isPremium());
 
-    private void clearGenerateData() {
-        editAiPrompt.setText("");
-        removeSelectedImage();
+                if (currentUser.isPremium()) {
+                    textPromptsCount.setText("∞");
+                    textImagesCount.setText("∞");
+                } else {
+                    int usedPrompts = UserLimits.FREE_MAX_QUIZ_SETS_PER_DAY - status.remainingDailyQuizzes;
+                    int usedImages = UserLimits.FREE_MAX_IMAGES_PER_SESSION - status.remainingSessionImages;
+
+                    textPromptsCount.setText(String.format("%d/%d", usedPrompts, UserLimits.FREE_MAX_QUIZ_SETS_PER_DAY));
+                    textImagesCount.setText(String.format("%d/%d", usedImages, UserLimits.FREE_MAX_IMAGES_PER_SESSION));
+                }
+            });
+        }).start();
     }
 
     private void updateUIBasedOnUserLimits() {
         new Thread(() -> {
             UserEntity currentUser = database.userDao().getCurrentUserSync();
 
-            runOnUiThread(() -> {
+            requireActivity().runOnUiThread(() -> {
                 if (currentUser == null) {
                     textAiStatus.setText("Vui lòng đăng nhập");
                     btnGenerateQuiz.setEnabled(false);
@@ -527,10 +522,44 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                         status.remainingDailyQuizzes, status.remainingSessionImages);
                     textAiStatus.setText(statusText);
 
-                    // Disable button if user has reached daily limit
                     btnGenerateQuiz.setEnabled(status.remainingDailyQuizzes > 0);
                 }
             });
         }).start();
+    }
+
+    private boolean checkAudioPermission() {
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestAudioPermission() {
+        ActivityCompat.requestPermissions(requireActivity(),
+                new String[]{Manifest.permission.RECORD_AUDIO},
+                REQUEST_RECORD_AUDIO_PERMISSION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startVoiceInput();
+            } else {
+                Toast.makeText(getContext(), "Cần quyền ghi âm để sử dụng tính năng giọng nói", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void clearGenerateData() {
+        editAiPrompt.setText("");
+        removeSelectedImage();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateDailyUsageStats();
+        updateUIBasedOnUserLimits();
     }
 }

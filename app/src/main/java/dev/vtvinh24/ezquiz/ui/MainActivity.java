@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.ui.fragment.CollectionsFragment;
+import dev.vtvinh24.ezquiz.ui.fragment.GenerateQuizFragment;
 import dev.vtvinh24.ezquiz.ui.fragment.HistoryFragment;
 import dev.vtvinh24.ezquiz.ui.fragment.ProgressFragment;
 import dev.vtvinh24.ezquiz.ui.fragment.SubscriptionFragment;
@@ -99,15 +100,12 @@ public class MainActivity extends AppCompatActivity {
       int itemId = item.getItemId();
       if (itemId == R.id.nav_collections) {
         selectedFragment = new CollectionsFragment();
-      } else if (itemId == R.id.nav_progress) {
-        selectedFragment = new ProgressFragment();
-      } else if (itemId == R.id.nav_generate_ai) {
-        // Handle Generate AI - open AI activity
-        Intent intent = new Intent(MainActivity.this, GenerateQuizAIActivity.class);
-        startActivity(intent);
-        return false; // Don't change selection
+      } else if (itemId == R.id.nav_generate) {
+        selectedFragment = new GenerateQuizFragment();
       } else if (itemId == R.id.nav_history) {
         selectedFragment = new HistoryFragment();
+      } else if (itemId == R.id.nav_progress) {
+        selectedFragment = new ProgressFragment();
       } else if (itemId == R.id.nav_subscription) {
         selectedFragment = new SubscriptionFragment();
       }
