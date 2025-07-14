@@ -31,7 +31,7 @@ public class HistoryFragment extends Fragment {
     private RecyclerView recyclerHistory;
     private LinearLayout layoutLoading, layoutEmpty;
     private ChipGroup chipGroupFilters;
-    private Chip chipAll, chipInProgress, chipCompleted;
+    private Chip chipAll, chipInProgress, chipCompleted, chipTotalHistory;
     private MaterialButton buttonBrowseQuizzes;
 
     private HistoryAdapter historyAdapter;
@@ -63,6 +63,7 @@ public class HistoryFragment extends Fragment {
         chipAll = view.findViewById(R.id.chip_all);
         chipInProgress = view.findViewById(R.id.chip_in_progress);
         chipCompleted = view.findViewById(R.id.chip_completed);
+        chipTotalHistory = view.findViewById(R.id.chip_total_history);
         buttonBrowseQuizzes = view.findViewById(R.id.button_browse_quizzes);
     }
 
@@ -83,6 +84,8 @@ public class HistoryFragment extends Fragment {
                 loadInProgressHistory();
             } else if (checkedId == R.id.chip_completed) {
                 loadCompletedHistory();
+            } else if (checkedId == R.id.chip_total_history) {
+                loadTotalHistory();
             }
         });
 
@@ -156,6 +159,24 @@ public class HistoryFragment extends Fragment {
         });
     }
 
+    private void loadTotalHistory() {
+        showLoading();
+        if (currentLiveData != null) {
+            currentLiveData.removeObservers(getViewLifecycleOwner());
+        }
+
+        currentLiveData = historyRepository.getAllHistoryItems(); // Assuming this method exists and fetches all history items
+        currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
+            hideLoading();
+            if (historyItems == null || historyItems.isEmpty()) {
+                showEmpty();
+            } else {
+                showContent();
+                historyAdapter.setHistoryItems(historyItems);
+            }
+        });
+    }
+
     private void showLoading() {
         layoutLoading.setVisibility(View.VISIBLE);
         layoutEmpty.setVisibility(View.GONE);
@@ -185,6 +206,8 @@ public class HistoryFragment extends Fragment {
             loadInProgressHistory();
         } else if (chipCompleted.isChecked()) {
             loadCompletedHistory();
+        } else if (chipTotalHistory.isChecked()) {
+            loadTotalHistory();
         }
     }
 

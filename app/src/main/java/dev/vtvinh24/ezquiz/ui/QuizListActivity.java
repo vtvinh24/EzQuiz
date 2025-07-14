@@ -26,9 +26,9 @@ import dev.vtvinh24.ezquiz.data.db.AppDatabaseProvider;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
 
-public class QuizListActivity extends AppCompatActivity implements QuizAdapter.OnAnswerListener {
+public class QuizListActivity extends AppCompatActivity implements QuizReviewAdapter.OnItemLongClickListener {
   private RecyclerView recyclerView;
-  private QuizAdapter adapter;
+  private QuizReviewAdapter adapter;
   private List<QuizEntity> quizzes;
   private AppDatabase db;
   private long quizSetId;
@@ -42,7 +42,8 @@ public class QuizListActivity extends AppCompatActivity implements QuizAdapter.O
     quizSetId = getIntent().getLongExtra("quizSetId", -1);
     db = AppDatabaseProvider.getDatabase(this);
     quizzes = db.quizDao().getByQuizSetId(quizSetId);
-    adapter = new QuizAdapter(quizzes, this);
+    adapter = new QuizReviewAdapter(quizzes);
+    adapter.setOnItemLongClickListener(this);
     recyclerView.setAdapter(adapter);
     FloatingActionButton fab = findViewById(R.id.fab_add_quiz);
     fab.setOnClickListener(v -> showAddQuizDialog());
@@ -193,15 +194,6 @@ public class QuizListActivity extends AppCompatActivity implements QuizAdapter.O
     } else {
       emptyView.setVisibility(View.GONE);
       recyclerView.setVisibility(View.VISIBLE);
-    }
-  }
-
-  @Override
-  public void onAnswer(QuizEntity quiz, List<Integer> selectedIndices) {
-    if (quiz.correctAnswerIndices.equals(selectedIndices)) {
-      Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
-    } else {
-      Toast.makeText(this, "Incorrect!", Toast.LENGTH_SHORT).show();
     }
   }
 
