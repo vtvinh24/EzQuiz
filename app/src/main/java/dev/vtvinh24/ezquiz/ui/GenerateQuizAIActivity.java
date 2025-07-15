@@ -461,8 +461,10 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
             public void onFailure(Call<GenerateQuizResponse> call, Throwable t) {
                 showLoading(false);
                 Log.e(TAG, "Network call failed", t);
-                Toast.makeText(GenerateQuizAIActivity.this,
-                        "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String msg = t.getMessage() != null && t.getMessage().contains("Unable to resolve host")
+                        ? "Server không phản hồi"
+                        : "Lỗi kết nối: " + t.getMessage();
+                Toast.makeText(GenerateQuizAIActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         };
     }
