@@ -2,33 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EzQuiz - Master Any Subject</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="assets/images/icon.png"
-    />
-    <link
-      rel="stylesheet"
-      href="css/styles.css"
-    />
+    <link rel="icon" type="image/png" href="assets/images/icon.png" />
+    <link rel="stylesheet" href="css/styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -51,10 +34,7 @@
             <div>Join Beta</div>
           </a>
         </nav>
-        <button
-          class="mobile-menu-toggle"
-          onclick="toggleMobileMenu()"
-        >
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
           <span></span>
           <span></span>
           <span></span>
@@ -63,27 +43,44 @@
     </header>
 
     <!-- Hero Section -->
-    <section
-      class="section hero-section"
-      id="hero"
-    >
+    <section class="section hero-section" id="hero">
       <div class="container">
         <main class="hero">
           <div class="hero-content">
             <div class="hero-text blur-bg">
-              <h2>Master Any Subject with <span class="gradient-text">EzQuiz</span></h2>
-              <p>The ultimate quiz app that makes learning fun and effective. Create custom quizzes, track your progress, and compete with friends.</p>
+              <h2>
+                Master Any Subject with
+                <span class="gradient-text">EzQuiz</span>
+              </h2>
+              <p>
+                The ultimate quiz app that makes learning fun and effective.
+                Create custom quizzes, track your progress, and compete with
+                friends.
+              </p>
 
               <!-- App Store Buttons -->
               <div class="download-buttons">
-                <a
-                  href="#"
-                  class="app-store-btn ios"
-                >
+                <a href="#" class="app-store-btn ios">
                   <i class="fa-brands fa-apple"></i>
                   <div>
-                    <div style="font-size: 0.75rem; opacity: 0.8">Download on the</div>
-                    <div style="font-size: 1rem; font-weight: 700">App Store</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8">
+                      Download on the
+                    </div>
+                    <div style="font-size: 1rem; font-weight: 700">
+                      App Store
+                    </div>
+                  </div>
+                </a>
+                <a
+                  href="https://github.com/vtvinh24/EzQuiz/releases/download/beta/app-debug.apk"
+                  class="app-store-btn android"
+                >
+                  <i class="fa-brands fa-github"></i>
+                  <div>
+                    <div style="font-size: 0.75rem; opacity: 0.8">Testing</div>
+                    <div style="font-size: 1rem; font-weight: 700">
+                      Download Now!
+                    </div>
                   </div>
                 </a>
                 <a
@@ -92,8 +89,12 @@
                 >
                   <i class="fa-brands fa-android"></i>
                   <div>
-                    <div style="font-size: 0.75rem; opacity: 0.8">Android Beta</div>
-                    <div style="font-size: 1rem; font-weight: 700">Join Now!</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8">
+                      Android Beta
+                    </div>
+                    <div style="font-size: 1rem; font-weight: 700">
+                      Join Now!
+                    </div>
                   </div>
                 </a>
                 <a
@@ -111,10 +112,7 @@
               <div class="steam-gallery">
                 <!-- Main Display Area -->
                 <div class="main-display">
-                  <div
-                    class="main-content"
-                    id="mainContent"
-                  >
+                  <div class="main-content" id="mainContent">
                     <!-- Demo Video (Initially Active) -->
                     <div
                       class="media-item active"
@@ -126,10 +124,7 @@
                           src="https://placehold.co/600x338/667eea/ffffff/png?text=Demo+Video"
                           alt="Demo Video"
                         />
-                        <div
-                          class="play-button"
-                          onclick="playVideo()"
-                        >
+                        <div class="play-button" onclick="playVideo()">
                           <svg
                             width="32"
                             height="32"
@@ -144,11 +139,7 @@
                     </div>
 
                     <!-- Screenshots -->
-                    <div
-                      class="media-item"
-                      data-type="image"
-                      data-index="1"
-                    >
+                    <div class="media-item" data-type="image" data-index="1">
                       <img
                         src="https://placehold.co/600x338/667eea/ffffff/png?text=Quiz+Screen"
                         alt="Quiz Screen"
@@ -156,11 +147,7 @@
                       <div class="media-label">Quiz Interface</div>
                     </div>
 
-                    <div
-                      class="media-item"
-                      data-type="image"
-                      data-index="2"
-                    >
+                    <div class="media-item" data-type="image" data-index="2">
                       <img
                         src="https://placehold.co/600x338/764ba2/ffffff/png?text=Progress+Tracking"
                         alt="Progress Tracking"
@@ -168,11 +155,7 @@
                       <div class="media-label">Progress Analytics</div>
                     </div>
 
-                    <div
-                      class="media-item"
-                      data-type="image"
-                      data-index="3"
-                    >
+                    <div class="media-item" data-type="image" data-index="3">
                       <img
                         src="https://placehold.co/600x338/10b981/ffffff/png?text=Study+Mode"
                         alt="Study Mode"
@@ -248,20 +231,29 @@
     </section>
 
     <!-- Manage Quiz Section -->
-    <section
-      class="section feature-section"
-      id="manage"
-    >
+    <section class="section feature-section" id="manage">
       <div class="container">
         <div class="feature-content">
           <div class="feature-text blur-bg">
             <h2>Manage Quiz and Flashcards</h2>
-            <p>Organize your learning materials with ease. Create, edit, and manage your quizzes and flashcards in one centralized location.</p>
+            <p>
+              Organize your learning materials with ease. Create, edit, and
+              manage your quizzes and flashcards in one centralized location.
+            </p>
             <ul class="feature-list">
-              <li><i class="fa fa-layer-group"></i> Create unlimited quizzes and flashcard sets</li>
-              <li><i class="fa fa-list-ul"></i> Organize by subjects and topics</li>
-              <li><i class="fa fa-edit"></i> Edit and update content anytime</li>
-              <li><i class="fa fa-bookmark"></i> Bookmark your favorite sets</li>
+              <li>
+                <i class="fa fa-layer-group"></i> Create unlimited quizzes and
+                flashcard sets
+              </li>
+              <li>
+                <i class="fa fa-list-ul"></i> Organize by subjects and topics
+              </li>
+              <li>
+                <i class="fa fa-edit"></i> Edit and update content anytime
+              </li>
+              <li>
+                <i class="fa fa-bookmark"></i> Bookmark your favorite sets
+              </li>
               <li><i class="fa fa-search"></i> Quick search and filtering</li>
             </ul>
           </div>
@@ -273,33 +265,35 @@
     </section>
 
     <!-- Import Section -->
-    <section
-      class="section feature-section"
-      id="import"
-    >
+    <section class="section feature-section" id="import">
       <div class="container">
         <div class="feature-content">
           <div class="feature-visual">
-            <div class="feature-placeholder">🔄 Import from Multiple Sources</div>
+            <div class="feature-placeholder">
+              🔄 Import from Multiple Sources
+            </div>
           </div>
           <div class="feature-text blur-bg">
             <h2>Import from Various Sources</h2>
-            <p>Seamlessly import your existing content from popular platforms. Our browser extension makes it even easier!</p>
+            <p>
+              Seamlessly import your existing content from popular platforms.
+              Our browser extension makes it even easier!
+            </p>
             <ul class="feature-list">
               <li><i class="fa fa-download"></i> Import from Quizlet sets</li>
               <li><i class="fa fa-download"></i> Convert Quizizz quizzes</li>
-              <li><i class="fa fa-download"></i> Import Socrative activities</li>
+              <li>
+                <i class="fa fa-download"></i> Import Socrative activities
+              </li>
               <li><i class="fa fa-download"></i> Support for Google Forms</li>
             </ul>
-            <div
-              class="download-buttons"
-              style="margin-top: 30px"
-            >
+            <div class="download-buttons" style="margin-top: 30px">
               <a
                 href="https://chromewebstore.google.com/detail/quiz-qr-extractor/oeefhcndpdcphhbbadpnagbneoklkhlm"
                 class="extension-btn"
               >
-                <i class="fa-solid fa-puzzle-piece"></i> Download Browser Extension
+                <i class="fa-solid fa-puzzle-piece"></i> Download Browser
+                Extension
               </a>
             </div>
           </div>
@@ -308,21 +302,30 @@
     </section>
 
     <!-- AI Generate Section -->
-    <section
-      class="section feature-section"
-      id="ai-generate"
-    >
+    <section class="section feature-section" id="ai-generate">
       <div class="container">
         <div class="feature-content">
           <div class="feature-text blur-bg">
             <h2>Generate Quiz with AI</h2>
-            <p>Harness the power of artificial intelligence to create engaging quizzes instantly. Just provide text or an image, and watch the magic happen!</p>
+            <p>
+              Harness the power of artificial intelligence to create engaging
+              quizzes instantly. Just provide text or an image, and watch the
+              magic happen!
+            </p>
             <ul class="feature-list">
-              <li><i class="fa fa-robot"></i> Generate from any text content</li>
-              <li><i class="fa fa-image"></i> Create quizzes from single images</li>
-              <li><i class="fa fa-list-ul"></i> Multiple question types supported</li>
+              <li>
+                <i class="fa fa-robot"></i> Generate from any text content
+              </li>
+              <li>
+                <i class="fa fa-image"></i> Create quizzes from single images
+              </li>
+              <li>
+                <i class="fa fa-list-ul"></i> Multiple question types supported
+              </li>
               <li><i class="fa fa-gift"></i> 3 free quiz sets daily</li>
-              <li><i class="fa fa-sliders-h"></i> Smart difficulty adjustment</li>
+              <li>
+                <i class="fa fa-sliders-h"></i> Smart difficulty adjustment
+              </li>
             </ul>
           </div>
           <div class="feature-visual">
@@ -333,29 +336,38 @@
     </section>
 
     <!-- Coming Soon Section -->
-    <section
-      class="section coming-soon-section"
-      id="coming-soon"
-    >
+    <section class="section coming-soon-section" id="coming-soon">
       <div class="container">
         <div class="coming-soon-content blur-bg">
           <h2>More Coming Soon</h2>
-          <p>We're constantly working on new features to enhance your learning experience. Here's what's on the horizon:</p>
+          <p>
+            We're constantly working on new features to enhance your learning
+            experience. Here's what's on the horizon:
+          </p>
 
           <div class="coming-soon-features">
             <div class="coming-soon-feature">
               <h4>👥 Share with Friends</h4>
-              <p>Collaborate on quiz sets and share your favorite learning materials with classmates and study groups.</p>
+              <p>
+                Collaborate on quiz sets and share your favorite learning
+                materials with classmates and study groups.
+              </p>
             </div>
 
             <div class="coming-soon-feature">
               <h4>🧠 Advanced Learning</h4>
-              <p>Spaced repetition algorithms that optimize your study schedule for maximum retention and efficiency.</p>
+              <p>
+                Spaced repetition algorithms that optimize your study schedule
+                for maximum retention and efficiency.
+              </p>
             </div>
 
             <div class="coming-soon-feature">
               <h4>📈 Track Progress</h4>
-              <p>Detailed analytics and performance tracking to monitor your learning journey and identify areas for improvement.</p>
+              <p>
+                Detailed analytics and performance tracking to monitor your
+                learning journey and identify areas for improvement.
+              </p>
             </div>
 
             <div class="coming-soon-feature">
@@ -365,7 +377,9 @@
 
             <div class="coming-soon-feature">
               <h4><i class="fa-solid fa-layer-group"></i> Batch Import</h4>
-              <p>Import multiple sets at once for faster onboarding. Coming soon!</p>
+              <p>
+                Import multiple sets at once for faster onboarding. Coming soon!
+              </p>
             </div>
           </div>
         </div>
@@ -375,15 +389,34 @@
     <!-- Ending Section: Join Beta CTA -->
     <section
       class="section ending-section"
-      style="text-align: center; padding: 64px 0; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: #fff"
+      style="
+        text-align: center;
+        padding: 64px 0;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+      "
     >
       <div class="container ending-content">
-        <h2 style="font-size: 2.2rem; font-weight: 700; margin-bottom: 18px">Ready to Shape the Future of Learning?</h2>
-        <p style="font-size: 1.15rem; margin-bottom: 32px">Join our Android Beta and help us build the best quiz app for students and lifelong learners. Your feedback matters!</p>
+        <h2 style="font-size: 2.2rem; font-weight: 700; margin-bottom: 18px">
+          Ready to Shape the Future of Learning?
+        </h2>
+        <p style="font-size: 1.15rem; margin-bottom: 32px">
+          Join our Android Beta and help us build the best quiz app for students
+          and lifelong learners. Your feedback matters!
+        </p>
         <a
           href="https://forms.gle/gYV2We7wRFxgvVct6"
           class="app-store-btn android"
-          style="font-size: 1.2rem; padding: 18px 36px; border-radius: 8px; background: #10b981; color: #fff; display: inline-block; font-weight: 600; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1)"
+          style="
+            font-size: 1.2rem;
+            padding: 18px 36px;
+            border-radius: 8px;
+            background: #10b981;
+            color: #fff;
+            display: inline-block;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+          "
         >
           <i class="fa-brands fa-android"></i>
           <span style="margin-left: 10px">Join Android Beta Now</span>
