@@ -1,20 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Text styles for bottom navigation -->
-    <style name="BottomNavActiveText" parent="@style/TextAppearance.Material3.LabelMedium">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
+    <!-- Custom Bottom Navigation Style -->
+    <style name="CustomBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="itemIconSize">28dp</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavTextActive</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavTextInactive</item>
+        <item name="android:animateLayoutChanges">true</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <style name="BottomNavInactiveText" parent="@style/TextAppearance.Material3.LabelSmall">
-        <item name="android:textSize">11sp</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <!-- Special style for Generate AI item -->
-    <style name="GenerateAIStyle">
+    <!-- Text styles for bottom navigation - Active state (larger and bold) -->
+    <style name="BottomNavTextActive" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:scaleX">1.1</item>
+        <item name="android:scaleY">1.1</item>
+    </style>
+
+    <!-- Text styles for bottom navigation - Inactive state (normal size) -->
+    <style name="BottomNavTextInactive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/text_color_secondary</item>
+        <item name="android:scaleX">1.0</item>
+        <item name="android:scaleY">1.0</item>
+    </style>
+
+    <!-- Fragment transition animations -->
+    <style name="FragmentSlideAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
+    </style>
+
+    <!-- Custom style for individual bottom nav items with scale animation -->
+    <style name="BottomNavItemStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bottom_nav_item_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 </resources>

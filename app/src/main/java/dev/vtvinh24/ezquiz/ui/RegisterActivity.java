@@ -73,17 +73,25 @@ public class RegisterActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        authViewModel.register(email, name, password, confirmPassword).observe(this, result -> {
-            if (result.isSuccess()) {
-                Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+        // Observe error messages và login state
+        authViewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        authViewModel.getIsLoggedIn().observe(this, isLoggedIn -> {
+            if (isLoggedIn) {
+                Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
-            } else {
-                Toast.makeText(this, result.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+        // Gọi register method (trả về void)
+        authViewModel.register(email, name, password, confirmPassword);
     }
 
     @Override

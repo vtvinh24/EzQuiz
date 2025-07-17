@@ -48,11 +48,18 @@ import dev.vtvinh24.ezquiz.data.entity.UserEntity;
 import dev.vtvinh24.ezquiz.data.model.AIService;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
+import dev.vtvinh24.ezquiz.data.model.Quiz;
 import dev.vtvinh24.ezquiz.network.RetrofitClient;
 import dev.vtvinh24.ezquiz.ui.ReviewGeneratedQuizActivity;
 import dev.vtvinh24.ezquiz.ui.adapter.TopicAdapter;
 import dev.vtvinh24.ezquiz.util.UserLimitValidator;
 import dev.vtvinh24.ezquiz.util.UserLimits;
+import dev.vtvinh24.ezquiz.network.ApiClient;
+import dev.vtvinh24.ezquiz.network.api.QuizApiService;
+import dev.vtvinh24.ezquiz.network.api.model.GenerateQuizRequest;
+import dev.vtvinh24.ezquiz.network.api.model.GeneratedQuizResponse;
+import dev.vtvinh24.ezquiz.network.api.model.QuizQuestion;
+import dev.vtvinh24.ezquiz.data.repo.UserRepository;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -363,34 +370,146 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
     private void proceedWithQuizGeneration(String prompt) {
         showLoading(true);
 
-        AIService aiService = RetrofitClient.getAIService(AIService.class);
+        // Tạo UserRepository trên main thread để tránh lỗi LiveData
+        UserRepository userRepository = new UserRepository(requireContext().getApplicationContext());
+        String authHeader = userRepository.getAuthHeader();
 
-        try {
-            if (selectedImageFile != null) {
-                String mimeType = "image/jpeg";
-                String fileName = selectedImageFile.getName().toLowerCase();
-                if (fileName.endsWith(".png")) {
-                    mimeType = "image/png";
-                } else if (fileName.endsWith(".webp")) {
-                    mimeType = "image/webp";
-                } else if (fileName.endsWith(".gif")) {
-                    mimeType = "image/gif";
+        new Thread(() -> {
+            UserEntity currentUser = database.userDao().getCurrentUserSync();
+
+            requireActivity().runOnUiThread(() -> {
+                // Debug logging để kiểm tra authentication
+                Log.d(TAG, "Current user from DB: " + (currentUser != null ? currentUser.getId() : "null"));
+                Log.d(TAG, "Auth header: " + (authHeader != null ? "Bearer ***" + authHeader.substring(Math.max(0, authHeader.length() - 10)) : "null"));
+                Log.d(TAG, "Is user logged in: " + userRepository.isUserLoggedIn());
+
+                if (authHeader == null) {
+                    showLoading(false);
+                    Toast.makeText(getContext(), "Vui lòng đăng nhập để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Auth header is null - user needs to login");
+                    return;
                 }
 
-                RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), prompt);
-                RequestBody imageBody = RequestBody.create(MediaType.parse(mimeType), selectedImageFile);
-                MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", selectedImageFile.getName(), imageBody);
+                QuizApiService apiService = ApiClient.getQuizApiService();
 
-                aiService.generateQuiz(promptBody, imagePart).enqueue(createQuizCallback());
-            } else {
-                RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), prompt);
-                aiService.generateQuizTextOnly(promptBody).enqueue(createQuizCallback());
+                // TODO: Hiện tại API chưa hỗ trợ upload ảnh, chỉ sử dụng text prompt
+                GenerateQuizRequest request = new GenerateQuizRequest(
+                    prompt,
+                    false, // saveQuiz
+                    "", // quizTitle
+                    "", // quizDescription
+                    "", // tags
+                    false // isPublic
+                );
+
+                Log.d(TAG, "Making API call with request: " + prompt);
+                apiService.generateQuiz(authHeader, request).enqueue(createNewQuizCallback());
+            });
+        }).start();
+    }
+
+    private Callback<GeneratedQuizResponse> createNewQuizCallback() {
+        return new Callback<GeneratedQuizResponse>() {
+            @Override
+            public void onResponse(Call<GeneratedQuizResponse> call, Response<GeneratedQuizResponse> response) {
+                showLoading(false);
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        GeneratedQuizResponse body = response.body();
+
+                        if (body.getQuizzes() != null && !body.getQuizzes().isEmpty()) {
+                            // Record successful usage
+                            limitValidator.recordSuccessfulRequest(selectedImageFile != null);
+                            updateDailyUsageStats();
+
+                            // Convert QuizQuestion to GeneratedQuizItem for compatibility
+                            List<GeneratedQuizItem> quizItems = convertToGeneratedQuizItems(body.getQuizzes());
+
+                            Intent intent = new Intent(getContext(), ReviewGeneratedQuizActivity.class);
+                            String quizzesJson = new Gson().toJson(quizItems);
+                            Log.d(TAG, "Success. Sending JSON to ReviewActivity: " + quizzesJson);
+                            intent.putExtra(ReviewGeneratedQuizActivity.EXTRA_GENERATED_QUIZZES, quizzesJson);
+                            reviewQuizLauncher.launch(intent);
+                        } else {
+                            Log.e(TAG, "Response successful but quizzes list is null or empty");
+                            String errorMsg = body.getSaveError() != null ?
+                                body.getSaveError() : "Không thể tạo câu hỏi. Vui lòng thử lại.";
+                            Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        String errorBody = "";
+                        try {
+                            if (response.errorBody() != null) {
+                                errorBody = response.errorBody().string();
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error parsing error body", e);
+                        }
+                        Log.e(TAG, "API call failed. Code: " + response.code()
+                                + " | Message: " + response.message()
+                                + " | Error Body: " + errorBody);
+
+                        String errorMessage = "Lỗi từ server: " + response.code();
+                        if (response.code() == 401) {
+                            errorMessage = "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại";
+                        } else if (response.code() == 429) {
+                            errorMessage = "Đã vượt quá giới hạn, vui lòng thử lại sau";
+                        } else if (response.code() >= 500) {
+                            errorMessage = "Lỗi server, vui lòng thử lại sau";
+                        }
+
+                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error processing response", e);
+                    Toast.makeText(getContext(),
+                            "Lỗi khi xử lý phản hồi từ server", Toast.LENGTH_SHORT).show();
+                }
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Error creating request", e);
-            showLoading(false);
-            Toast.makeText(getContext(), "Lỗi khi tạo yêu cầu", Toast.LENGTH_SHORT).show();
+
+            @Override
+            public void onFailure(Call<GeneratedQuizResponse> call, Throwable t) {
+                showLoading(false);
+                Log.e(TAG, "Network call failed", t);
+
+                String errorMsg;
+                if (t instanceof java.net.SocketTimeoutException) {
+                    errorMsg = "Kết nối quá chậm, vui lòng thử lại";
+                } else if (t instanceof java.net.UnknownHostException) {
+                    errorMsg = "Không thể kết nối đến server, vui lòng kiểm tra mạng";
+                } else if (t instanceof java.net.ConnectException) {
+                    errorMsg = "Không thể kết nối đến server, vui lòng thử lại sau";
+                } else {
+                    errorMsg = "Lỗi kết nối: " + t.getMessage();
+                }
+
+                Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    private List<GeneratedQuizItem> convertToGeneratedQuizItems(List<QuizQuestion> questions) {
+        List<GeneratedQuizItem> items = new ArrayList<>();
+
+        for (QuizQuestion question : questions) {
+            GeneratedQuizItem item = new GeneratedQuizItem();
+            item.question = question.getQuestion();
+            item.answers = question.getAnswers();
+            item.correctAnswerIndices = question.getCorrectAnswerIndices();
+
+            // Convert string type to enum
+            if ("SINGLE_CHOICE".equals(question.getType())) {
+                item.type = Quiz.Type.SINGLE_CHOICE;
+            } else if ("MULTIPLE_CHOICE".equals(question.getType())) {
+                item.type = Quiz.Type.MULTIPLE_CHOICE;
+            } else {
+                item.type = Quiz.Type.SINGLE_CHOICE; // default
+            }
+
+            items.add(item);
         }
+
+        return items;
     }
 
     private void showPremiumUpgradeDialog(String message) {
@@ -506,23 +625,32 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
             UserEntity currentUser = database.userDao().getCurrentUserSync();
 
             requireActivity().runOnUiThread(() -> {
+                // Debug log để kiểm tra trạng thái user
+                Log.d(TAG, "updateUIBasedOnUserLimits - currentUser: " + (currentUser != null ? "logged in" : "null"));
+
                 if (currentUser == null) {
                     textAiStatus.setText("Vui lòng đăng nhập");
                     btnGenerateQuiz.setEnabled(false);
+                    Log.d(TAG, "Button disabled - User not logged in");
                     return;
                 }
 
+                Log.d(TAG, "User isPremium: " + currentUser.isPremium());
                 UserLimitValidator.LimitStatus status = limitValidator.getCurrentLimitStatus(currentUser.isPremium());
+                Log.d(TAG, "Remaining daily quizzes: " + status.remainingDailyQuizzes);
 
                 if (currentUser.isPremium()) {
                     textAiStatus.setText("Premium - Không giới hạn");
                     btnGenerateQuiz.setEnabled(true);
+                    Log.d(TAG, "Button enabled - Premium user");
                 } else {
                     String statusText = String.format("Còn lại: %d quiz hôm nay, %d ảnh",
                         status.remainingDailyQuizzes, status.remainingSessionImages);
                     textAiStatus.setText(statusText);
 
-                    btnGenerateQuiz.setEnabled(status.remainingDailyQuizzes > 0);
+                    boolean isEnabled = status.remainingDailyQuizzes > 0;
+                    btnGenerateQuiz.setEnabled(isEnabled);
+                    Log.d(TAG, "Button " + (isEnabled ? "enabled" : "disabled") + " - Free user with " + status.remainingDailyQuizzes + " remaining quizzes");
                 }
             });
         }).start();

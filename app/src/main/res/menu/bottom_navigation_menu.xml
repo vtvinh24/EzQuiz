@@ -3,27 +3,27 @@
 
     <item
         android:id="@+id/nav_collections"
-        android:icon="@drawable/ic_folder"
+        android:icon="@drawable/ic_collections_new"
         android:title="Collections" />
 
     <item
-        android:id="@+id/nav_generate"
-        android:icon="@drawable/ic_auto_awesome"
-        android:title="Generate" />
-
-    <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/ic_history"
-        android:title="History" />
-
-    <item
         android:id="@+id/nav_progress"
-        android:icon="@drawable/ic_progress"
+        android:icon="@drawable/ic_progress_new"
         android:title="Progress" />
 
     <item
+        android:id="@+id/nav_generate"
+        android:icon="@drawable/ic_generate_ai"
+        android:title="Generate AI" />
+
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/ic_history_new"
+        android:title="History" />
+
+    <item
         android:id="@+id/nav_subscription"
-        android:icon="@drawable/ic_premium"
-        android:title="Premium" />
+        android:icon="@drawable/ic_subscription_new"
+        android:title="Subscription" />
 
 </menu>

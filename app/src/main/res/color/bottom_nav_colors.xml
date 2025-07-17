@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Special color for Generate AI item when selected -->
-    <item android:color="?attr/colorPrimary" android:state_checked="true" />
-    <!-- Normal color for other items -->
-    <item android:color="?attr/colorOnSurfaceVariant" />
-</selector>
+<resources>
+    <!-- Bottom Navigation Colors -->
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_background_dark">#1E1E1E</color>
+
+    <!-- Ripple effect color -->
+    <color name="bottom_nav_ripple">#1A6366F1</color>
+    <color name="bottom_nav_ripple_dark">#1AFF9800</color>
+
+    <!-- Background colors -->
+    <color name="background_color">#F8F9FA</color>
+    <color name="background_color_dark">#121212</color>
+
+    <!-- Primary colors for active state -->
+    <color name="primary_color">#6366F1</color>
+    <color name="primary_color_variant">#4F46E5</color>
+
+    <!-- Secondary colors -->
+    <color name="secondary_color">#FF9800</color>
+
+    <!-- Text colors -->
+    <color name="text_color_primary">#1F2937</color>
+    <color name="text_color_secondary">#6B7280</color>
+    <color name="text_color_primary_dark">#F9FAFB</color>
+    <color name="text_color_secondary_dark">#9CA3AF</color>
+</resources>
+

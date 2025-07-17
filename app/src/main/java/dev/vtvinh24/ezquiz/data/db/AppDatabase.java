@@ -22,7 +22,7 @@ import dev.vtvinh24.ezquiz.data.entity.UserEntity;
 
 @Database(
         entities = {QuizEntity.class, QuizSetEntity.class, QuizCollectionEntity.class, PracticeProgressEntity.class, QuizSessionHistoryEntity.class, UserEntity.class},
-        version = 5,
+        version = 6,
         exportSchema = false
 )
 @TypeConverters({StringListConverter.class, IntegerListConverter.class, QuizTypeConverter.class})

@@ -138,19 +138,18 @@ public class SubscriptionFragment extends Fragment {
             return;
         }
 
-        authViewModel.redeemGiftCode(code).observe(this, result -> {
-            if (result.isSuccess()) {
-                etGiftCode.setText("");
-                Toast.makeText(getContext(),
-                    "Gift code redeemed successfully! " + result.getPremium().getDaysAdded() + " days added.",
-                    Toast.LENGTH_LONG).show();
-
-                // Refresh user data to update UI
-                observeUserData();
-            } else {
-                Toast.makeText(getContext(), result.getMessage(), Toast.LENGTH_LONG).show();
+        // Observe error messages từ AuthViewModel
+        authViewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
             }
         });
+
+        // Gọi redeemGiftCode method (trả về void)
+        authViewModel.redeemGiftCode(code);
+
+        // Clear gift code field after attempting to redeem
+        etGiftCode.setText("");
     }
 
     private void performLogout() {

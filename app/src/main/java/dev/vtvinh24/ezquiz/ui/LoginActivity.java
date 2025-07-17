@@ -62,23 +62,44 @@ public class LoginActivity extends AppCompatActivity {
                 btnGoToRegister.setEnabled(true);
             }
         });
+
+        // Observe error messages
+        authViewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Observe login state
+        authViewModel.getIsLoggedIn().observe(this, isLoggedIn -> {
+            if (isLoggedIn) {
+                Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void performLogin() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        authViewModel.login(email, password).observe(this, result -> {
-            if (result.isSuccess()) {
-                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(this, result.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        if (email.isEmpty()) {
+            etEmail.setError("Email không được để trống");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            etPassword.setError("Mật khẩu không được để trống");
+            etPassword.requestFocus();
+            return;
+        }
+
+        // Gọi login method
+        authViewModel.login(email, password);
     }
 
     @Override

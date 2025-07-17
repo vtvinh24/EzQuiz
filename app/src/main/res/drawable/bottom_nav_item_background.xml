@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Active state - larger scale and primary color -->
+    <item android:state_checked="true">
+        <layer-list>
+            <item android:drawable="@color/primary_color" />
+        </layer-list>
+    </item>
+
+    <!-- Inactive state - normal scale and secondary color -->
+    <item>
+        <layer-list>
+            <item android:drawable="@color/text_color_secondary" />
+        </layer-list>
+    </item>
+</selector>
+

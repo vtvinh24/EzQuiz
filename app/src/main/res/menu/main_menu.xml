@@ -3,10 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_sync"
+        android:icon="@android:drawable/ic_popup_sync"
+        android:title="Sync Quiz"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:title="Refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_logout"
-        android:title="Logout"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="Logout"
         app:showAsAction="never" />
 
 </menu>
-
