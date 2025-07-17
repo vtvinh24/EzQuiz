@@ -306,72 +306,104 @@
             android:layout_marginBottom="16dp"
             android:paddingHorizontal="4dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_voice_input"
+            <!-- Voice Input Button -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="68dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:text="Voice"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.02"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:background="@drawable/selector_voice_button"
-                android:elevation="8dp"
-                app:icon="@drawable/ic_mic"
-                app:iconTint="@color/white"
-                app:iconSize="18dp"
-                app:iconGravity="top"
-                app:iconPadding="4dp"
-                style="@style/Widget.Material3.Button.UnelevatedButton" />
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                android:backgroundTint="@color/gradient_green_start"
+                style="@style/Widget.Material3.CardView.Elevated">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_upload_image"
-                android:layout_width="0dp"
-                android:layout_height="68dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:text="Gallery"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.02"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:background="@drawable/selector_gallery_button"
-                android:elevation="8dp"
-                app:icon="@drawable/ic_image"
-                app:iconTint="@color/white"
-                app:iconSize="18dp"
-                app:iconGravity="top"
-                app:iconPadding="4dp"
-                style="@style/Widget.Material3.Button.UnelevatedButton" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_voice_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:text="Voice Input"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.02"
+                    android:maxLines="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:elevation="0dp"
+                    app:icon="@drawable/ic_mic"
+                    app:iconTint="@color/white"
+                    app:iconSize="20dp"
+                    app:iconGravity="top"
+                    app:iconPadding="6dp"
+                    app:cornerRadius="20dp"
+                    style="@style/Widget.Material3.Button.UnelevatedButton" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_camera"
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Gallery Button -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="68dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:text="Camera"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.02"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:background="@drawable/selector_camera_button"
-                android:elevation="8dp"
-                app:icon="@drawable/ic_camera"
-                app:iconTint="@color/white"
-                app:iconSize="18dp"
-                app:iconGravity="top"
-                app:iconPadding="4dp"
-                style="@style/Widget.Material3.Button.UnelevatedButton" />
+                android:layout_marginHorizontal="4dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                android:backgroundTint="@color/gradient_orange_start"
+                style="@style/Widget.Material3.CardView.Elevated">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_upload_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:text="Gallery"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.02"
+                    android:maxLines="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:elevation="0dp"
+                    app:icon="@drawable/ic_image"
+                    app:iconTint="@color/white"
+                    app:iconSize="20dp"
+                    app:iconGravity="top"
+                    app:iconPadding="6dp"
+                    app:cornerRadius="20dp"
+                    style="@style/Widget.Material3.Button.UnelevatedButton" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Camera Button -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                android:backgroundTint="@color/gradient_purple_start"
+                style="@style/Widget.Material3.CardView.Elevated">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:text="Camera"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.02"
+                    android:maxLines="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:elevation="0dp"
+                    app:icon="@drawable/ic_camera"
+                    app:iconTint="@color/white"
+                    app:iconSize="20dp"
+                    app:iconGravity="top"
+                    app:iconPadding="6dp"
+                    app:cornerRadius="20dp"
+                    style="@style/Widget.Material3.Button.UnelevatedButton" />
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

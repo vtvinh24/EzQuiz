@@ -148,14 +148,12 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
     );
 
     private final ActivityResultLauncher<Intent> reviewQuizLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
-                    boolean shouldClearData = result.getData().getBooleanExtra(
-                            ReviewGeneratedQuizActivity.EXTRA_CLEAR_GENERATE_DATA, false);
-                    if (shouldClearData) {
-                        clearGenerateData();
-                        Toast.makeText(getContext(), "Đã xóa dữ liệu tạo quiz", Toast.LENGTH_SHORT).show();
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == getActivity().RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null && data.getBooleanExtra(ReviewGeneratedQuizActivity.EXTRA_CLEAR_GENERATE_DATA, false)) {
+                        editAiPrompt.setText("");
+                        // Add clearing for other input fields if needed
                     }
                 }
             }
