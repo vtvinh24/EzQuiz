@@ -60,5 +60,25 @@
     <color name="correct_answer_stroke">@color/correct_answer</color>
     <color name="incorrect_answer_stroke">@color/incorrect_answer</color>
 
+    <!-- Bottom Navigation Enhanced Colors -->
+    <color name="bottom_nav_active">#667eea</color>
+    <color name="bottom_nav_active_secondary">#764ba2</color>
+    <color name="bottom_nav_inactive">#8E8E93</color>
+    <color name="bottom_nav_background_start">#FFFFFF</color>
+    <color name="bottom_nav_background_end">#F8F9FA</color>
+    <color name="bottom_nav_border">#E2E8F0</color>
+    <color name="bottom_nav_indicator">#667eea</color>
+    <color name="bottom_nav_indicator_light">#E6EBFF</color>
 
+    <!-- Generate AI Special Colors -->
+    <color name="generate_ai_active">#FF6B6B</color>
+    <color name="generate_ai_background">#FFE0E0</color>
+
+    <!-- Progress Colors -->
+    <color name="progress_active">#4ECDC4</color>
+    <color name="progress_background">#E0F7F5</color>
+
+    <!-- Collections Colors -->
+    <color name="collections_active">#45B7D1</color>
+    <color name="collections_background">#E1F5FE</color>
 </resources>

@@ -2,6 +2,7 @@ package dev.vtvinh24.ezquiz.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.HistoryItem;
 import dev.vtvinh24.ezquiz.ui.PracticeActivity;
@@ -29,6 +32,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     private final Context context;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy • HH:mm", Locale.getDefault());
 
+    private final int[][] gradientColors = {
+            {R.color.gradient_blue_start, R.color.gradient_blue_end},
+            {R.color.gradient_green_start, R.color.gradient_green_end},
+            {R.color.gradient_orange_start, R.color.gradient_orange_end},
+            {R.color.gradient_purple_start, R.color.gradient_purple_end},
+            {R.color.gradient_pink_start, R.color.gradient_pink_end}
+    };
+
     public HistoryAdapter(Context context) {
         this.context = context;
     }
@@ -43,7 +54,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         HistoryItem item = historyItems.get(position);
-        holder.bind(item);
+        holder.bind(item, position);
     }
 
     @Override
@@ -56,15 +67,29 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         notifyDataSetChanged();
     }
 
+    private void setGradientBackground(ImageView imageView, int position, Context context) {
+        int colorIndex = position % gradientColors.length;
+        int startColor = ContextCompat.getColor(context, gradientColors[colorIndex][0]);
+        int endColor = ContextCompat.getColor(context, gradientColors[colorIndex][1]);
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                new int[]{startColor, endColor}
+        );
+        gradientDrawable.setShape(GradientDrawable.OVAL);
+        imageView.setBackground(gradientDrawable);
+    }
+
     class HistoryViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView cardView;
         private final TextView quizSetNameText;
         private final TextView collectionNameText;
-        private final TextView statusText;
+        private final Chip statusChip;
         private final TextView lastUpdatedText;
         private final ProgressBar progressBar;
         private final TextView progressText;
         private final ImageView statusIcon;
+        private final ImageView iconBackground;
         private final MaterialButton actionButton;
 
         public HistoryViewHolder(@NonNull View itemView) {
@@ -72,77 +97,152 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             cardView = itemView.findViewById(R.id.card_history_item);
             quizSetNameText = itemView.findViewById(R.id.text_quiz_set_name);
             collectionNameText = itemView.findViewById(R.id.text_collection_name);
-            statusText = itemView.findViewById(R.id.text_status);
+            statusChip = itemView.findViewById(R.id.chip_status);
             lastUpdatedText = itemView.findViewById(R.id.text_last_updated);
             progressBar = itemView.findViewById(R.id.progress_bar);
             progressText = itemView.findViewById(R.id.text_progress);
             statusIcon = itemView.findViewById(R.id.icon_status);
+            iconBackground = itemView.findViewById(R.id.icon_background);
             actionButton = itemView.findViewById(R.id.button_action);
         }
 
-        public void bind(HistoryItem item) {
-            quizSetNameText.setText(item.getQuizSet().name);
-            collectionNameText.setText(item.getCollectionName() + (item.isAIGenerated() ? " • AI Generated" : ""));
-            statusText.setText(item.getStatusText());
-            lastUpdatedText.setText(dateFormat.format(new Date(item.getLastUpdated())));
+        public void bind(HistoryItem item, int position) {
+            // Use correct method names from HistoryItem
+            quizSetNameText.setText(item.getQuizSet() != null ? item.getQuizSet().name : "Unknown Quiz");
+            collectionNameText.setText(item.getCollectionName() != null ? item.getCollectionName() : "Unknown Collection");
 
-            // Hiển thị thống kê chi tiết thay vì chỉ progress cơ bản
-            String detailedStats = item.getDetailedStats();
-            if (!detailedStats.equals("No attempts yet")) {
-                progressText.setText(detailedStats);
-                progressBar.setVisibility(View.GONE);
+            // Set gradient background for icon
+            setGradientBackground(iconBackground, position, itemView.getContext());
+
+            // Configure progress using correct methods
+            int progress = item.getCompletedQuestions();
+            int total = item.getTotalQuestions();
+            progressBar.setMax(total);
+            progressBar.setProgress(progress);
+            progressText.setText(String.format(Locale.getDefault(), "%d/%d", progress, total));
+
+            // Configure status chip with colors
+            String status = getStatusFromItem(item);
+            configureStatusChip(status);
+
+            // Set appropriate icon based on status
+            setStatusIcon(status);
+
+            // Configure action button
+            configureActionButton(item, status);
+
+            // Set last updated time using correct method
+            long lastUpdated = item.getLastUpdated();
+            if (lastUpdated > 0) {
+                String timeAgo = getTimeAgo(lastUpdated);
+                lastUpdatedText.setText(timeAgo);
             } else {
-                progressBar.setMax(item.getTotalQuestions());
-                progressBar.setProgress(item.getCompletedQuestions());
-                progressText.setText(item.getCompletedQuestions() + "/" + item.getTotalQuestions());
-                progressBar.setVisibility(View.VISIBLE);
+                lastUpdatedText.setText("");
             }
+        }
 
+        private String getStatusFromItem(HistoryItem item) {
             if (item.isCompleted()) {
-                statusIcon.setImageResource(R.drawable.ic_check_circle);
-                statusIcon.setColorFilter(context.getColor(R.color.correct_answer));
-                actionButton.setText("View Results");
-                actionButton.setOnClickListener(v -> viewResults(item));
-            } else if (item.canContinue()) {
-                statusIcon.setImageResource(R.drawable.ic_play_circle);
-                statusIcon.setColorFilter(context.getColor(R.color.practice_title));
-                actionButton.setText("Continue");
-                actionButton.setOnClickListener(v -> continueQuiz(item));
+                return "COMPLETED";
+            } else if (item.getCompletedQuestions() > 0) {
+                return "IN_PROGRESS";
             } else {
-                statusIcon.setImageResource(R.drawable.ic_quiz);
-                statusIcon.setColorFilter(context.getColor(R.color.text_secondary));
-                actionButton.setText("Start Quiz");
-                actionButton.setOnClickListener(v -> startQuiz(item));
+                return "NOT_STARTED";
             }
-
-            cardView.setOnClickListener(v -> {
-                if (item.isCompleted()) {
-                    viewResults(item);
-                } else {
-                    continueQuiz(item);
-                }
-            });
         }
 
-        private void continueQuiz(HistoryItem item) {
-            Intent intent = new Intent(context, PracticeActivity.class);
-            intent.putExtra("quizSetId", item.getQuizSet().id);
-            intent.putExtra("continueSession", true);
-            context.startActivity(intent);
+        private void configureStatusChip(String status) {
+            switch (status) {
+                case "COMPLETED":
+                    statusChip.setText("Completed");
+                    statusChip.setChipBackgroundColorResource(R.color.correct_answer);
+                    break;
+                case "IN_PROGRESS":
+                    statusChip.setText("In Progress");
+                    statusChip.setChipBackgroundColorResource(R.color.bottom_nav_active);
+                    break;
+                case "NOT_STARTED":
+                    statusChip.setText("Not Started");
+                    statusChip.setChipBackgroundColorResource(R.color.bottom_nav_inactive);
+                    break;
+                default:
+                    statusChip.setText("Unknown");
+                    statusChip.setChipBackgroundColorResource(R.color.bottom_nav_inactive);
+                    break;
+            }
         }
 
-        private void startQuiz(HistoryItem item) {
-            Intent intent = new Intent(context, PracticeActivity.class);
-            intent.putExtra("quizSetId", item.getQuizSet().id);
-            intent.putExtra("continueSession", false);
-            context.startActivity(intent);
+        private void setStatusIcon(String status) {
+            switch (status) {
+                case "COMPLETED":
+                    statusIcon.setImageResource(R.drawable.ic_check_circle);
+                    break;
+                case "IN_PROGRESS":
+                    statusIcon.setImageResource(R.drawable.ic_arrow_forward);
+                    break;
+                case "NOT_STARTED":
+                    statusIcon.setImageResource(R.drawable.ic_add);
+                    break;
+                default:
+                    statusIcon.setImageResource(R.drawable.ic_history);
+                    break;
+            }
         }
 
-        private void viewResults(HistoryItem item) {
-            Intent intent = new Intent(context, TestResultActivity.class);
-            intent.putExtra("quizSetId", item.getQuizSet().id);
-            intent.putExtra("sessionResults", item.getSessionResults());
-            context.startActivity(intent);
+        private void configureActionButton(HistoryItem item, String status) {
+            switch (status) {
+                case "COMPLETED":
+                    actionButton.setText("Review");
+                    actionButton.setIconResource(R.drawable.ic_info);
+                    actionButton.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, TestResultActivity.class);
+                        intent.putExtra("quizSetId", item.getQuizSet().id);
+                        context.startActivity(intent);
+                    });
+                    break;
+                case "IN_PROGRESS":
+                    actionButton.setText("Continue");
+                    actionButton.setIconResource(R.drawable.ic_arrow_forward);
+                    actionButton.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, PracticeActivity.class);
+                        intent.putExtra("quizSetId", item.getQuizSet().id);
+                        intent.putExtra("continueFromHistory", true);
+                        context.startActivity(intent);
+                    });
+                    break;
+                case "NOT_STARTED":
+                    actionButton.setText("Start");
+                    actionButton.setIconResource(R.drawable.ic_arrow_forward);
+                    actionButton.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, PracticeActivity.class);
+                        intent.putExtra("quizSetId", item.getQuizSet().id);
+                        context.startActivity(intent);
+                    });
+                    break;
+                default:
+                    actionButton.setText("View");
+                    actionButton.setIconResource(R.drawable.ic_info);
+                    actionButton.setOnClickListener(null);
+                    break;
+            }
+        }
+
+        private String getTimeAgo(long timestamp) {
+            long diff = System.currentTimeMillis() - timestamp;
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            long days = hours / 24;
+
+            if (days > 0) {
+                return days + " day" + (days > 1 ? "s" : "") + " ago";
+            } else if (hours > 0) {
+                return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+            } else if (minutes > 0) {
+                return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago";
+            } else {
+                return "Just now";
+            }
         }
     }
 }

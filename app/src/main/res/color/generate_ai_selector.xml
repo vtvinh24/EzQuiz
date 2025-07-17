@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Generate AI - Red theme -->
+    <item android:color="@color/generate_ai_active" android:state_checked="true" />
+    <item android:color="@color/bottom_nav_inactive" />
+</selector>
+
