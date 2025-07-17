@@ -77,6 +77,23 @@ function initDB() {
       )
     `);
 
+    // Paste table for text pasting functionality
+    db.run(`
+      CREATE TABLE IF NOT EXISTS pastes (
+        id TEXT PRIMARY KEY,
+        content TEXT NOT NULL,
+        content_type TEXT DEFAULT 'text/plain',
+        size INTEGER NOT NULL,
+        ip_address TEXT,
+        user_agent TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        expires_at DATETIME,
+        view_count INTEGER DEFAULT 0,
+        max_views INTEGER,
+        is_deleted BOOLEAN DEFAULT 0
+      )
+    `);
+
     // Create default admin user if not exists
     const bcrypt = require("bcryptjs");
     const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD || "admin123";

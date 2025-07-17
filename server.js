@@ -31,9 +31,19 @@ const authLimiter = rateLimit({
   message: "Too many authentication attempts, please try again later.",
 });
 
+// Rate limiting for paste endpoints (to prevent spam)
+const pasteLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // limit each IP to 10 pastes per minute
+  message: "Too many paste requests, please try again later.",
+});
+
 // Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Serve static files
+app.use("/public", express.static("public"));
 
 // Initialize database
 const { initDB } = require("./config/database");
@@ -44,12 +54,14 @@ const authRoutes = require("./routes/api/v1/auth");
 const quizRoutes = require("./routes/api/v1/generate/generate");
 const licenseRoutes = require("./routes/api/v1/license");
 const paymentRoutes = require("./routes/api/v1/payment");
+const pasteRoutes = require("./routes/api/v1/paste");
 
 // Apply routes
 app.use("/api/v1/auth", authLimiter, authRoutes);
 app.use("/api/v1/generate", quizRoutes);
 app.use("/api/v1/license", licenseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/paste", pasteLimiter, pasteRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -58,6 +70,11 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
+});
+
+// Serve paste web interface
+app.get("/paste", (req, res) => {
+  res.sendFile(__dirname + "/public/paste.html");
 });
 
 // Error handling middleware
