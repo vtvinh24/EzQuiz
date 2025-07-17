@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -49,6 +52,7 @@ import dev.vtvinh24.ezquiz.data.model.AIService;
 import dev.vtvinh24.ezquiz.data.model.GenerateQuizResponse;
 import dev.vtvinh24.ezquiz.data.model.GeneratedQuizItem;
 import dev.vtvinh24.ezquiz.network.RetrofitClient;
+import dev.vtvinh24.ezquiz.ui.MainActivity;
 import dev.vtvinh24.ezquiz.ui.ReviewGeneratedQuizActivity;
 import dev.vtvinh24.ezquiz.ui.adapter.TopicAdapter;
 import dev.vtvinh24.ezquiz.util.UserLimitValidator;
@@ -63,28 +67,37 @@ import retrofit2.Response;
 public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTopicClickListener {
     private static final String TAG = "GenerateQuizFragment";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
 
     private TextInputEditText editAiPrompt;
     private MaterialButton btnGenerateQuiz;
     private MaterialButton btnVoiceInput;
     private MaterialButton btnUploadImage;
     private MaterialButton btnRemoveImage;
+    private MaterialButton btnCamera;
     private CircularProgressIndicator progressBar;
     private TextView textAiStatus;
     private TextView textPromptsCount;
     private TextView textImagesCount;
-    private MaterialCardView layoutStatus;
+    private LinearLayout layoutStatus;
     private RecyclerView recyclerTopics;
     private MaterialCardView cardImagePreview;
     private ImageView imagePreview;
     private TextView textImageName;
+    private Chip chipPremiumStatus;
+    private LinearLayout chatMessagesContainer;
+    private ScrollView chatScrollView;
 
     private TopicAdapter topicAdapter;
     private File selectedImageFile;
+    private File cameraImageFile;
     private boolean isVoiceInputActive = false;
+    private String selectedTopic = null;
 
     private UserLimitValidator limitValidator;
     private AppDatabase database;
+
+    private MainActivity mainActivity;
 
     private final List<String> quickTopics = Arrays.asList(
             "Thể thao", "Khoa học", "Lịch sử", "Văn học", "Toán học",
@@ -99,6 +112,21 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
                     Uri imageUri = result.getData().getData();
                     if (imageUri != null) {
                         handleSelectedImage(imageUri);
+                    }
+                }
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == getActivity().RESULT_OK) {
+                    if (cameraImageFile != null && cameraImageFile.exists()) {
+                        handleCapturedImage(cameraImageFile);
+                    }
+                } else {
+                    if (cameraImageFile != null && cameraImageFile.exists()) {
+                        cameraImageFile.delete();
                     }
                 }
             }
@@ -143,6 +171,11 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get reference to MainActivity
+        if (getActivity() instanceof MainActivity) {
+            mainActivity = (MainActivity) getActivity();
+        }
+
         limitValidator = new UserLimitValidator(requireContext());
         database = AppDatabaseProvider.getDatabase(requireContext());
 
@@ -159,6 +192,7 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
         btnVoiceInput = view.findViewById(R.id.btn_voice_input);
         btnUploadImage = view.findViewById(R.id.btn_upload_image);
         btnRemoveImage = view.findViewById(R.id.btn_remove_image);
+        btnCamera = view.findViewById(R.id.btn_camera);
         progressBar = view.findViewById(R.id.progress_bar);
         textAiStatus = view.findViewById(R.id.text_ai_status);
         textPromptsCount = view.findViewById(R.id.text_prompts_count);
@@ -168,6 +202,9 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
         cardImagePreview = view.findViewById(R.id.card_image_preview);
         imagePreview = view.findViewById(R.id.image_preview);
         textImageName = view.findViewById(R.id.text_image_name);
+        chipPremiumStatus = view.findViewById(R.id.chip_premium_status);
+        chatMessagesContainer = view.findViewById(R.id.chat_messages_container);
+        chatScrollView = view.findViewById(R.id.chat_scroll_view);
     }
 
     private void setupTopicSuggestions() {
@@ -181,16 +218,20 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
         btnVoiceInput.setOnClickListener(v -> startVoiceInput());
         btnUploadImage.setOnClickListener(v -> openImagePicker());
         btnRemoveImage.setOnClickListener(v -> removeSelectedImage());
+        btnCamera.setOnClickListener(v -> openCamera());
     }
 
     @Override
     public void onTopicClick(String topic) {
-        String currentText = editAiPrompt.getText() != null ? editAiPrompt.getText().toString().trim() : "";
-        String newText = currentText.isEmpty() ?
-            "Tạo câu hỏi trắc nghiệm về chủ đề " + topic :
-            currentText + " về chủ đề " + topic;
-        editAiPrompt.setText(newText);
-        editAiPrompt.setSelection(newText.length());
+        // Store the selected topic silently
+        selectedTopic = topic;
+
+        // Show user feedback about topic selection without filling input field
+        if (topic != null) {
+            Toast.makeText(getContext(), "Đã chọn chủ đề: " + topic, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Đã bỏ chọn chủ đề", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startVoiceInput() {
@@ -260,8 +301,29 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
         }
     }
 
+    private void handleCapturedImage(File imageFile) {
+        try {
+            cameraImageFile = imageFile;
+            Uri imageUri = Uri.fromFile(imageFile);
+
+            Glide.with(this)
+                    .load(imageUri)
+                    .centerCrop()
+                    .into(imagePreview);
+
+            textImageName.setText(cameraImageFile.getName());
+            cardImagePreview.setVisibility(View.VISIBLE);
+
+            Toast.makeText(getContext(), "Đã chụp hình ảnh: " + cameraImageFile.getName(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error handling captured image", e);
+            Toast.makeText(getContext(), "Lỗi khi xử lý hình ảnh chụp", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void removeSelectedImage() {
         selectedImageFile = null;
+        cameraImageFile = null;
         cardImagePreview.setVisibility(View.GONE);
         imagePreview.setImageDrawable(null);
         textImageName.setText("");
@@ -329,7 +391,7 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
     private void generateQuiz() {
         String prompt = editAiPrompt.getText() != null ? editAiPrompt.getText().toString().trim() : "";
 
-        if (prompt.isEmpty() && selectedImageFile == null) {
+        if (prompt.isEmpty() && selectedImageFile == null && cameraImageFile == null) {
             Toast.makeText(getContext(), "Vui lòng nhập nội dung hoặc chọn hình ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -347,8 +409,9 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
                     UserLimits.PREMIUM_MAX_QUIZ_QUESTIONS :
                     UserLimits.FREE_MAX_QUIZ_QUESTIONS;
 
+                boolean hasImage = selectedImageFile != null || cameraImageFile != null;
                 UserLimitValidator.ValidationResult validation = limitValidator.validateQuizGeneration(
-                    currentUser, requestedQuestions, selectedImageFile != null);
+                    currentUser, requestedQuestions, hasImage);
 
                 if (!validation.isValid) {
                     showPremiumUpgradeDialog(validation.message);
@@ -366,9 +429,21 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
         AIService aiService = RetrofitClient.getAuthenticatedAIService(AIService.class, requireContext());
 
         try {
-            if (selectedImageFile != null) {
+            // Combine user prompt with selected topic silently
+            String finalPrompt = prompt;
+            if (selectedTopic != null && !selectedTopic.trim().isEmpty()) {
+                if (prompt.isEmpty()) {
+                    finalPrompt = "Tạo câu hỏi trắc nghiệm về chủ đề " + selectedTopic;
+                } else {
+                    finalPrompt = prompt + " (Chủ đề: " + selectedTopic + ")";
+                }
+            }
+
+            File imageToUse = selectedImageFile != null ? selectedImageFile : cameraImageFile;
+
+            if (imageToUse != null) {
                 String mimeType = "image/jpeg";
-                String fileName = selectedImageFile.getName().toLowerCase();
+                String fileName = imageToUse.getName().toLowerCase();
                 if (fileName.endsWith(".png")) {
                     mimeType = "image/png";
                 } else if (fileName.endsWith(".webp")) {
@@ -377,13 +452,13 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
                     mimeType = "image/gif";
                 }
 
-                RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), prompt);
-                RequestBody imageBody = RequestBody.create(MediaType.parse(mimeType), selectedImageFile);
-                MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", selectedImageFile.getName(), imageBody);
+                RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), finalPrompt);
+                RequestBody imageBody = RequestBody.create(MediaType.parse(mimeType), imageToUse);
+                MultipartBody.Part imagePart = MultipartBody.Part.createFormData("file", imageToUse.getName(), imageBody);
 
                 aiService.generateQuiz(promptBody, imagePart).enqueue(createQuizCallback());
             } else {
-                RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), prompt);
+                RequestBody promptBody = RequestBody.create(MediaType.parse("text/plain"), finalPrompt);
                 aiService.generateQuizTextOnly(promptBody).enqueue(createQuizCallback());
             }
         } catch (Exception e) {
@@ -465,13 +540,23 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
     }
 
     private void showLoading(boolean isLoading) {
-        if (isLoading) {
-            layoutStatus.setVisibility(View.VISIBLE);
-            btnGenerateQuiz.setEnabled(false);
-        } else {
-            layoutStatus.setVisibility(View.GONE);
-            btnGenerateQuiz.setEnabled(true);
+        if (mainActivity != null) {
+            if (isLoading) {
+                mainActivity.showLoadingOverlay();
+            } else {
+                mainActivity.hideLoadingOverlay();
+            }
         }
+
+        // Also disable fragment buttons during loading
+        btnGenerateQuiz.setEnabled(!isLoading);
+        btnVoiceInput.setEnabled(!isLoading);
+        btnUploadImage.setEnabled(!isLoading);
+        btnRemoveImage.setEnabled(!isLoading);
+        btnCamera.setEnabled(!isLoading);
+
+        // Hide the old status layout since we're using the full-screen overlay
+        layoutStatus.setVisibility(View.GONE);
     }
 
     private void updateDailyUsageStats() {
@@ -539,6 +624,17 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
                 REQUEST_RECORD_AUDIO_PERMISSION);
     }
 
+    private boolean checkCameraPermission() {
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(requireActivity(),
+                new String[]{Manifest.permission.CAMERA},
+                REQUEST_CAMERA_PERMISSION);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -548,12 +644,22 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
             } else {
                 Toast.makeText(getContext(), "Cần quyền ghi âm để sử dụng tính năng giọng nói", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(getContext(), "Cần quyền truy cập camera để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     private void clearGenerateData() {
         editAiPrompt.setText("");
         removeSelectedImage();
+        selectedTopic = null;
+        if (topicAdapter != null) {
+            topicAdapter.clearSelection();
+        }
     }
 
     @Override
@@ -561,5 +667,43 @@ public class GenerateQuizFragment extends Fragment implements TopicAdapter.OnTop
         super.onResume();
         updateDailyUsageStats();
         updateUIBasedOnUserLimits();
+    }
+
+    private void openCamera() {
+        if (!checkCameraPermission()) {
+            requestCameraPermission();
+            return;
+        }
+
+        try {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            if (cameraIntent.resolveActivity(requireContext().getPackageManager()) != null) {
+                cameraImageFile = createImageFile();
+                if (cameraImageFile != null) {
+                    Uri photoURI = androidx.core.content.FileProvider.getUriForFile(
+                            requireContext(),
+                            requireContext().getPackageName() + ".provider",
+                            cameraImageFile
+                    );
+                    cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoURI);
+                    cameraLauncher.launch(cameraIntent);
+                }
+            } else {
+                Toast.makeText(getContext(), "Không tìm thấy ứng dụng camera", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error opening camera", e);
+            Toast.makeText(getContext(), "Lỗi khi mở camera", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        String imageFileName = "QUIZ_" + timeStamp + "_";
+        File storageDir = new File(requireContext().getCacheDir(), "images");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 }

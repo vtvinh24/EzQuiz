@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -74,10 +75,12 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     private MaterialCardView cardImagePreview;
     private ImageView imagePreview;
     private TextView textImageName;
+    private FrameLayout loadingOverlay;
 
     private TopicAdapter topicAdapter;
     private File selectedImageFile;
     private boolean isVoiceInputActive = false;
+    private boolean isGeneratingQuiz = false;
 
     private UserLimitValidator limitValidator;
     private AppDatabase database;
@@ -161,6 +164,7 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
         cardImagePreview = findViewById(R.id.card_image_preview);
         imagePreview = findViewById(R.id.image_preview);
         textImageName = findViewById(R.id.text_image_name);
+        loadingOverlay = findViewById(R.id.loading_overlay);
     }
 
     private void setupToolbar() {
@@ -470,13 +474,63 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
     }
 
     private void showLoading(boolean isLoading) {
+        isGeneratingQuiz = isLoading;
+
         if (isLoading) {
-            layoutStatus.setVisibility(View.VISIBLE);
+            loadingOverlay.setVisibility(View.VISIBLE);
+
+            // Start animations for loading elements
+            View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
+            ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
+            TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
+
+            if (borderCircle != null) {
+                android.view.animation.Animation rotateAnimation =
+                    android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_border);
+                borderCircle.startAnimation(rotateAnimation);
+            }
+
+            if (lightningIcon != null) {
+                android.view.animation.Animation pulseAnimation =
+                    android.view.animation.AnimationUtils.loadAnimation(this, R.anim.pulse_lightning);
+                lightningIcon.startAnimation(pulseAnimation);
+            }
+
+            if (textProcessing != null) {
+                android.view.animation.Animation fadeAnimation =
+                    android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_text);
+                textProcessing.startAnimation(fadeAnimation);
+            }
+
             btnGenerateQuiz.setEnabled(false);
-            textAiStatus.setText("Đang tạo câu hỏi...");
+            btnVoiceInput.setEnabled(false);
+            btnUploadImage.setEnabled(false);
+            btnRemoveImage.setEnabled(false);
+            toolbar.setNavigationOnClickListener(null);
         } else {
-            layoutStatus.setVisibility(View.GONE);
+            // Stop all animations
+            View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
+            ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
+            TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
+
+            if (borderCircle != null) {
+                borderCircle.clearAnimation();
+            }
+
+            if (lightningIcon != null) {
+                lightningIcon.clearAnimation();
+            }
+
+            if (textProcessing != null) {
+                textProcessing.clearAnimation();
+            }
+
+            loadingOverlay.setVisibility(View.GONE);
             btnGenerateQuiz.setEnabled(true);
+            btnVoiceInput.setEnabled(true);
+            btnUploadImage.setEnabled(true);
+            btnRemoveImage.setEnabled(true);
+            toolbar.setNavigationOnClickListener(v -> finish());
         }
     }
 
@@ -501,6 +555,15 @@ public class GenerateQuizAIActivity extends AppCompatActivity implements TopicAd
                 Toast.makeText(this, "Cần quyền ghi âm để sử dụng tính năng giọng nói", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isGeneratingQuiz) {
+            Toast.makeText(this, "Đang tạo câu hỏi, vui lòng chờ...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        super.onBackPressed();
     }
 
     private void clearGenerateData() {

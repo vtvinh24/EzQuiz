@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
   private ViewPager2 viewPager;
   private MainPagerAdapter pagerAdapter;
   private AuthViewModel authViewModel;
+  private View loadingOverlay;
+
+  // Interface for fragment communication
+  public interface LoadingOverlayController {
+    void showLoadingOverlay();
+    void hideLoadingOverlay();
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
   private void initializeViews() {
     bottomNavigationView = findViewById(R.id.bottom_navigation);
     viewPager = findViewById(R.id.viewPager);
+    loadingOverlay = findViewById(R.id.loading_overlay);
   }
 
   private void initViewModel() {
@@ -159,5 +170,66 @@ public class MainActivity extends AppCompatActivity {
       return 4;
     }
     return -1;
+  }
+
+  // Public methods for LoadingOverlayController interface
+  public void showLoadingOverlay() {
+    if (loadingOverlay != null) {
+      loadingOverlay.setVisibility(View.VISIBLE);
+      
+      // Start animations for loading elements
+      View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
+      ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
+      TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
+      
+      if (borderCircle != null) {
+        android.view.animation.Animation rotateAnimation = 
+            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_border);
+        borderCircle.startAnimation(rotateAnimation);
+      }
+      
+      if (lightningIcon != null) {
+        android.view.animation.Animation pulseAnimation = 
+            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.pulse_lightning);
+        lightningIcon.startAnimation(pulseAnimation);
+      }
+      
+      if (textProcessing != null) {
+        android.view.animation.Animation fadeAnimation = 
+            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_text);
+        textProcessing.startAnimation(fadeAnimation);
+      }
+      
+      // Disable navigation during loading
+      viewPager.setUserInputEnabled(false);
+      bottomNavigationView.setEnabled(false);
+    }
+  }
+
+  public void hideLoadingOverlay() {
+    if (loadingOverlay != null) {
+      // Stop all animations
+      View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
+      ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
+      TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
+      
+      if (borderCircle != null) {
+        borderCircle.clearAnimation();
+      }
+      
+      if (lightningIcon != null) {
+        lightningIcon.clearAnimation();
+      }
+      
+      if (textProcessing != null) {
+        textProcessing.clearAnimation();
+      }
+      
+      loadingOverlay.setVisibility(View.GONE);
+      
+      // Re-enable navigation
+      viewPager.setUserInputEnabled(true);
+      bottomNavigationView.setEnabled(true);
+    }
   }
 }
