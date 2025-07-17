@@ -205,7 +205,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                     actionButton.setIconResource(R.drawable.ic_arrow_forward);
                     actionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(context, PracticeActivity.class);
-                        intent.putExtra("quizSetId", item.getQuizSet().id);
+                        intent.putExtra(PracticeActivity.EXTRA_SET_ID, item.getQuizSet().id);
                         intent.putExtra("continueFromHistory", true);
                         context.startActivity(intent);
                     });
@@ -215,7 +215,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                     actionButton.setIconResource(R.drawable.ic_arrow_forward);
                     actionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(context, PracticeActivity.class);
-                        intent.putExtra("quizSetId", item.getQuizSet().id);
+                        intent.putExtra(PracticeActivity.EXTRA_SET_ID, item.getQuizSet().id);
                         context.startActivity(intent);
                     });
                     break;
@@ -233,15 +233,21 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             long minutes = seconds / 60;
             long hours = minutes / 60;
             long days = hours / 24;
+            long weeks = days / 7;
+            long months = days / 30;
 
-            if (days > 0) {
-                return days + " day" + (days > 1 ? "s" : "") + " ago";
+            if (months > 0) {
+                return months + "mo ago";
+            } else if (weeks > 0) {
+                return weeks + "w ago";
+            } else if (days > 0) {
+                return days + "d ago";
             } else if (hours > 0) {
-                return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+                return hours + "h ago";
             } else if (minutes > 0) {
-                return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago";
+                return minutes + "m ago";
             } else {
-                return "Just now";
+                return "now";
             }
         }
     }

@@ -133,14 +133,17 @@
                 <!-- Last Updated Time -->
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/text_last_updated"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="11sp"
+                    android:maxWidth="80dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:gravity="end"
-                    tools:text="2 hours ago" />
+                    tools:text="2h ago" />
 
             </LinearLayout>
 
