@@ -9,6 +9,14 @@
 async function uploadData(data) {
   const PASTE_SERVICES = [
     {
+      name: "ezquiz",
+      upload: async (text) => {
+        return new Promise((resolve) => {
+          chrome.runtime.sendMessage({ action: "uploadText", service: "ezquiz", text }, (response) => {
+            resolve(response || { url: null, error: "No response from background script." });
+          });
+        });
+      },
       name: "paste.rs",
       upload: async (text) => {
         return new Promise((resolve) => {

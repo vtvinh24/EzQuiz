@@ -6,7 +6,23 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "uploadText") {
     (async () => {
-      if (msg.service === "paste.rs") {
+      if (msg.service === "ezquiz") {
+        try {
+          const resp = await fetch("https://server-horusoul.onrender.com/api/paste", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: msg.text }),
+          });
+          const data = await resp.json();
+          if (resp.ok && data.url && data.url.startsWith("http")) {
+            sendResponse({ url: data.url.trim(), error: null });
+          } else {
+            sendResponse({ url: null, error: `ezquiz: Upload failed with status ${resp.status}` });
+          }
+        } catch (e) {
+          sendResponse({ url: null, error: "ezquiz error: " + (e && e.message ? e.message : e) });
+        }
+      } else if (msg.service === "paste.rs") {
         try {
           const resp = await fetch("https://paste.rs", {
             method: "POST",
@@ -44,6 +60,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         }
       }
     })();
-    return true; // Keep the message port open for async sendResponse
+    return true;
   }
 });
