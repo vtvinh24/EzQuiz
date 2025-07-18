@@ -17,24 +17,6 @@ async function uploadData(data) {
           });
         });
       },
-      name: "paste.rs",
-      upload: async (text) => {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ action: "uploadText", service: "paste.rs", text }, (response) => {
-            resolve(response || { url: null, error: "No response from background script." });
-          });
-        });
-      },
-    },
-    {
-      name: "0x0.st",
-      upload: async (text) => {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ action: "uploadText", service: "0x0.st", text }, (response) => {
-            resolve(response || { url: null, error: "No response from background script." });
-          });
-        });
-      },
     },
   ];
 

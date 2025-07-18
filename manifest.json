@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Quiz QR Extractor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extracts flashcards and quiz data from popular quiz sites and generates QR codes to send to your app.",
   "icons": {
     "16": "icon16.png",
