@@ -59,7 +59,10 @@ public class AuthRepository {
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
                 Log.e(TAG, "Login API call failed", t);
-                result.setValue(new AuthResult(false, "Network error: " + t.getMessage(), null));
+                String msg = t.getMessage() != null && t.getMessage().contains("Unable to resolve host")
+                        ? "Server không phản hồi"
+                        : "Network error: " + t.getMessage();
+                result.setValue(new AuthResult(false, msg, null));
             }
         });
 
@@ -89,7 +92,10 @@ public class AuthRepository {
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
                 Log.e(TAG, "Register API call failed", t);
-                result.setValue(new AuthResult(false, "Network error: " + t.getMessage(), null));
+                String msg = t.getMessage() != null && t.getMessage().contains("Unable to resolve host")
+                        ? "Server không phản hồi"
+                        : "Network error: " + t.getMessage();
+                result.setValue(new AuthResult(false, msg, null));
             }
         });
 

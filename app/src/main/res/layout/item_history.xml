@@ -1,132 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_history_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    style="@style/Widget.Material3.CardView.Outlined">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    android:backgroundTint="?attr/colorSurfaceContainer"
+    style="@style/Widget.Material3.CardView.Elevated">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_vertical">
 
-        <!-- Header with quiz set name and status -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+        <!-- History Icon with Gradient Background -->
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginEnd="16dp">
 
+            <!-- Gradient Background Circle -->
+            <ImageView
+                android:id="@+id/icon_background"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/circle_gradient_background"
+                android:scaleType="centerCrop" />
+
+            <!-- Status Icon -->
             <ImageView
                 android:id="@+id/icon_status"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_quiz" />
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_history"
+                app:tint="@android:color/white" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+        </FrameLayout>
+
+        <!-- Quiz Info Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Quiz Set Name -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_quiz_set_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Advanced Mathematics Quiz" />
 
-                <TextView
-                    android:id="@+id/text_quiz_set_name"
+            <!-- Collection Name -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_collection_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginBottom="8dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Mathematics Collection" />
+
+            <!-- Progress Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="12dp"
+                    android:progressTint="@color/bottom_nav_active"
+                    android:progressBackgroundTint="?attr/colorSurfaceVariant"
+                    android:progress="75" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quiz Set Name"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    android:textColor="?attr/colorOnSurface"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
-
-                <TextView
-                    android:id="@+id/text_collection_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Collection Name"
-                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
+                    android:textStyle="bold"
+                    android:minWidth="48dp"
+                    android:gravity="end"
+                    tools:text="15/20" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_status"
-                android:layout_width="wrap_content"
+            <!-- Status and Action Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Completed"
-                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                android:textColor="?attr/colorPrimary"
-                android:background="@drawable/bg_status_chip"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Status Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="In Progress"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
+                    app:chipBackgroundColor="@color/bottom_nav_active"
+                    app:chipStrokeWidth="0dp"
+                    app:chipMinHeight="28dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <!-- Last Updated Time -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_last_updated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="11sp"
+                    android:maxWidth="80dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    tools:text="2h ago" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Progress section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="12dp">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="0dp"
-                android:layout_height="8dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:progressTint="?attr/colorPrimary"
-                android:progressBackgroundTint="?attr/colorSurfaceVariant" />
-
-            <TextView
-                android:id="@+id/text_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0/10"
-                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:minWidth="40dp"
-                android:gravity="end" />
-
-        </LinearLayout>
-
-        <!-- Footer with last updated time and action button -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="12dp">
-
-            <TextView
-                android:id="@+id/text_last_updated"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Dec 13, 2024 • 14:30"
-                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Continue"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:textColor="?attr/colorPrimary"
-                android:minWidth="80dp" />
-
-        </LinearLayout>
+        <!-- Action Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_action"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:text="Continue"
+            android:textSize="12sp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            app:cornerRadius="20dp"
+            app:backgroundTint="@color/bottom_nav_active"
+            app:icon="@drawable/ic_arrow_forward"
+            app:iconSize="16dp"
+            app:iconGravity="textStart"
+            style="@style/Widget.Material3.Button" />
 
     </LinearLayout>
 

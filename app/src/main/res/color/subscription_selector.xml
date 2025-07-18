@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Subscription - Purple gradient theme -->
+    <item android:color="#9C27B0" android:state_checked="true" />
+    <item android:color="@color/bottom_nav_inactive" />
+</selector>
+

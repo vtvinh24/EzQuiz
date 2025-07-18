@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state with vibrant blue -->
+    <item android:color="@color/bottom_nav_active" android:state_checked="true" />
+    <!-- Unselected state with muted gray -->
+    <item android:color="@color/bottom_nav_inactive" />
+</selector>

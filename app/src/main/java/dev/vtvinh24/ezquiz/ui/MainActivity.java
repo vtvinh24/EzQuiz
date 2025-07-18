@@ -4,28 +4,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dev.vtvinh24.ezquiz.R;
-import dev.vtvinh24.ezquiz.ui.fragment.CollectionsFragment;
-import dev.vtvinh24.ezquiz.ui.fragment.GenerateQuizFragment;
-import dev.vtvinh24.ezquiz.ui.fragment.HistoryFragment;
-import dev.vtvinh24.ezquiz.ui.fragment.ProgressFragment;
-import dev.vtvinh24.ezquiz.ui.fragment.SubscriptionFragment;
+import dev.vtvinh24.ezquiz.ui.adapter.MainPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
   private BottomNavigationView bottomNavigationView;
-  private FragmentManager fragmentManager;
+  private ViewPager2 viewPager;
+  private MainPagerAdapter pagerAdapter;
   private AuthViewModel authViewModel;
+  private View loadingOverlay;
+
+  // Interface for fragment communication
+  public interface LoadingOverlayController {
+    void showLoadingOverlay();
+    void hideLoadingOverlay();
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -34,29 +39,77 @@ public class MainActivity extends AppCompatActivity {
 
     initializeViews();
     initViewModel();
+    setupViewPager();
     setupBottomNavigation();
     observeUser();
 
-    // Load default fragment (Collections)
+    // Set default selection
     if (savedInstanceState == null) {
-      loadFragment(new CollectionsFragment());
+      viewPager.setCurrentItem(0, false);
       bottomNavigationView.setSelectedItemId(R.id.nav_collections);
     }
   }
 
   private void initializeViews() {
     bottomNavigationView = findViewById(R.id.bottom_navigation);
-    fragmentManager = getSupportFragmentManager();
+    viewPager = findViewById(R.id.viewPager);
+    loadingOverlay = findViewById(R.id.loading_overlay);
   }
 
   private void initViewModel() {
     authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
   }
 
+  private void setupViewPager() {
+    pagerAdapter = new MainPagerAdapter(this);
+    viewPager.setAdapter(pagerAdapter);
+    viewPager.setOffscreenPageLimit(3);
+
+    viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+      @Override
+      public void onPageSelected(int position) {
+        super.onPageSelected(position);
+        updateBottomNavigationSelection(position);
+      }
+    });
+  }
+
+  private void updateBottomNavigationSelection(int position) {
+    switch (position) {
+      case 0:
+        bottomNavigationView.setSelectedItemId(R.id.nav_collections);
+        updateNavbarTheme(R.color.collections_active, R.color.collections_background);
+        break;
+      case 1:
+        bottomNavigationView.setSelectedItemId(R.id.nav_generate);
+        updateNavbarTheme(R.color.generate_ai_active, R.color.generate_ai_background);
+        break;
+      case 2:
+        bottomNavigationView.setSelectedItemId(R.id.nav_history);
+        updateNavbarTheme(R.color.bottom_nav_active, R.color.bottom_nav_indicator_light);
+        break;
+      case 3:
+        bottomNavigationView.setSelectedItemId(R.id.nav_progress);
+        updateNavbarTheme(R.color.progress_active, R.color.progress_background);
+        break;
+      case 4:
+        bottomNavigationView.setSelectedItemId(R.id.nav_subscription);
+        updateNavbarTheme(R.color.bottom_nav_active_secondary, R.color.bottom_nav_indicator_light);
+        break;
+    }
+  }
+
+  private void updateNavbarTheme(int activeColor, int backgroundColor) {
+    // Chỉ tạo hiệu ứng màu sắc nhẹ nhàng, không scale cả navbar
+    int currentActiveColor = getResources().getColor(activeColor, getTheme());
+
+    // Có thể thêm hiệu ứng subtle cho từng icon riêng lẻ ở đây nếu cần
+    // Nhưng không làm gì với cả thanh navbar
+  }
+
   private void observeUser() {
     authViewModel.getCurrentUser().observe(this, user -> {
       if (user != null) {
-        // Use setTitle() directly instead of getSupportActionBar() to avoid null pointer
         setTitle("Welcome, " + user.getName());
       } else {
         redirectToLogin();
@@ -95,34 +148,88 @@ public class MainActivity extends AppCompatActivity {
 
   private void setupBottomNavigation() {
     bottomNavigationView.setOnItemSelectedListener(item -> {
-      Fragment selectedFragment = null;
-
-      int itemId = item.getItemId();
-      if (itemId == R.id.nav_collections) {
-        selectedFragment = new CollectionsFragment();
-      } else if (itemId == R.id.nav_generate) {
-        selectedFragment = new GenerateQuizFragment();
-      } else if (itemId == R.id.nav_history) {
-        selectedFragment = new HistoryFragment();
-      } else if (itemId == R.id.nav_progress) {
-        selectedFragment = new ProgressFragment();
-      } else if (itemId == R.id.nav_subscription) {
-        selectedFragment = new SubscriptionFragment();
-      }
-
-      if (selectedFragment != null) {
-        loadFragment(selectedFragment);
+      int position = getPositionFromMenuId(item.getItemId());
+      if (position != -1) {
+        viewPager.setCurrentItem(position, true);
         return true;
       }
-
       return false;
     });
   }
 
+  private int getPositionFromMenuId(int menuId) {
+    if (menuId == R.id.nav_collections) {
+      return 0;
+    } else if (menuId == R.id.nav_generate) {
+      return 1;
+    } else if (menuId == R.id.nav_history) {
+      return 2;
+    } else if (menuId == R.id.nav_progress) {
+      return 3;
+    } else if (menuId == R.id.nav_subscription) {
+      return 4;
+    }
+    return -1;
+  }
 
-  private void loadFragment(Fragment fragment) {
-    FragmentTransaction transaction = fragmentManager.beginTransaction();
-    transaction.replace(R.id.fragment_container, fragment);
-    transaction.commit();
+  // Public methods for LoadingOverlayController interface
+  public void showLoadingOverlay() {
+    if (loadingOverlay != null) {
+      loadingOverlay.setVisibility(View.VISIBLE);
+      
+      // Start animations for loading elements
+      View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
+      ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
+      TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
+      
+      if (borderCircle != null) {
+        android.view.animation.Animation rotateAnimation = 
+            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_border);
+        borderCircle.startAnimation(rotateAnimation);
+      }
+      
+      if (lightningIcon != null) {
+        android.view.animation.Animation pulseAnimation = 
+            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.pulse_lightning);
+        lightningIcon.startAnimation(pulseAnimation);
+      }
+      
+      if (textProcessing != null) {
+        android.view.animation.Animation fadeAnimation = 
+            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_text);
+        textProcessing.startAnimation(fadeAnimation);
+      }
+      
+      // Disable navigation during loading
+      viewPager.setUserInputEnabled(false);
+      bottomNavigationView.setEnabled(false);
+    }
+  }
+
+  public void hideLoadingOverlay() {
+    if (loadingOverlay != null) {
+      // Stop all animations
+      View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
+      ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
+      TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
+      
+      if (borderCircle != null) {
+        borderCircle.clearAnimation();
+      }
+      
+      if (lightningIcon != null) {
+        lightningIcon.clearAnimation();
+      }
+      
+      if (textProcessing != null) {
+        textProcessing.clearAnimation();
+      }
+      
+      loadingOverlay.setVisibility(View.GONE);
+      
+      // Re-enable navigation
+      viewPager.setUserInputEnabled(true);
+      bottomNavigationView.setEnabled(true);
+    }
   }
 }

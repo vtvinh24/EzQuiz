@@ -5,28 +5,95 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-    <!-- Main Content Container -->
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <!-- Main Content Container with ViewPager2 for smooth swiping -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp" />
 
-    <!-- Bottom Navigation with Enhanced Generate Button -->
+    <!-- Enhanced Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
-        android:background="?attr/colorSurface"
-        android:elevation="8dp"
+        android:background="@drawable/bottom_nav_background"
+        android:elevation="16dp"
         app:menu="@menu/bottom_navigation_menu"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/bottom_nav_colors"
-        app:itemTextColor="@color/bottom_nav_colors"
-        app:itemIconSize="28dp"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:itemIconSize="24dp"
         app:itemTextAppearanceActive="@style/BottomNavActiveText"
         app:itemTextAppearanceInactive="@style/BottomNavInactiveText"
-        app:elevation="8dp" />
+        app:itemRippleColor="@android:color/transparent"
+        app:itemActiveIndicatorStyle="@style/BottomNavActiveIndicator" />
+
+    <!-- Full-Screen Loading Overlay -->
+    <FrameLayout
+        android:id="@+id/loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:elevation="20dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            android:backgroundTint="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="24dp">
+
+                <!-- Lightning Icon with Animated Border -->
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Animated Border Circle -->
+                    <View
+                        android:id="@+id/border_circle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/lightning_border_circle" />
+
+                    <!-- Animated Lightning Icon -->
+                    <ImageView
+                        android:id="@+id/lightning_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_lightning"
+                        app:tint="@color/gradient_blue_start" />
+
+                </FrameLayout>
+
+                <!-- Animated Processing Text -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_processing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Processing"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

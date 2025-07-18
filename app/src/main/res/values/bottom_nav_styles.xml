@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Text styles for bottom navigation -->
+    <!-- Enhanced text styles for bottom navigation with colorful theme -->
     <style name="BottomNavActiveText" parent="@style/TextAppearance.Material3.LabelMedium">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.02</item>
     </style>
 
     <style name="BottomNavInactiveText" parent="@style/TextAppearance.Material3.LabelSmall">
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:letterSpacing">0.01</item>
     </style>
 
-    <!-- Special style for Generate AI item -->
+    <!-- Active indicator style with gradient background -->
+    <style name="BottomNavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:width">40dp</item>
+        <item name="android:height">40dp</item>
+        <item name="android:color">@color/bottom_nav_indicator_light</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
+
+    <!-- Special vibrant style for Generate AI item -->
     <style name="GenerateAIStyle">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">@color/generate_ai_active</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
+
+    <!-- Animated scale style for active items -->
+    <style name="BottomNavActiveIcon">
+        <item name="android:scaleX">1.1</item>
+        <item name="android:scaleY">1.1</item>
     </style>
 </resources>

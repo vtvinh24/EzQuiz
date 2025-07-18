@@ -1,6 +1,5 @@
 package dev.vtvinh24.ezquiz.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -23,7 +21,6 @@ import java.util.List;
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.HistoryItem;
 import dev.vtvinh24.ezquiz.data.repo.HistoryRepository;
-import dev.vtvinh24.ezquiz.ui.MainActivity;
 import dev.vtvinh24.ezquiz.ui.adapter.HistoryAdapter;
 
 public class HistoryFragment extends Fragment {
@@ -32,7 +29,6 @@ public class HistoryFragment extends Fragment {
     private LinearLayout layoutLoading, layoutEmpty;
     private ChipGroup chipGroupFilters;
     private Chip chipAll, chipInProgress, chipCompleted, chipTotalHistory;
-    private MaterialButton buttonBrowseQuizzes;
 
     private HistoryAdapter historyAdapter;
     private HistoryRepository historyRepository;
@@ -64,7 +60,6 @@ public class HistoryFragment extends Fragment {
         chipInProgress = view.findViewById(R.id.chip_in_progress);
         chipCompleted = view.findViewById(R.id.chip_completed);
         chipTotalHistory = view.findViewById(R.id.chip_total_history);
-        buttonBrowseQuizzes = view.findViewById(R.id.button_browse_quizzes);
     }
 
     private void setupRecyclerView() {
@@ -86,13 +81,6 @@ public class HistoryFragment extends Fragment {
                 loadCompletedHistory();
             } else if (checkedId == R.id.chip_total_history) {
                 loadTotalHistory();
-            }
-        });
-
-        buttonBrowseQuizzes.setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.findViewById(R.id.nav_collections).performClick();
             }
         });
     }

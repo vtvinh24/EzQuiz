@@ -201,26 +201,61 @@ public class PracticeActivity extends AppCompatActivity {
             int newProgressValue = (int) (((position + 1) * 100.0f) / total);
             int currentProgress = progressBar.getProgress();
 
-            // Animate progress bar
-            ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", currentProgress, newProgressValue);
-            progressAnimator.setDuration(800);
-            progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            progressAnimator.start();
+            // Only animate if there's actual progress change
+            if (newProgressValue != currentProgress) {
+                // Animate progress bar with smoother interpolation
+                ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", currentProgress, newProgressValue);
+                progressAnimator.setDuration(1200); // Longer duration for smoother animation
+                progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-            // Animate percentage text
-            ValueAnimator percentageAnimator = ValueAnimator.ofInt(currentProgress, newProgressValue);
-            percentageAnimator.setDuration(800);
-            percentageAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            percentageAnimator.addUpdateListener(animation -> {
-                int animatedValue = (int) animation.getAnimatedValue();
-                textProgressPercentage.setText(String.format("%d%%", animatedValue));
-            });
-            percentageAnimator.start();
+                // Add celebration bounce effect for significant progress
+                if (newProgressValue > currentProgress + 10) {
+                    progressAnimator.addListener(new android.animation.AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(android.animation.Animator animation) {
+                            // Bounce effect when reaching milestones
+                            progressBar.animate()
+                                    .scaleY(1.15f)
+                                    .setDuration(150)
+                                    .withEndAction(() -> {
+                                        progressBar.animate()
+                                                .scaleY(1f)
+                                                .setDuration(150)
+                                                .start();
+                                    })
+                                    .start();
+                        }
+                    });
+                }
+                progressAnimator.start();
 
-            // Update progress text immediately
+                // Animate percentage text with counter effect
+                ValueAnimator percentageAnimator = ValueAnimator.ofInt(currentProgress, newProgressValue);
+                percentageAnimator.setDuration(1200);
+                percentageAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                percentageAnimator.addUpdateListener(animation -> {
+                    int animatedValue = (int) animation.getAnimatedValue();
+                    textProgressPercentage.setText(String.format("%d%%", animatedValue));
+                });
+                percentageAnimator.start();
+
+                // Add pulse animation to percentage text for emphasis
+                textProgressPercentage.animate()
+                        .scaleX(1.3f)
+                        .scaleY(1.3f)
+                        .setDuration(300)
+                        .withEndAction(() -> {
+                            textProgressPercentage.animate()
+                                    .scaleX(1f)
+                                    .scaleY(1f)
+                                    .setDuration(300)
+                                    .start();
+                        })
+                        .start();
+            }
+
+            // Update progress text with scale animation
             textProgress.setText(String.format("%d/%d", position + 1, total));
-
-            // Add scale animation to progress text
             textProgress.animate()
                     .scaleX(1.2f)
                     .scaleY(1.2f)

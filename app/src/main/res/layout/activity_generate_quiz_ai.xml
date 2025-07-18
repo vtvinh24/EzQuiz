@@ -216,36 +216,64 @@
                         android:gravity="center_vertical">
 
                         <!-- Voice Input Button -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_voice_input"
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="8dp"
-                            android:text="Voice"
-                            android:textColor="@color/white"
-                            app:icon="@drawable/ic_mic"
-                            app:iconTint="@color/white"
-                            app:iconGravity="textStart"
-                            app:backgroundTint="@color/gradient_green_start"
-                            app:cornerRadius="12dp"
-                            style="@style/Widget.Material3.Button.UnelevatedButton" />
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="4dp"
+                            android:backgroundTint="@color/gradient_green_start"
+                            style="@style/Widget.Material3.CardView.Elevated">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_voice_input"
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:text="Voice Input"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                app:icon="@drawable/ic_mic"
+                                app:iconTint="@color/white"
+                                app:iconGravity="textStart"
+                                app:iconSize="20dp"
+                                android:backgroundTint="@android:color/transparent"
+                                app:cornerRadius="16dp"
+                                android:elevation="0dp"
+                                style="@style/Widget.Material3.Button.UnelevatedButton" />
+
+                        </com.google.android.material.card.MaterialCardView>
 
                         <!-- Image Upload Button -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_upload_image"
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
-                            android:text="Image"
-                            android:textColor="@color/white"
-                            app:icon="@drawable/ic_image"
-                            app:iconTint="@color/white"
-                            app:iconGravity="textStart"
-                            app:backgroundTint="@color/gradient_orange_start"
-                            app:cornerRadius="12dp"
-                            style="@style/Widget.Material3.Button.UnelevatedButton" />
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="4dp"
+                            android:backgroundTint="@color/gradient_orange_start"
+                            style="@style/Widget.Material3.CardView.Elevated">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_upload_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:text="Upload Image"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                app:icon="@drawable/ic_image"
+                                app:iconTint="@color/white"
+                                app:iconGravity="textStart"
+                                app:iconSize="20dp"
+                                android:backgroundTint="@android:color/transparent"
+                                app:cornerRadius="16dp"
+                                android:elevation="0dp"
+                                style="@style/Widget.Material3.Button.UnelevatedButton" />
+
+                        </com.google.android.material.card.MaterialCardView>
 
                     </LinearLayout>
 
@@ -324,19 +352,32 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Generate Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_generate_quiz"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Generate Quiz"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                app:icon="@drawable/ic_auto_awesome"
-                app:iconTint="@color/white"
-                app:iconGravity="textStart"
-                app:backgroundTint="@color/gradient_blue_start"
-                app:cornerRadius="16dp"
-                style="@style/Widget.Material3.Button.UnelevatedButton" />
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                android:backgroundTint="@color/gradient_blue_start"
+                style="@style/Widget.Material3.CardView.Elevated">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_generate_quiz"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:text="Generate Quiz with AI"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_auto_awesome"
+                    app:iconTint="@color/white"
+                    app:iconGravity="textStart"
+                    app:iconSize="24dp"
+                    android:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="20dp"
+                    android:elevation="0dp"
+                    style="@style/Widget.Material3.Button.UnelevatedButton" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Status Section -->
             <com.google.android.material.card.MaterialCardView
@@ -382,5 +423,71 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Loading Overlay -->
+    <FrameLayout
+        android:id="@+id/loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:elevation="10dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            android:backgroundTint="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="24dp">
+
+                <!-- Lightning Icon with Animated Border -->
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Animated Border Circle -->
+                    <View
+                        android:id="@+id/border_circle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/lightning_border_circle" />
+
+                    <!-- Animated Lightning Icon -->
+                    <ImageView
+                        android:id="@+id/lightning_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_lightning"
+                        app:tint="@color/gradient_blue_start" />
+
+                </FrameLayout>
+
+                <!-- Animated Processing Text -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_processing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Processing"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
