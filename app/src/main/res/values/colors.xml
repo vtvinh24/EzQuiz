@@ -29,13 +29,15 @@
     <!-- Practice screen specific colors -->
     <color name="practice_question">#1A237E</color>  <!-- Màu xanh đậm cho câu hỏi -->
     <color name="practice_title">#667EEA</color>     <!-- Màu xanh chính -->
-    <color name="practice_answer_text">#2C3E50</color>  <!-- Màu xám đậm dễ đọc cho text câu trả lời -->
+    <color name="practice_answer_text">#2C3E50
+    </color>  <!-- Màu xám đậm dễ đọc cho text câu trả lời -->
     <color name="practice_answer_stroke">#E2E8F0</color> <!-- Màu viền nhạt cho các nút đáp án -->
     <color name="practice_progress_text">#64748B</color> <!-- Màu xám cho text progress -->
 
     <color name="unanswered_highlight">#FFAB00</color>
 
-    <color name="surface_container_lowest">#FFFFFF</color> <!-- Màu nền sáng nhất, thường là trắng -->
+    <color name="surface_container_lowest">#FFFFFF
+    </color> <!-- Màu nền sáng nhất, thường là trắng -->
     <color name="on_surface">#1F1F21</color> <!-- Màu chữ chính trên nền -->
     <color name="outline_variant">#E2E8F0</color> <!-- Màu viền hoặc nền phụ, rất nhạt -->
 

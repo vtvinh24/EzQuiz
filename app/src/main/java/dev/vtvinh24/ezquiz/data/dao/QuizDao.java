@@ -24,6 +24,7 @@ public interface QuizDao {
 
   @Query("SELECT * FROM quiz WHERE id IN (:quizIds)")
   List<QuizEntity> getQuizzesByIds(List<Long> quizIds);
+
   @Query("SELECT * FROM quiz WHERE id = :id")
   QuizEntity getById(long id);
 

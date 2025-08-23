@@ -70,6 +70,7 @@ public class Quiz implements Serializable {
   public int getDifficulty() {
     return difficulty;
   }
+
   @Override
   public boolean equals(Object o) {
 

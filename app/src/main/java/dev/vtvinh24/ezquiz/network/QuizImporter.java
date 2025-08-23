@@ -18,8 +18,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class QuizImporter {
-  private final Gson gson = new Gson();
   private static final String TAG = "QuizImporter";
+  private final Gson gson = new Gson();
 
   public String getRemoteJSON(String pasteId) {
     PasteService service = RetrofitClient.getPasteService(PasteService.class);

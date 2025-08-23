@@ -14,11 +14,11 @@
             <shape>
                 <corners android:radius="4dp" />
                 <gradient
-                    android:startColor="#667eea"
+                    android:angle="0"
                     android:centerColor="#764ba2"
                     android:endColor="#f093fb"
-                    android:type="linear"
-                    android:angle="0" />
+                    android:startColor="#667eea"
+                    android:type="linear" />
             </shape>
         </clip>
     </item>

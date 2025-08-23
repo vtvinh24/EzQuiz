@@ -13,31 +13,31 @@ import dev.vtvinh24.ezquiz.ui.fragment.SubscriptionFragment;
 
 public class MainPagerAdapter extends FragmentStateAdapter {
 
-    public MainPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
-        super(fragmentActivity);
-    }
+  public MainPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    super(fragmentActivity);
+  }
 
-    @NonNull
-    @Override
-    public Fragment createFragment(int position) {
-        switch (position) {
-            case 0:
-                return new CollectionsFragment();
-            case 1:
-                return new GenerateQuizFragment();
-            case 2:
-                return new HistoryFragment();
-            case 3:
-                return new ProgressFragment();
-            case 4:
-                return new SubscriptionFragment();
-            default:
-                return new CollectionsFragment();
-        }
+  @NonNull
+  @Override
+  public Fragment createFragment(int position) {
+    switch (position) {
+      case 0:
+        return new CollectionsFragment();
+      case 1:
+        return new GenerateQuizFragment();
+      case 2:
+        return new HistoryFragment();
+      case 3:
+        return new ProgressFragment();
+      case 4:
+        return new SubscriptionFragment();
+      default:
+        return new CollectionsFragment();
     }
+  }
 
-    @Override
-    public int getItemCount() {
-        return 5;
-    }
+  @Override
+  public int getItemCount() {
+    return 5;
+  }
 }

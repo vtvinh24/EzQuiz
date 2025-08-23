@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -42,12 +42,12 @@
                         android:id="@+id/icon_summary"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:src="@drawable/ic_trophy"
-                        android:background="@drawable/circle_white_background"
-                        android:padding="12dp"
-                        app:tint="@color/gradient_blue_start"
                         android:layout_marginBottom="16dp"
-                        android:contentDescription="@string/cd_success_icon" />
+                        android:background="@drawable/circle_white_background"
+                        android:contentDescription="@string/cd_success_icon"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_trophy"
+                        app:tint="@color/gradient_blue_start" />
 
 
                     <com.google.android.material.textview.MaterialTextView
@@ -209,9 +209,9 @@
                     android:id="@+id/btn_finish"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:textColor="@color/gradient_blue_start"
                     android:layout_height="wrap_content"
-                    android:text="@string/btn_finish" />
+                    android:text="@string/btn_finish"
+                    android:textColor="@color/gradient_blue_start" />
 
             </LinearLayout>
 

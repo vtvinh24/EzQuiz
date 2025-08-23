@@ -2,21 +2,21 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
     android:backgroundTint="?attr/colorSurfaceContainer"
-    style="@style/Widget.Material3.CardView.Elevated">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="20dp"
-        android:gravity="center_vertical">
+        android:padding="20dp">
 
         <!-- Collection Icon with Dynamic Color -->
         <FrameLayout
@@ -29,8 +29,8 @@
                 android:id="@+id/icon_background"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/circle_gradient_background"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/circle_gradient_background" />
 
             <!-- Collection Icon -->
             <ImageView
@@ -55,10 +55,10 @@
                 android:id="@+id/textName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
-                android:layout_marginBottom="4dp"
                 tools:text="Math Collection" />
 
             <!-- Collection Description -->
@@ -66,46 +66,46 @@
                 android:id="@+id/textDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:layout_marginBottom="8dp"
                 tools:text="Mathematics and algebra quizzes" />
 
             <!-- Quiz Count Badge -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_quiz_count"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 sets"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    app:chipBackgroundColor="@color/gradient_blue_start"
-                    app:chipStrokeWidth="0dp"
-                    app:chipMinHeight="28dp"
                     android:clickable="false"
                     android:focusable="false"
-                    style="@style/Widget.Material3.Chip.Filter" />
+                    android:text="0 sets"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/gradient_blue_start"
+                    app:chipMinHeight="28dp"
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_last_updated"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Updated today"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    app:chipBackgroundColor="@color/gradient_green_start"
-                    app:chipStrokeWidth="0dp"
-                    app:chipMinHeight="28dp"
                     android:clickable="false"
                     android:focusable="false"
-                    style="@style/Widget.Material3.Chip.Filter" />
+                    android:text="Updated today"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/gradient_green_start"
+                    app:chipMinHeight="28dp"
+                    app:chipStrokeWidth="0dp" />
 
             </LinearLayout>
 
@@ -115,9 +115,9 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginStart="8dp"
             android:src="@drawable/ic_arrow_forward"
-            app:tint="?attr/colorOnSurfaceVariant"
-            android:layout_marginStart="8dp" />
+            app:tint="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
 

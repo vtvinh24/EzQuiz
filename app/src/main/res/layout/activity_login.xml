@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:id="@+id/scrollViewLogin"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollViewLogin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_surface_background"
@@ -11,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="32dp"
-        android:gravity="center">
+        android:padding="32dp">
 
         <!-- Logo Section -->
         <ImageView
@@ -21,54 +20,54 @@
             android:layout_height="100dp"
             android:layout_marginTop="48dp"
             android:layout_marginBottom="24dp"
-            android:src="@mipmap/ic_launcher"
-            android:contentDescription="EzQuiz App Logo" />
+            android:contentDescription="EzQuiz App Logo"
+            android:src="@mipmap/ic_launcher" />
 
         <!-- Main Login Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:orientation="vertical"
-            android:padding="32dp"
-            android:background="@android:color/transparent">
+            android:padding="32dp">
 
             <!-- Welcome Text -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Welcome Back"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
+                android:layout_marginBottom="8dp"
                 android:gravity="center"
-                android:layout_marginBottom="8dp" />
+                android:text="Welcome Back"
+                android:textColor="@android:color/white"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign in to continue your learning journey"
-                android:textSize="16sp"
-                android:textColor="@android:color/white"
+                android:layout_marginBottom="32dp"
                 android:gravity="center"
-                android:layout_marginBottom="32dp" />
+                android:text="Sign in to continue your learning journey"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
 
             <!-- Email Input -->
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="#F5FAFF"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
+                app:boxBackgroundMode="filled"
                 app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeColor="@color/auth_primary_blue"
                 app:boxStrokeWidth="2dp"
                 app:hintTextColor="@color/auth_text_secondary"
                 app:startIconDrawable="@drawable/ic_user"
-                app:startIconTint="@color/auth_primary_blue"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox">
+                app:startIconTint="@color/auth_primary_blue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
@@ -84,23 +83,23 @@
 
             <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="#F5FAFF"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
+                app:boxBackgroundMode="filled"
                 app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeColor="@color/auth_primary_blue"
                 app:boxStrokeWidth="2dp"
-                app:hintTextColor="@color/auth_text_secondary"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/auth_primary_blue"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/auth_primary_blue"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox">
+                app:hintTextColor="@color/auth_text_secondary"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/auth_primary_blue">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
@@ -117,20 +116,20 @@
             <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/auth_primary_blue"
                 android:text="Sign In"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/auth_primary_blue"
-                android:layout_marginBottom="16dp"
                 app:cornerRadius="16dp"
                 app:elevation="6dp"
                 app:icon="@drawable/ic_arrow_forward"
                 app:iconGravity="end"
-                app:iconTint="@color/white"
-                style="@style/Widget.Material3.Button" />
+                app:iconTint="@color/white" />
 
             <!-- Progress Bar -->
             <ProgressBar
@@ -139,42 +138,42 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:indeterminateTint="@color/auth_primary_blue" />
+                android:indeterminateTint="@color/auth_primary_blue"
+                android:visibility="gone" />
 
             <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/auth_divider"
-                android:layout_marginVertical="24dp" />
+                android:layout_marginVertical="24dp"
+                android:background="@color/auth_divider" />
 
             <!-- Register Section -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account?"
-                android:textSize="16sp"
-                android:textColor="@android:color/white"
+                android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:layout_marginBottom="16dp" />
+                android:text="Don't have an account?"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoToRegister"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:backgroundTint="@android:color/transparent"
                 android:text="Create Account"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:backgroundTint="@android:color/transparent"
                 app:cornerRadius="16dp"
-                app:strokeColor="@color/auth_primary_blue"
-                app:strokeWidth="2dp"
                 app:icon="@drawable/ic_add"
                 app:iconGravity="start"
                 app:iconTint="@color/auth_primary_blue"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
+                app:strokeColor="@color/auth_primary_blue"
+                app:strokeWidth="2dp" />
 
         </LinearLayout>
 

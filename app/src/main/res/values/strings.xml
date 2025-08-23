@@ -70,11 +70,11 @@
     <string name="dialog_close_test_message">Your progress will not be saved. Are you sure you want to exit?</string>
     <string name="btn_exit">Exit</string>
 
-        <string name="question_header_multiple_choice">Multiple Choice</string>
-        <string name="prompt_select_multiple_answers">Choose one or more correct answers</string>
-        <string name="prompt_select_one_answer">Choose one correct answer</string>
-        <string name="question_header_true_false">True / False</string>
-        <string name="test_question_progress_format">%1$d / %2$d</string>
+    <string name="question_header_multiple_choice">Multiple Choice</string>
+    <string name="prompt_select_multiple_answers">Choose one or more correct answers</string>
+    <string name="prompt_select_one_answer">Choose one correct answer</string>
+    <string name="question_header_true_false">True / False</string>
+    <string name="test_question_progress_format">%1$d / %2$d</string>
     <string name="error_invalid_quiz_set_id">Error: Invalid quiz set ID.</string>
     <string name="switch_label_multiple_choice">Multiple Choice (%d)</string>
     <string name="switch_label_true_false">True/False (%d)</string>
@@ -84,15 +84,15 @@
     <string name="error_invalid_question_count_range">Number of invalid questions (1 - %d)</string>
     <string name="error_invalid_question_count">Number of invalid questions.</string>
 
-        <string name="toast_no_result_data">No result data.</string>
-        <string name="test_result_score_format">%1$d/%2$d (%3$d%%)</string>
-        <string name="test_result_message_excellent">You are excellent </string>
-        <string name="test_result_message_good">Congratulations! You have completed the test.</string>
-        <string name="test_result_message_needs_practice">You need more practice </string>
-        <string name="share_result_content">I just completed the test on EzQuiz with a score of %1$d/%2$d! </string>
-        <string name="share_result_title">EzQuiz Results</string>
-        <string name="toast_practice_again_coming_soon"> Retry feature will be added soon!</string>
-        <string name="error_cannot_find_id_for_retry">Error: ID not found for retry.</string>
+    <string name="toast_no_result_data">No result data.</string>
+    <string name="test_result_score_format">%1$d/%2$d (%3$d%%)</string>
+    <string name="test_result_message_excellent">You are excellent </string>
+    <string name="test_result_message_good">Congratulations! You have completed the test.</string>
+    <string name="test_result_message_needs_practice">You need more practice </string>
+    <string name="share_result_content">I just completed the test on EzQuiz with a score of %1$d/%2$d! </string>
+    <string name="share_result_title">EzQuiz Results</string>
+    <string name="toast_practice_again_coming_soon"> Retry feature will be added soon!</string>
+    <string name="error_cannot_find_id_for_retry">Error: ID not found for retry.</string>
     <string name="answer_true">True</string>
     <string name="answer_false">False</string>
     <string name="cd_close">Close</string>

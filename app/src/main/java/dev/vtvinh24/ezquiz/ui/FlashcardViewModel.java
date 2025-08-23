@@ -32,33 +32,18 @@ import dev.vtvinh24.ezquiz.util.SingleEvent;
 
 public class FlashcardViewModel extends AndroidViewModel {
 
-  public static class QuizDisplayItem {
-    public final long id;
-    public final Quiz quiz;
-
-    QuizDisplayItem(long id, Quiz quiz) {
-      this.id = id;
-      this.quiz = quiz;
-    }
-  }
-
   private final QuizRepository quizRepository;
   private final UserProgressRepository userProgressRepository;
   private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
-
   private final MutableLiveData<String> _sessionProgressText = new MutableLiveData<>();
   public final LiveData<String> sessionProgressText = _sessionProgressText;
-
   private final MutableLiveData<SingleEvent<List<FlashcardResult>>> _sessionFinished = new MutableLiveData<>();
   public final LiveData<SingleEvent<List<FlashcardResult>>> sessionFinished = _sessionFinished;
-
   private final MutableLiveData<List<QuizDisplayItem>> _flashcards = new MutableLiveData<>();
   public final LiveData<List<QuizDisplayItem>> flashcards = _flashcards;
-
   private final MutableLiveData<Integer> _currentCardPosition = new MutableLiveData<>();
   public final LiveData<Integer> currentCardPosition = _currentCardPosition;
-
   private final Map<Long, CardStatus> sessionProgress = new HashMap<>();
 
   public FlashcardViewModel(@NonNull Application application) {
@@ -70,6 +55,7 @@ public class FlashcardViewModel extends AndroidViewModel {
 
   /**
    * Bắt đầu một phiên học mới với tất cả các thẻ trong một bộ.
+   *
    * @param quizSetId ID của bộ câu hỏi.
    */
   public void startSession(long quizSetId) {
@@ -82,6 +68,7 @@ public class FlashcardViewModel extends AndroidViewModel {
 
   /**
    * Bắt đầu một phiên học đặc biệt chỉ với danh sách ID thẻ được chỉ định.
+   *
    * @param cardIds Danh sách ID của các thẻ cần học.
    */
   public void startSessionWithSpecificCards(List<Long> cardIds) {
@@ -98,6 +85,7 @@ public class FlashcardViewModel extends AndroidViewModel {
 
   /**
    * Xử lý danh sách các QuizEntity và cập nhật LiveData để hiển thị trên UI.
+   *
    * @param flashcardEntities Danh sách các thẻ từ database.
    */
   private void processAndDisplayCards(List<QuizEntity> flashcardEntities) {
@@ -126,7 +114,6 @@ public class FlashcardViewModel extends AndroidViewModel {
       updateProgressText();
     });
   }
-
 
   public void markAsKnown() {
     updateCardStatus(CardStatus.KNOWN);
@@ -244,5 +231,15 @@ public class FlashcardViewModel extends AndroidViewModel {
         Log.e("FlashcardViewModel", "Error saving flashcard progress: " + e.getMessage(), e);
       }
     });
+  }
+
+  public static class QuizDisplayItem {
+    public final long id;
+    public final Quiz quiz;
+
+    QuizDisplayItem(long id, Quiz quiz) {
+      this.id = id;
+      this.quiz = quiz;
+    }
   }
 }

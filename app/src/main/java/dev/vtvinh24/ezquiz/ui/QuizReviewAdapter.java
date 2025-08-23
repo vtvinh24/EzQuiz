@@ -17,99 +17,99 @@ import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 
 public class QuizReviewAdapter extends RecyclerView.Adapter<QuizReviewAdapter.ViewHolder> {
-    private final List<QuizEntity> quizzes;
-    private OnItemLongClickListener longClickListener;
+  private final List<QuizEntity> quizzes;
+  private OnItemLongClickListener longClickListener;
 
-    public QuizReviewAdapter(List<QuizEntity> quizzes) {
-        this.quizzes = quizzes;
+  public QuizReviewAdapter(List<QuizEntity> quizzes) {
+    this.quizzes = quizzes;
+  }
+
+  @NonNull
+  @Override
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_review, parent, false);
+    return new ViewHolder(view);
+  }
+
+  @Override
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    QuizEntity quiz = quizzes.get(position);
+
+    // Set question with numbering
+    holder.textQuestion.setText((position + 1) + ". " + quiz.question);
+
+    // Clear previous answers
+    holder.answersContainer.removeAllViews();
+
+    // Display all answers
+    for (int i = 0; i < quiz.answers.size(); i++) {
+      TextView answerView = new TextView(holder.itemView.getContext());
+      String answerText = getAnswerPrefix(i) + " " + quiz.answers.get(i);
+      answerView.setText(answerText);
+      answerView.setTextSize(16);
+      answerView.setPadding(16, 8, 16, 8);
+
+      // Highlight correct answers
+      if (quiz.correctAnswerIndices.contains(i)) {
+        answerView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.gradient_green_start));
+        answerView.setTypeface(null, Typeface.BOLD);
+        answerView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.gradient_green_start_alpha));
+      } else {
+        answerView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorOnSurface));
+        answerView.setTypeface(null, Typeface.NORMAL);
+      }
+
+      holder.answersContainer.addView(answerView);
     }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_review, parent, false);
-        return new ViewHolder(view);
+    // Display correct answer summary
+    StringBuilder correctAnswersText = new StringBuilder("Đáp án đúng: ");
+    for (int i = 0; i < quiz.correctAnswerIndices.size(); i++) {
+      int correctIndex = quiz.correctAnswerIndices.get(i);
+      correctAnswersText.append(getAnswerPrefix(correctIndex));
+      if (i < quiz.correctAnswerIndices.size() - 1) {
+        correctAnswersText.append(", ");
+      }
     }
+    holder.textCorrectAnswers.setText(correctAnswersText.toString());
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        QuizEntity quiz = quizzes.get(position);
+    // Set long click listener for edit/delete
+    holder.itemView.setOnLongClickListener(v -> {
+      if (longClickListener != null) {
+        longClickListener.onItemLongClick(quiz);
+        return true;
+      }
+      return false;
+    });
+  }
 
-        // Set question with numbering
-        holder.textQuestion.setText((position + 1) + ". " + quiz.question);
+  @Override
+  public int getItemCount() {
+    return quizzes.size();
+  }
 
-        // Clear previous answers
-        holder.answersContainer.removeAllViews();
+  private String getAnswerPrefix(int index) {
+    return String.valueOf((char) ('A' + index));
+  }
 
-        // Display all answers
-        for (int i = 0; i < quiz.answers.size(); i++) {
-            TextView answerView = new TextView(holder.itemView.getContext());
-            String answerText = getAnswerPrefix(i) + " " + quiz.answers.get(i);
-            answerView.setText(answerText);
-            answerView.setTextSize(16);
-            answerView.setPadding(16, 8, 16, 8);
+  public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+    this.longClickListener = listener;
+  }
 
-            // Highlight correct answers
-            if (quiz.correctAnswerIndices.contains(i)) {
-                answerView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.gradient_green_start));
-                answerView.setTypeface(null, Typeface.BOLD);
-                answerView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.gradient_green_start_alpha));
-            } else {
-                answerView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorOnSurface));
-                answerView.setTypeface(null, Typeface.NORMAL);
-            }
+  public interface OnItemLongClickListener {
+    void onItemLongClick(QuizEntity quiz);
+  }
 
-            holder.answersContainer.addView(answerView);
-        }
+  static class ViewHolder extends RecyclerView.ViewHolder {
+    TextView textQuestion;
+    LinearLayout answersContainer;
+    TextView textCorrectAnswers;
 
-        // Display correct answer summary
-        StringBuilder correctAnswersText = new StringBuilder("Đáp án đúng: ");
-        for (int i = 0; i < quiz.correctAnswerIndices.size(); i++) {
-            int correctIndex = quiz.correctAnswerIndices.get(i);
-            correctAnswersText.append(getAnswerPrefix(correctIndex));
-            if (i < quiz.correctAnswerIndices.size() - 1) {
-                correctAnswersText.append(", ");
-            }
-        }
-        holder.textCorrectAnswers.setText(correctAnswersText.toString());
-
-        // Set long click listener for edit/delete
-        holder.itemView.setOnLongClickListener(v -> {
-            if (longClickListener != null) {
-                longClickListener.onItemLongClick(quiz);
-                return true;
-            }
-            return false;
-        });
+    ViewHolder(View itemView) {
+      super(itemView);
+      textQuestion = itemView.findViewById(R.id.textQuestion);
+      answersContainer = itemView.findViewById(R.id.answersContainer);
+      textCorrectAnswers = itemView.findViewById(R.id.textCorrectAnswers);
     }
-
-    @Override
-    public int getItemCount() {
-        return quizzes.size();
-    }
-
-    private String getAnswerPrefix(int index) {
-        return String.valueOf((char) ('A' + index));
-    }
-
-    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        this.longClickListener = listener;
-    }
-
-    public interface OnItemLongClickListener {
-        void onItemLongClick(QuizEntity quiz);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textQuestion;
-        LinearLayout answersContainer;
-        TextView textCorrectAnswers;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            textQuestion = itemView.findViewById(R.id.textQuestion);
-            answersContainer = itemView.findViewById(R.id.answersContainer);
-            textCorrectAnswers = itemView.findViewById(R.id.textCorrectAnswers);
-        }
-    }
+  }
 }

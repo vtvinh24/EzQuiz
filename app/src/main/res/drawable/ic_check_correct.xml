@@ -4,7 +4,7 @@
         <layer-list>
             <item android:gravity="end|center_vertical" android:right="16dp">
                 <vector android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
-                    <path android:fillColor="#4CAF50" android:pathData="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41,-1.41z"/>
+                    <path android:fillColor="#4CAF50" android:pathData="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41,-1.41z" />
                 </vector>
             </item>
         </layer-list>

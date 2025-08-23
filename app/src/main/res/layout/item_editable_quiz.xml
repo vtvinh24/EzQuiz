@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_quiz"
+    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="8dp"
+    android:backgroundTint="@color/collection_card_background"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:strokeWidth="0dp"
-    android:backgroundTint="@color/collection_card_background"
-    style="@style/Widget.Material3.CardView.Elevated">
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,22 +23,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:orientation="horizontal">
 
             <!-- Question Number Chip -->
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_question_number"
+                style="@style/Widget.Material3.Chip.Assist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Q1"
-                android:textSize="12sp"
                 android:textColor="@android:color/white"
+                android:textSize="12sp"
                 app:chipBackgroundColor="@color/gradient_blue_start"
-                app:chipStrokeWidth="0dp"
                 app:chipMinHeight="32dp"
-                style="@style/Widget.Material3.Chip.Assist" />
+                app:chipStrokeWidth="0dp" />
 
             <View
                 android:layout_width="0dp"
@@ -49,12 +49,13 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:background="@drawable/button_group_background"
+                android:orientation="horizontal"
                 android:padding="4dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_move_up"
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="2dp"
@@ -63,11 +64,11 @@
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
                     app:iconSize="20dp"
-                    app:iconTint="@color/gradient_blue_start"
-                    style="@style/Widget.Material3.Button.IconButton" />
+                    app:iconTint="@color/gradient_blue_start" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_move_down"
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="2dp"
@@ -76,11 +77,11 @@
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
                     app:iconSize="20dp"
-                    app:iconTint="@color/gradient_blue_start"
-                    style="@style/Widget.Material3.Button.IconButton" />
+                    app:iconTint="@color/gradient_blue_start" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_delete_quiz"
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:contentDescription="Delete question"
@@ -88,8 +89,7 @@
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
                     app:iconSize="20dp"
-                    app:iconTint="@color/gradient_red_start"
-                    style="@style/Widget.Material3.Button.IconButton" />
+                    app:iconTint="@color/gradient_red_start" />
 
             </LinearLayout>
 
@@ -97,21 +97,21 @@
 
         <!-- Question Input -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:hint="Question text"
             app:boxStrokeColor="@color/gradient_blue_start"
-            app:hintTextColor="@color/gradient_blue_start"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            app:hintTextColor="@color/gradient_blue_start">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine|textCapSentences"
-                android:minLines="2"
                 android:maxLines="4"
+                android:minLines="2"
                 android:textColor="@color/black"
                 tools:text="What is the capital of France?" />
 
@@ -120,21 +120,21 @@
         <!-- Question Type Selection -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_question_type"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:hint="Question type"
             app:boxStrokeColor="@color/gradient_blue_start"
-            app:hintTextColor="@color/gradient_blue_start"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+            app:hintTextColor="@color/gradient_blue_start">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/spinner_question_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:textColor="@color/black"
-                android:text="Single Choice" />
+                android:text="Single Choice"
+                android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,9 +148,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="12dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
 
                 <FrameLayout
                     android:layout_width="32dp"
@@ -160,8 +160,8 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/circle_gradient_background"
-                        android:scaleType="centerCrop" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/circle_gradient_background" />
 
                     <ImageView
                         android:layout_width="16dp"
@@ -183,17 +183,17 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_answer"
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/gradient_green_start"
                     android:text="Add Option"
+                    android:textColor="@android:color/white"
                     android:textSize="12sp"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="start"
                     app:iconSize="16dp"
-                    android:backgroundTint="@color/gradient_green_start"
-                    android:textColor="@android:color/white"
-                    app:iconTint="@android:color/white"
-                    style="@style/Widget.Material3.Button" />
+                    app:iconTint="@android:color/white" />
 
             </LinearLayout>
 
@@ -202,11 +202,11 @@
                 android:id="@+id/recycler_answers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
                 android:background="@drawable/answer_options_background"
+                android:nestedScrollingEnabled="false"
                 android:padding="8dp"
-                tools:listitem="@layout/item_answer_option"
-                tools:itemCount="3" />
+                tools:itemCount="3"
+                tools:listitem="@layout/item_answer_option" />
 
         </LinearLayout>
 

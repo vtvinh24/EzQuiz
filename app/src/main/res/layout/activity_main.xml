@@ -20,15 +20,15 @@
         android:layout_gravity="bottom"
         android:background="@drawable/bottom_nav_background"
         android:elevation="16dp"
-        app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/bottom_nav_selector"
-        app:itemTextColor="@color/bottom_nav_selector"
+        app:itemActiveIndicatorStyle="@style/BottomNavActiveIndicator"
         app:itemIconSize="24dp"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemRippleColor="@android:color/transparent"
         app:itemTextAppearanceActive="@style/BottomNavActiveText"
         app:itemTextAppearanceInactive="@style/BottomNavInactiveText"
-        app:itemRippleColor="@android:color/transparent"
-        app:itemActiveIndicatorStyle="@style/BottomNavActiveIndicator" />
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_navigation_menu" />
 
     <!-- Full-Screen Loading Overlay -->
     <FrameLayout
@@ -37,23 +37,23 @@
         android:layout_height="match_parent"
         android:background="#80000000"
         android:clickable="true"
+        android:elevation="20dp"
         android:focusable="true"
-        android:visibility="gone"
-        android:elevation="20dp">
+        android:visibility="gone">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
+            android:backgroundTint="@color/white"
             app:cardCornerRadius="24dp"
-            app:cardElevation="8dp"
-            android:backgroundTint="@color/white">
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="24dp">
 
                 <!-- Lightning Icon with Animated Border -->

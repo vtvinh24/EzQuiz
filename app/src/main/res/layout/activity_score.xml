@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_surface_background"
@@ -20,59 +19,59 @@
 
             <!-- Header Card with Score -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
                 android:backgroundTint="@color/gradient_blue_start"
-                style="@style/Widget.Material3.CardView.Elevated">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="24dp"
-                    android:gravity="center">
+                    android:padding="24dp">
 
                     <ImageView
                         android:id="@+id/icon_result"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:src="@drawable/ic_trophy"
-                        android:background="@drawable/circle_white_background"
-                        android:padding="12dp"
-                        app:tint="@color/gradient_blue_start"
                         android:layout_marginBottom="16dp"
-                        android:contentDescription="Result icon" />
+                        android:background="@drawable/circle_white_background"
+                        android:contentDescription="Result icon"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_trophy"
+                        app:tint="@color/gradient_blue_start" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/text_score_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="Kết quả bài luyện tập"
                         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                         android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textStyle="bold" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/text_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
                         android:textColor="@android:color/white"
                         android:textStyle="bold"
-                        android:layout_marginBottom="8dp"
                         tools:text="8/10" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/text_score_percentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:alpha="0.9"
                         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                         android:textColor="@android:color/white"
-                        android:alpha="0.9"
                         tools:text="80% Chính xác" />
 
                 </LinearLayout>
@@ -83,29 +82,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="24dp"
-                android:layout_marginHorizontal="16dp">
+                android:orientation="horizontal">
 
                 <!-- Correct Answers Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_correct"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F1F8E9"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
                     app:strokeColor="#E8F5E8"
-                    android:backgroundTint="#F1F8E9">
+                    app:strokeWidth="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="24dp"
-                        android:gravity="center">
+                        android:padding="24dp">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_correct_count"
@@ -119,10 +118,10 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:text="Câu đúng"
                             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
+                            android:textColor="@color/text_secondary" />
 
                     </LinearLayout>
 
@@ -133,20 +132,20 @@
                     android:id="@+id/card_incorrect"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFF3F3"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
                     app:strokeColor="#FFEBEE"
-                    android:backgroundTint="#FFF3F3">
+                    app:strokeWidth="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="24dp"
-                        android:gravity="center">
+                        android:padding="24dp">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_incorrect_count"
@@ -160,10 +159,10 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:text="Câu sai"
                             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
+                            android:textColor="@color/text_secondary" />
 
                     </LinearLayout>
 
@@ -175,31 +174,31 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_try_again"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/button_blue"
+                    android:padding="16dp"
                     android:text="Luyện tập lại"
                     android:textSize="16sp"
-                    android:padding="16dp"
-                    app:cornerRadius="12dp"
-                    android:backgroundTint="@color/button_blue"
-                    android:layout_marginBottom="12dp" />
+                    app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_back_to_sets"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Quay lại bộ thẻ"
-                    android:textSize="16sp"
                     android:padding="16dp"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:text="Quay lại bộ thẻ"
+                    android:textColor="@color/button_blue"
+                    android:textSize="16sp"
                     app:cornerRadius="12dp"
-                    app:strokeColor="@color/button_blue"
-                    android:textColor="@color/button_blue" />
+                    app:strokeColor="@color/button_blue" />
 
             </LinearLayout>
 

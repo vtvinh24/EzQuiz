@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,7 +50,6 @@ import dev.vtvinh24.ezquiz.data.entity.QuizEntity;
 import dev.vtvinh24.ezquiz.data.entity.QuizSetEntity;
 import dev.vtvinh24.ezquiz.data.model.QRData;
 import dev.vtvinh24.ezquiz.data.model.Quiz;
-import dev.vtvinh24.ezquiz.data.repo.QuizSetRepository;
 import dev.vtvinh24.ezquiz.network.QuizImporter;
 import dev.vtvinh24.ezquiz.util.QRParser;
 
@@ -62,13 +59,11 @@ public class PostImportActivity extends AppCompatActivity {
 
   private static final String TAG = "PostImportActivity";
   private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
-
+  // QR scanner components
+  private final Gson gson = new Gson();
   private long selectedCollectionId = -1;
   private String setName = null;
   private boolean isProcessing = false;
-
-  // QR scanner components
-  private final Gson gson = new Gson();
   private ExecutorService cameraExecutor;
   private QRParser qrParser;
 

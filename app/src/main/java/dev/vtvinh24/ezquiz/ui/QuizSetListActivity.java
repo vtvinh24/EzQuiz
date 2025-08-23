@@ -46,7 +46,6 @@ public class QuizSetListActivity extends AppCompatActivity
   private long currentCollectionId;
 
 
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

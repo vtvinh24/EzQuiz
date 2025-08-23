@@ -17,19 +17,19 @@
             android:id="@+id/textQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
             android:textColor="@color/colorOnSurface"
-            android:layout_marginBottom="12dp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Đáp án:"
-            android:textSize="14sp"
-            android:textStyle="bold"
             android:textColor="@color/colorOnSurface"
-            android:layout_marginBottom="8dp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/answersContainer"
@@ -42,12 +42,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/gradient_green_start"
             android:drawableStart="@drawable/ic_check_correct"
             android:drawablePadding="8dp"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textColor="@color/gradient_green_start"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

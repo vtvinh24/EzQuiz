@@ -73,7 +73,7 @@ public class PreImportActivity extends AppCompatActivity {
     collections = collectionRepo.getAllCollections();
 
     ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-        android.R.layout.simple_dropdown_item_1line);
+            android.R.layout.simple_dropdown_item_1line);
 
     for (QuizCollectionEntity collection : collections) {
       adapter.add(collection.name);

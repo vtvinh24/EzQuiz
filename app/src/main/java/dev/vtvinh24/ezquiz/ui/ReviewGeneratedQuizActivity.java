@@ -10,18 +10,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -108,16 +104,16 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
 
   private void showExitConfirmationDialog() {
     new MaterialAlertDialogBuilder(this)
-        .setTitle("Bạn có chắc muốn thoát?")
-        .setMessage("Bạn chưa lưu bộ quiz này. Tất cả câu hỏi sẽ bị mất và dữ liệu tạo quiz sẽ được xóa.")
-        .setPositiveButton("Thoát", (dialog, which) -> {
-          finishWithResult(true);
-        })
-        .setNegativeButton("Ở lại", null)
-        .setNeutralButton("Lưu trước", (dialog, which) -> {
-          saveQuizSet();
-        })
-        .show();
+            .setTitle("Bạn có chắc muốn thoát?")
+            .setMessage("Bạn chưa lưu bộ quiz này. Tất cả câu hỏi sẽ bị mất và dữ liệu tạo quiz sẽ được xóa.")
+            .setPositiveButton("Thoát", (dialog, which) -> {
+              finishWithResult(true);
+            })
+            .setNegativeButton("Ở lại", null)
+            .setNeutralButton("Lưu trước", (dialog, which) -> {
+              saveQuizSet();
+            })
+            .show();
   }
 
   private void finishWithResult(boolean shouldClearData) {
@@ -131,11 +127,11 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
 
   private void showPreviewDialog() {
     new MaterialAlertDialogBuilder(this)
-        .setTitle("Quiz Preview")
-        .setMessage("Preview functionality will show a quick overview of your quiz questions and answers.")
-        .setPositiveButton("Coming Soon", null)
-        .setNegativeButton("Close", null)
-        .show();
+            .setTitle("Quiz Preview")
+            .setMessage("Preview functionality will show a quick overview of your quiz questions and answers.")
+            .setPositiveButton("Coming Soon", null)
+            .setNegativeButton("Close", null)
+            .show();
   }
 
   private void initializeDatabase() {
@@ -160,7 +156,8 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
     }
 
     try {
-      Type listType = new TypeToken<List<GeneratedQuizItem>>() {}.getType();
+      Type listType = new TypeToken<List<GeneratedQuizItem>>() {
+      }.getType();
       generatedQuizzes = new Gson().fromJson(quizzesJson, listType);
 
       if (generatedQuizzes == null || generatedQuizzes.isEmpty()) {
@@ -230,13 +227,13 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
 
   private void setupItemTouchHelper() {
     ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
       @Override
       public boolean onMove(@NonNull RecyclerView recyclerView,
-                           @NonNull RecyclerView.ViewHolder viewHolder,
-                           @NonNull RecyclerView.ViewHolder target) {
+                            @NonNull RecyclerView.ViewHolder viewHolder,
+                            @NonNull RecyclerView.ViewHolder target) {
         int fromPosition = viewHolder.getAdapterPosition();
         int toPosition = target.getAdapterPosition();
         adapter.moveQuiz(fromPosition, toPosition);
@@ -268,35 +265,35 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
 
   private void showAddQuestionDialog() {
     new MaterialAlertDialogBuilder(this)
-        .setTitle("Add New Question")
-        .setMessage("Choose where to add the new question:")
-        .setPositiveButton("Add at End", (dialog, which) -> {
-          adapter.addNewQuiz(adapter.getItemCount());
-          updateQuestionCount();
-          hasUnsavedChanges = true;
-        })
-        .setNeutralButton("Add at Beginning", (dialog, which) -> {
-          adapter.addNewQuiz(0);
-          updateQuestionCount();
-          hasUnsavedChanges = true;
-        })
-        .setNegativeButton("Cancel", null)
-        .show();
+            .setTitle("Add New Question")
+            .setMessage("Choose where to add the new question:")
+            .setPositiveButton("Add at End", (dialog, which) -> {
+              adapter.addNewQuiz(adapter.getItemCount());
+              updateQuestionCount();
+              hasUnsavedChanges = true;
+            })
+            .setNeutralButton("Add at Beginning", (dialog, which) -> {
+              adapter.addNewQuiz(0);
+              updateQuestionCount();
+              hasUnsavedChanges = true;
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
   }
 
   private void showDeleteQuestionConfirmation(int position) {
     new MaterialAlertDialogBuilder(this)
-        .setTitle("Delete Question")
-        .setMessage("Are you sure you want to delete this question?")
-        .setPositiveButton("Delete", (dialog, which) -> {
-          adapter.removeQuiz(position);
-          updateQuestionCount();
-          hasUnsavedChanges = true;
-        })
-        .setNegativeButton("Cancel", (dialog, which) -> {
-          adapter.notifyItemChanged(position);
-        })
-        .show();
+            .setTitle("Delete Question")
+            .setMessage("Are you sure you want to delete this question?")
+            .setPositiveButton("Delete", (dialog, which) -> {
+              adapter.removeQuiz(position);
+              updateQuestionCount();
+              hasUnsavedChanges = true;
+            })
+            .setNegativeButton("Cancel", (dialog, which) -> {
+              adapter.notifyItemChanged(position);
+            })
+            .show();
   }
 
   private void updateQuestionCount() {
@@ -358,7 +355,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
 
   private void setupCollectionSpinner() {
     ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-        android.R.layout.simple_spinner_item);
+            android.R.layout.simple_spinner_item);
     spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     for (QuizCollectionEntity collection : collections) {
@@ -424,7 +421,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
   }
 
   private void saveQuizSetToDatabase(String setName, QuizCollectionEntity collection,
-                                   List<GeneratedQuizItem> quizzes) {
+                                     List<GeneratedQuizItem> quizzes) {
     Log.d(TAG, "Saving quiz set: " + setName + " to collection: " + collection.name);
 
     // Xử lý description - nếu trống thì dùng mặc định
@@ -456,7 +453,7 @@ public class ReviewGeneratedQuizActivity extends AppCompatActivity implements Ed
       quiz.correctAnswerIndices = item.correctAnswerIndices;
       quiz.type = item.type;
       quiz.quizSetId = quizSetId;
-        quiz.order = i;
+      quiz.order = i;
       quiz.createdAt = System.currentTimeMillis();
       quiz.updatedAt = System.currentTimeMillis();
 

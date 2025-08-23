@@ -31,17 +31,6 @@ public class FlashcardActivity extends AppCompatActivity {
   public static final String EXTRA_SET_ID = "setId";
 
   private FlashcardViewModel viewModel;
-  private SwipeableCardView swipeableCard;
-  private TextView tvQuestion, tvAnswer, tvCardCounter;
-  private View cardFront, cardBack;
-  private ProgressBar progressBar;
-  private TextView btnKnow, btnDontKnow;
-  private Button btnJumpTo;
-  private ImageButton btnPreviousCard, btnBack;
-
-  private QuizDisplayItem currentCard;
-  private boolean isAnswerRevealed = false;
-
   private final ActivityResultLauncher<Intent> summaryLauncher = registerForActivityResult(
           new ActivityResultContracts.StartActivityForResult(),
           result -> {
@@ -66,6 +55,15 @@ public class FlashcardActivity extends AppCompatActivity {
               finish();
             }
           });
+  private SwipeableCardView swipeableCard;
+  private TextView tvQuestion, tvAnswer, tvCardCounter;
+  private View cardFront, cardBack;
+  private ProgressBar progressBar;
+  private TextView btnKnow, btnDontKnow;
+  private Button btnJumpTo;
+  private ImageButton btnPreviousCard, btnBack;
+  private QuizDisplayItem currentCard;
+  private boolean isAnswerRevealed = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

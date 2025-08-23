@@ -7,30 +7,30 @@
 
     <!-- Header Card with Gradient -->
     <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
         android:backgroundTint="@color/gradient_blue_start"
-        style="@style/Widget.Material3.CardView.Elevated">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="24dp"
-            android:gravity="center_vertical">
+            android:padding="24dp">
 
             <!-- Header Icon -->
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_folder"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/circle_white_background"
                 android:padding="12dp"
-                app:tint="@color/gradient_blue_start"
-                android:layout_marginEnd="16dp" />
+                android:src="@drawable/ic_folder"
+                app:tint="@color/gradient_blue_start" />
 
             <!-- Header Text -->
             <LinearLayout
@@ -42,34 +42,34 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:text="My Collections"
                     android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                     android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp" />
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:alpha="0.9"
                     android:text="Organize your quizzes into collections"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@android:color/white"
-                    android:alpha="0.9" />
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
             <!-- Stats Badge -->
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_total_collections"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
                 android:text="0"
                 android:textColor="@color/gradient_blue_start"
                 app:chipBackgroundColor="@android:color/white"
-                app:chipStrokeWidth="0dp"
-                android:clickable="false"
-                android:focusable="false"
-                style="@style/Widget.Material3.Chip.Filter" />
+                app:chipStrokeWidth="0dp" />
 
         </LinearLayout>
 
@@ -78,32 +78,32 @@
     <!-- Selection Toolbar -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/selection_toolbar"
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:backgroundTint="?attr/colorPrimary"
         android:visibility="gone"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        android:backgroundTint="?attr/colorPrimary"
-        style="@style/Widget.Material3.CardView.Elevated">
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical">
+            android:padding="16dp">
 
             <!-- Close Selection Button -->
             <ImageView
                 android:id="@+id/btn_close_selection"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_close"
+                android:layout_marginEnd="16dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
-                app:tint="@android:color/white"
-                android:layout_marginEnd="16dp" />
+                android:src="@drawable/ic_close"
+                app:tint="@android:color/white" />
 
             <!-- Selection Title -->
             <TextView
@@ -121,21 +121,21 @@
                 android:id="@+id/btn_edit_selected"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_edit"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
-                app:tint="@android:color/white"
-                android:layout_marginEnd="8dp"
-                android:visibility="gone" />
+                android:src="@drawable/ic_edit"
+                android:visibility="gone"
+                app:tint="@android:color/white" />
 
             <!-- Delete Button -->
             <ImageView
                 android:id="@+id/btn_delete_selected"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_delete"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
+                android:src="@drawable/ic_delete"
                 app:tint="@android:color/white" />
 
         </LinearLayout>
@@ -158,43 +158,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="140dp"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="32dp"
         android:visibility="gone">
 
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_folder"
-            app:tint="?attr/colorPrimary"
+            android:layout_marginBottom="24dp"
             android:alpha="0.6"
-            android:layout_marginBottom="24dp" />
+            android:src="@drawable/ic_folder"
+            app:tint="?attr/colorPrimary" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="No Collections Yet"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginBottom="8dp" />
+            android:textColor="?attr/colorOnSurface" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Create your first collection to organize your quizzes"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
             android:textAlignment="center"
-            android:layout_marginBottom="24dp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_create_first_collection"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create Collection"
-            app:icon="@drawable/ic_add"
-            style="@style/Widget.Material3.Button" />
+            app:icon="@drawable/ic_add" />
 
     </LinearLayout>
 
@@ -207,8 +207,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"
         android:text="New Collection"
-        app:icon="@drawable/ic_add"
         app:backgroundTint="@color/gradient_green_start"
+        app:icon="@drawable/ic_add"
         app:iconTint="@android:color/white" />
 
     <!-- Enhanced FAB for Import -->
@@ -219,8 +219,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="Import Quizzes"
-        app:icon="@drawable/ic_qr_code"
         app:backgroundTint="@color/gradient_blue_start"
+        app:icon="@drawable/ic_qr_code"
         app:iconTint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

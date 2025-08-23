@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -155,22 +154,47 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
 
   private String getDifficultyText(int difficulty) {
     switch (difficulty) {
-      case 1: return "Easy";
-      case 2: return "Medium";
-      case 3: return "Hard";
-      default: return "Unknown";
+      case 1:
+        return "Easy";
+      case 2:
+        return "Medium";
+      case 3:
+        return "Hard";
+      default:
+        return "Unknown";
     }
   }
 
   private int getDifficultyColor(int difficulty) {
     switch (difficulty) {
-      case 1: return R.color.gradient_green_start;
-      case 2: return R.color.gradient_orange_start;
-      case 3: return R.color.gradient_pink_start;
-      default: return R.color.gradient_blue_start;
+      case 1:
+        return R.color.gradient_green_start;
+      case 2:
+        return R.color.gradient_orange_start;
+      case 3:
+        return R.color.gradient_pink_start;
+      default:
+        return R.color.gradient_blue_start;
     }
   }
 
+
+  public interface OnItemClickListener {
+    void onItemClick(QuizSetEntity quizSet);
+  }
+
+
+  public interface OnPlayFlashcardClickListener {
+    void onPlayFlashcardClick(long quizSetId);
+  }
+
+  public interface OnPracticeClickListener {
+    void onPracticeClick(long quizSetId);
+  }
+
+  public interface OnTestClickListener {
+    void onTestClick(long quizSetId);
+  }
 
   static class ViewHolder extends RecyclerView.ViewHolder {
     TextView textName, textDescription;
@@ -192,22 +216,5 @@ public class QuizSetAdapter extends RecyclerView.Adapter<QuizSetAdapter.ViewHold
       btnPracticeQuiz = itemView.findViewById(R.id.btn_practice_quiz);
       btnTest = itemView.findViewById(R.id.btn_test);
     }
-  }
-
-
-  public interface OnItemClickListener {
-    void onItemClick(QuizSetEntity quizSet);
-  }
-
-  public interface OnPlayFlashcardClickListener {
-    void onPlayFlashcardClick(long quizSetId);
-  }
-
-  public interface OnPracticeClickListener {
-    void onPracticeClick(long quizSetId);
-  }
-
-  public interface OnTestClickListener {
-    void onTestClick(long quizSetId);
   }
 }

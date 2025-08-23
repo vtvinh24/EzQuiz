@@ -9,8 +9,8 @@
         android:id="@+id/card_front"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="24dp">
 
         <TextView
@@ -18,10 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="?android:attr/textColorPrimary"
             android:lineSpacingExtra="4dp"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -30,8 +30,8 @@
         android:id="@+id/card_back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="24dp"
         android:visibility="gone">
 
@@ -40,10 +40,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="18sp"
-            android:textColor="?android:attr/textColorSecondary"
             android:lineSpacingExtra="4dp"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

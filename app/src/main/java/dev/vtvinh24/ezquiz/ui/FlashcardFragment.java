@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import dev.vtvinh24.ezquiz.R;
 import dev.vtvinh24.ezquiz.data.model.Quiz;

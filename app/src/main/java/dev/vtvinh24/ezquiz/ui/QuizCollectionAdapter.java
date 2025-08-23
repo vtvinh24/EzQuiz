@@ -30,16 +30,15 @@ public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAd
   private final OnItemClickListener listener;
   private final Context context;
   private final List<Long> selectedItems = new ArrayList<>();
-  private boolean isSelectionMode = false;
-
   // Array of gradient colors for collection icons
   private final int[][] gradientColors = {
-      {R.color.gradient_blue_start, R.color.gradient_blue_end},
-      {R.color.gradient_green_start, R.color.gradient_green_end},
-      {R.color.gradient_orange_start, R.color.gradient_orange_end},
-      {R.color.gradient_purple_start, R.color.gradient_purple_end},
-      {R.color.gradient_pink_start, R.color.gradient_pink_end}
+          {R.color.gradient_blue_start, R.color.gradient_blue_end},
+          {R.color.gradient_green_start, R.color.gradient_green_end},
+          {R.color.gradient_orange_start, R.color.gradient_orange_end},
+          {R.color.gradient_purple_start, R.color.gradient_purple_end},
+          {R.color.gradient_pink_start, R.color.gradient_pink_end}
   };
+  private boolean isSelectionMode = false;
 
   public QuizCollectionAdapter(List<QuizCollectionEntity> collections, OnItemClickListener listener) {
     this.collections = collections;
@@ -258,7 +257,9 @@ public class QuizCollectionAdapter extends RecyclerView.Adapter<QuizCollectionAd
 
   public interface OnSelectionModeListener extends OnItemClickListener {
     void onSelectionModeStarted();
+
     void onSelectionModeEnded();
+
     void onSelectionChanged(int selectedCount);
   }
 

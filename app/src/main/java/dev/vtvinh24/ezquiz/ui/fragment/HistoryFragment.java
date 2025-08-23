@@ -25,185 +25,185 @@ import dev.vtvinh24.ezquiz.ui.adapter.HistoryAdapter;
 
 public class HistoryFragment extends Fragment {
 
-    private RecyclerView recyclerHistory;
-    private LinearLayout layoutLoading, layoutEmpty;
-    private ChipGroup chipGroupFilters;
-    private Chip chipAll, chipInProgress, chipCompleted, chipTotalHistory;
+  private RecyclerView recyclerHistory;
+  private LinearLayout layoutLoading, layoutEmpty;
+  private ChipGroup chipGroupFilters;
+  private Chip chipAll, chipInProgress, chipCompleted, chipTotalHistory;
 
-    private HistoryAdapter historyAdapter;
-    private HistoryRepository historyRepository;
-    private LiveData<List<HistoryItem>> currentLiveData;
+  private HistoryAdapter historyAdapter;
+  private HistoryRepository historyRepository;
+  private LiveData<List<HistoryItem>> currentLiveData;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_history, container, false);
-    }
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_history, container, false);
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-        initializeViews(view);
-        setupRecyclerView();
-        setupFilters();
-        setupRepository();
-        loadInitialData();
-    }
+    initializeViews(view);
+    setupRecyclerView();
+    setupFilters();
+    setupRepository();
+    loadInitialData();
+  }
 
-    private void initializeViews(View view) {
-        recyclerHistory = view.findViewById(R.id.recycler_history);
-        layoutLoading = view.findViewById(R.id.layout_loading);
-        layoutEmpty = view.findViewById(R.id.layout_empty);
-        chipGroupFilters = view.findViewById(R.id.chip_group_filters);
-        chipAll = view.findViewById(R.id.chip_all);
-        chipInProgress = view.findViewById(R.id.chip_in_progress);
-        chipCompleted = view.findViewById(R.id.chip_completed);
-        chipTotalHistory = view.findViewById(R.id.chip_total_history);
-    }
+  private void initializeViews(View view) {
+    recyclerHistory = view.findViewById(R.id.recycler_history);
+    layoutLoading = view.findViewById(R.id.layout_loading);
+    layoutEmpty = view.findViewById(R.id.layout_empty);
+    chipGroupFilters = view.findViewById(R.id.chip_group_filters);
+    chipAll = view.findViewById(R.id.chip_all);
+    chipInProgress = view.findViewById(R.id.chip_in_progress);
+    chipCompleted = view.findViewById(R.id.chip_completed);
+    chipTotalHistory = view.findViewById(R.id.chip_total_history);
+  }
 
-    private void setupRecyclerView() {
-        historyAdapter = new HistoryAdapter(getContext());
-        recyclerHistory.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerHistory.setAdapter(historyAdapter);
-    }
+  private void setupRecyclerView() {
+    historyAdapter = new HistoryAdapter(getContext());
+    recyclerHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+    recyclerHistory.setAdapter(historyAdapter);
+  }
 
-    private void setupFilters() {
-        chipGroupFilters.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (checkedIds.isEmpty()) return;
+  private void setupFilters() {
+    chipGroupFilters.setOnCheckedStateChangeListener((group, checkedIds) -> {
+      if (checkedIds.isEmpty()) return;
 
-            int checkedId = checkedIds.get(0);
-            if (checkedId == R.id.chip_all) {
-                loadAllHistory();
-            } else if (checkedId == R.id.chip_in_progress) {
-                loadInProgressHistory();
-            } else if (checkedId == R.id.chip_completed) {
-                loadCompletedHistory();
-            } else if (checkedId == R.id.chip_total_history) {
-                loadTotalHistory();
-            }
-        });
-    }
-
-    private void setupRepository() {
-        historyRepository = new HistoryRepository(getContext());
-    }
-
-    private void loadInitialData() {
+      int checkedId = checkedIds.get(0);
+      if (checkedId == R.id.chip_all) {
         loadAllHistory();
+      } else if (checkedId == R.id.chip_in_progress) {
+        loadInProgressHistory();
+      } else if (checkedId == R.id.chip_completed) {
+        loadCompletedHistory();
+      } else if (checkedId == R.id.chip_total_history) {
+        loadTotalHistory();
+      }
+    });
+  }
+
+  private void setupRepository() {
+    historyRepository = new HistoryRepository(getContext());
+  }
+
+  private void loadInitialData() {
+    loadAllHistory();
+  }
+
+  private void loadAllHistory() {
+    showLoading();
+    if (currentLiveData != null) {
+      currentLiveData.removeObservers(getViewLifecycleOwner());
     }
 
-    private void loadAllHistory() {
-        showLoading();
-        if (currentLiveData != null) {
-            currentLiveData.removeObservers(getViewLifecycleOwner());
-        }
+    currentLiveData = historyRepository.getAllHistoryItems();
+    currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
+      hideLoading();
+      if (historyItems == null || historyItems.isEmpty()) {
+        showEmpty();
+      } else {
+        showContent();
+        historyAdapter.setHistoryItems(historyItems);
+      }
+    });
+  }
 
-        currentLiveData = historyRepository.getAllHistoryItems();
-        currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
-            hideLoading();
-            if (historyItems == null || historyItems.isEmpty()) {
-                showEmpty();
-            } else {
-                showContent();
-                historyAdapter.setHistoryItems(historyItems);
-            }
-        });
+  private void loadInProgressHistory() {
+    showLoading();
+    if (currentLiveData != null) {
+      currentLiveData.removeObservers(getViewLifecycleOwner());
     }
 
-    private void loadInProgressHistory() {
-        showLoading();
-        if (currentLiveData != null) {
-            currentLiveData.removeObservers(getViewLifecycleOwner());
-        }
+    currentLiveData = historyRepository.getInProgressItems();
+    currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
+      hideLoading();
+      if (historyItems == null || historyItems.isEmpty()) {
+        showEmpty();
+      } else {
+        showContent();
+        historyAdapter.setHistoryItems(historyItems);
+      }
+    });
+  }
 
-        currentLiveData = historyRepository.getInProgressItems();
-        currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
-            hideLoading();
-            if (historyItems == null || historyItems.isEmpty()) {
-                showEmpty();
-            } else {
-                showContent();
-                historyAdapter.setHistoryItems(historyItems);
-            }
-        });
+  private void loadCompletedHistory() {
+    showLoading();
+    if (currentLiveData != null) {
+      currentLiveData.removeObservers(getViewLifecycleOwner());
     }
 
-    private void loadCompletedHistory() {
-        showLoading();
-        if (currentLiveData != null) {
-            currentLiveData.removeObservers(getViewLifecycleOwner());
-        }
+    currentLiveData = historyRepository.getCompletedItems();
+    currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
+      hideLoading();
+      if (historyItems == null || historyItems.isEmpty()) {
+        showEmpty();
+      } else {
+        showContent();
+        historyAdapter.setHistoryItems(historyItems);
+      }
+    });
+  }
 
-        currentLiveData = historyRepository.getCompletedItems();
-        currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
-            hideLoading();
-            if (historyItems == null || historyItems.isEmpty()) {
-                showEmpty();
-            } else {
-                showContent();
-                historyAdapter.setHistoryItems(historyItems);
-            }
-        });
+  private void loadTotalHistory() {
+    showLoading();
+    if (currentLiveData != null) {
+      currentLiveData.removeObservers(getViewLifecycleOwner());
     }
 
-    private void loadTotalHistory() {
-        showLoading();
-        if (currentLiveData != null) {
-            currentLiveData.removeObservers(getViewLifecycleOwner());
-        }
+    currentLiveData = historyRepository.getAllHistoryItems(); // Assuming this method exists and fetches all history items
+    currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
+      hideLoading();
+      if (historyItems == null || historyItems.isEmpty()) {
+        showEmpty();
+      } else {
+        showContent();
+        historyAdapter.setHistoryItems(historyItems);
+      }
+    });
+  }
 
-        currentLiveData = historyRepository.getAllHistoryItems(); // Assuming this method exists and fetches all history items
-        currentLiveData.observe(getViewLifecycleOwner(), historyItems -> {
-            hideLoading();
-            if (historyItems == null || historyItems.isEmpty()) {
-                showEmpty();
-            } else {
-                showContent();
-                historyAdapter.setHistoryItems(historyItems);
-            }
-        });
-    }
+  private void showLoading() {
+    layoutLoading.setVisibility(View.VISIBLE);
+    layoutEmpty.setVisibility(View.GONE);
+    recyclerHistory.setVisibility(View.GONE);
+  }
 
-    private void showLoading() {
-        layoutLoading.setVisibility(View.VISIBLE);
-        layoutEmpty.setVisibility(View.GONE);
-        recyclerHistory.setVisibility(View.GONE);
-    }
+  private void hideLoading() {
+    layoutLoading.setVisibility(View.GONE);
+  }
 
-    private void hideLoading() {
-        layoutLoading.setVisibility(View.GONE);
-    }
+  private void showEmpty() {
+    layoutEmpty.setVisibility(View.VISIBLE);
+    recyclerHistory.setVisibility(View.GONE);
+  }
 
-    private void showEmpty() {
-        layoutEmpty.setVisibility(View.VISIBLE);
-        recyclerHistory.setVisibility(View.GONE);
-    }
+  private void showContent() {
+    layoutEmpty.setVisibility(View.GONE);
+    recyclerHistory.setVisibility(View.VISIBLE);
+  }
 
-    private void showContent() {
-        layoutEmpty.setVisibility(View.GONE);
-        recyclerHistory.setVisibility(View.VISIBLE);
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (chipAll.isChecked()) {
+      loadAllHistory();
+    } else if (chipInProgress.isChecked()) {
+      loadInProgressHistory();
+    } else if (chipCompleted.isChecked()) {
+      loadCompletedHistory();
+    } else if (chipTotalHistory.isChecked()) {
+      loadTotalHistory();
     }
+  }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (chipAll.isChecked()) {
-            loadAllHistory();
-        } else if (chipInProgress.isChecked()) {
-            loadInProgressHistory();
-        } else if (chipCompleted.isChecked()) {
-            loadCompletedHistory();
-        } else if (chipTotalHistory.isChecked()) {
-            loadTotalHistory();
-        }
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if (currentLiveData != null) {
+      currentLiveData.removeObservers(getViewLifecycleOwner());
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (currentLiveData != null) {
-            currentLiveData.removeObservers(getViewLifecycleOwner());
-        }
-    }
+  }
 }

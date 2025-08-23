@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -255,15 +255,15 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
 
   private void showDeleteConfirmationDialog(List<QuizCollectionEntity> selectedItems) {
     String message = selectedItems.size() == 1
-        ? "Are you sure you want to delete \"" + selectedItems.get(0).name + "\"?"
-        : "Are you sure you want to delete " + selectedItems.size() + " collections?";
+            ? "Are you sure you want to delete \"" + selectedItems.get(0).name + "\"?"
+            : "Are you sure you want to delete " + selectedItems.size() + " collections?";
 
     new AlertDialog.Builder(requireContext())
-        .setTitle("Delete Collections")
-        .setMessage(message)
-        .setPositiveButton("Delete", (dialog, which) -> deleteSelectedCollections(selectedItems))
-        .setNegativeButton("Cancel", null)
-        .show();
+            .setTitle("Delete Collections")
+            .setMessage(message)
+            .setPositiveButton("Delete", (dialog, which) -> deleteSelectedCollections(selectedItems))
+            .setNegativeButton("Cancel", null)
+            .show();
   }
 
   private void deleteSelectedCollections(List<QuizCollectionEntity> selectedItems) {
@@ -279,8 +279,8 @@ public class CollectionsFragment extends Fragment implements QuizCollectionAdapt
         adapter.clearSelection();
 
         String message = selectedItems.size() == 1
-            ? "Collection deleted successfully"
-            : selectedItems.size() + " collections deleted successfully";
+                ? "Collection deleted successfully"
+                : selectedItems.size() + " collections deleted successfully";
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
       });
     });

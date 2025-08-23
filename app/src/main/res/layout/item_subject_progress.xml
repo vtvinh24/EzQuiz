@@ -4,35 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp">
+    android:padding="16dp">
 
     <!-- Subject Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom="12dp"
         android:gravity="center_vertical"
-        android:layout_marginBottom="12dp">
+        android:orientation="horizontal">
 
         <!-- Subject Icon -->
         <ImageView
             android:id="@+id/icon_subject"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_folder"
             android:background="@drawable/circle_gradient_background"
             android:padding="8dp"
+            android:src="@drawable/ic_folder"
             app:tint="@color/gradient_blue_start" />
 
         <!-- Subject Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
+            android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text_subject_name"
@@ -47,10 +47,10 @@
                 android:id="@+id/text_subject_stats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="45/60 thẻ đã học"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
-                android:layout_marginTop="2dp"
                 tools:text="45/60 thẻ đã học" />
 
         </LinearLayout>
@@ -59,8 +59,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text_subject_percentage"
@@ -68,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:text="75%"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:textStyle="bold"
                 android:textColor="@color/gradient_blue_start"
+                android:textStyle="bold"
                 tools:text="75%" />
 
         </LinearLayout>
@@ -80,8 +80,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <!-- Large Progress Circle -->
         <FrameLayout
@@ -108,11 +108,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="75%"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 android:textColor="@color/gradient_blue_start"
                 android:textStyle="bold"
-                android:gravity="center"
                 tools:text="75%" />
 
         </FrameLayout>
@@ -128,16 +128,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="12dp"
                     android:layout_height="12dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/circle_background"
-                    android:backgroundTint="#4CAF50"
-                    android:layout_marginEnd="8dp" />
+                    android:backgroundTint="#4CAF50" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="0dp"
@@ -153,8 +153,8 @@
                     android:layout_height="wrap_content"
                     android:text="45"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textStyle="bold"
                     android:textColor="#4CAF50"
+                    android:textStyle="bold"
                     tools:text="45" />
 
             </LinearLayout>
@@ -163,16 +163,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="12dp"
                     android:layout_height="12dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/circle_background"
-                    android:backgroundTint="#FF9800"
-                    android:layout_marginEnd="8dp" />
+                    android:backgroundTint="#FF9800" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="0dp"
@@ -188,8 +188,8 @@
                     android:layout_height="wrap_content"
                     android:text="10"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textStyle="bold"
                     android:textColor="#FF9800"
+                    android:textStyle="bold"
                     tools:text="10" />
 
             </LinearLayout>
@@ -198,15 +198,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="12dp"
                     android:layout_height="12dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/circle_background"
-                    android:backgroundTint="#F44336"
-                    android:layout_marginEnd="8dp" />
+                    android:backgroundTint="#F44336" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="0dp"
@@ -222,8 +222,8 @@
                     android:layout_height="wrap_content"
                     android:text="5"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textStyle="bold"
                     android:textColor="#F44336"
+                    android:textStyle="bold"
                     tools:text="5" />
 
             </LinearLayout>
@@ -235,15 +235,15 @@
     <!-- Action Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_continue_study"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tiếp tục học"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/gradient_blue_start"
+        android:text="Tiếp tục học"
         android:textColor="@android:color/white"
-        style="@style/Widget.Material3.Button"
         app:icon="@drawable/ic_arrow_forward"
-        app:iconTint="@android:color/white"
-        app:iconGravity="textEnd" />
+        app:iconGravity="textEnd"
+        app:iconTint="@android:color/white" />
 
 </LinearLayout>

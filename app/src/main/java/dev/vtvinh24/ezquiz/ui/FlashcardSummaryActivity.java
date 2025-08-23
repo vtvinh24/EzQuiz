@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

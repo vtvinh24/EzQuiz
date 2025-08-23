@@ -19,13 +19,13 @@
 
             <!-- Header Card with User Stats -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
                 android:backgroundTint="@color/gradient_blue_start"
-                style="@style/Widget.Material3.CardView.Elevated">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -37,24 +37,24 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="20dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="64dp"
                             android:layout_height="64dp"
-                            android:src="@drawable/ic_brain_ai"
                             android:background="@drawable/circle_white_background"
                             android:padding="16dp"
+                            android:src="@drawable/ic_brain_ai"
                             app:tint="@color/gradient_blue_start" />
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="16dp">
+                            android:orientation="vertical">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
@@ -68,11 +68,11 @@
                                 android:id="@+id/text_overall_progress"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:alpha="0.9"
                                 android:text="Bạn đã học 75% nội dung"
                                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                                android:textColor="@android:color/white"
-                                android:alpha="0.9"
-                                android:layout_marginTop="4dp" />
+                                android:textColor="@android:color/white" />
 
                         </LinearLayout>
 
@@ -80,8 +80,8 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="vertical">
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -93,19 +93,19 @@
                                 android:id="@+id/text_streak_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
                                 android:text="7"
                                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                                 android:textColor="#FFD700"
-                                android:textStyle="bold"
-                                android:layout_marginTop="4dp" />
+                                android:textStyle="bold" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:alpha="0.8"
                                 android:text="ngày"
                                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                                android:textColor="@android:color/white"
-                                android:alpha="0.8" />
+                                android:textColor="@android:color/white" />
 
                         </LinearLayout>
 
@@ -120,17 +120,17 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="8dp">
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:alpha="0.9"
                                 android:text="Tổng tiến độ"
                                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                                android:textColor="@android:color/white"
-                                android:alpha="0.9" />
+                                android:textColor="@android:color/white" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/text_overall_percentage"
@@ -148,10 +148,10 @@
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="12dp"
+                            android:layout_marginBottom="4dp"
                             android:progress="75"
-                            android:progressTint="#FFD700"
                             android:progressBackgroundTint="#FFFFFF40"
-                            android:layout_marginBottom="4dp" />
+                            android:progressTint="#FFD700" />
 
                     </LinearLayout>
 
@@ -163,36 +163,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <!-- Total Flashcards -->
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Material3.CardView.Elevated"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F3E5F5"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
                     app:strokeColor="#E3F2FD"
-                    android:backgroundTint="#F3E5F5"
-                    style="@style/Widget.Material3.CardView.Elevated">
+                    app:strokeWidth="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:background="@drawable/gradient_purple_card"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="@drawable/gradient_purple_card">
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:layout_marginBottom="8dp"
                             android:src="@drawable/ic_quiz"
-                            app:tint="#7B1FA2"
-                            android:layout_marginBottom="8dp" />
+                            app:tint="#7B1FA2" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_total_flashcards"
@@ -200,18 +200,18 @@
                             android:layout_height="wrap_content"
                             android:text="156"
                             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                            android:textStyle="bold"
                             android:textColor="#4A148C"
+                            android:textStyle="bold"
                             tools:text="156" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="Tổng thẻ"
                             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                             android:textColor="#7B1FA2"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -219,31 +219,31 @@
 
                 <!-- Mastered Cards -->
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Material3.CardView.Elevated"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F1F8E9"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
                     app:strokeColor="#E8F5E8"
-                    android:backgroundTint="#F1F8E9"
-                    style="@style/Widget.Material3.CardView.Elevated">
+                    app:strokeWidth="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:background="@drawable/gradient_known_card"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="@drawable/gradient_known_card">
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:layout_marginBottom="8dp"
                             android:src="@drawable/ic_check_circle"
-                            app:tint="#2E7D32"
-                            android:layout_marginBottom="8dp" />
+                            app:tint="#2E7D32" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_mastered_cards"
@@ -251,18 +251,18 @@
                             android:layout_height="wrap_content"
                             android:text="98"
                             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                            android:textStyle="bold"
                             android:textColor="#1B5E20"
+                            android:textStyle="bold"
                             tools:text="98" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="Đã thành thạo"
                             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                             android:textColor="#2E7D32"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -274,36 +274,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <!-- Study Sessions -->
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Material3.CardView.Elevated"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FFF8E1"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
                     app:strokeColor="#FFF3E0"
-                    android:backgroundTint="#FFF8E1"
-                    style="@style/Widget.Material3.CardView.Elevated">
+                    app:strokeWidth="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:background="@drawable/gradient_orange_card"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="@drawable/gradient_orange_card">
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:layout_marginBottom="8dp"
                             android:src="@drawable/ic_history"
-                            app:tint="#E65100"
-                            android:layout_marginBottom="8dp" />
+                            app:tint="#E65100" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_study_sessions"
@@ -311,18 +311,18 @@
                             android:layout_height="wrap_content"
                             android:text="23"
                             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                            android:textStyle="bold"
                             android:textColor="#BF360C"
+                            android:textStyle="bold"
                             tools:text="23" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="Phiên học"
                             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                             android:textColor="#E65100"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -330,31 +330,31 @@
 
                 <!-- Study Time -->
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Material3.CardView.Elevated"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#E0F2F1"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
                     app:strokeColor="#E1F5FE"
-                    android:backgroundTint="#E0F2F1"
-                    style="@style/Widget.Material3.CardView.Elevated">
+                    app:strokeWidth="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:background="@drawable/gradient_cyan_card"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="@drawable/gradient_cyan_card">
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:layout_marginBottom="8dp"
                             android:src="@drawable/ic_auto_awesome"
-                            app:tint="#00695C"
-                            android:layout_marginBottom="8dp" />
+                            app:tint="#00695C" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/text_study_time"
@@ -362,18 +362,18 @@
                             android:layout_height="wrap_content"
                             android:text="12h"
                             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                            android:textStyle="bold"
                             android:textColor="#004D40"
+                            android:textStyle="bold"
                             tools:text="12h" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="Thời gian học"
                             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                             android:textColor="#00695C"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -383,12 +383,12 @@
 
             <!-- Weekly Progress Chart -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                style="@style/Widget.Material3.CardView.Elevated">
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -399,19 +399,19 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:text="Tiến độ 7 ngày qua"
                         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="16dp" />
+                        android:textStyle="bold" />
 
                     <!-- Weekly Chart Container -->
                     <LinearLayout
                         android:id="@+id/weekly_chart_container"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
-                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp"
                         android:gravity="bottom|center_horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:orientation="horizontal">
 
                         <!-- Days will be added programmatically -->
 
@@ -427,63 +427,63 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="T2"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="T3"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="T4"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="T5"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="T6"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="T7"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="CN"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                            android:gravity="center"
                             android:textColor="?android:attr/textColorSecondary" />
 
                     </LinearLayout>
@@ -494,12 +494,12 @@
 
             <!-- Subject Progress -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                style="@style/Widget.Material3.CardView.Elevated">
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -510,10 +510,10 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:text="Tiến độ theo chủ đề"
                         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="16dp" />
+                        android:textStyle="bold" />
 
                     <!-- Subject Progress List -->
                     <androidx.recyclerview.widget.RecyclerView
@@ -530,11 +530,11 @@
 
             <!-- Achievements Section -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                style="@style/Widget.Material3.CardView.Elevated">
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -545,9 +545,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="0dp"
@@ -578,26 +578,26 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
                             android:gravity="center"
+                            android:orientation="vertical"
                             android:padding="12dp">
 
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_trophy"
                                 android:background="@drawable/circle_gradient_background"
                                 android:padding="12dp"
+                                android:src="@drawable/ic_trophy"
                                 app:tint="#FFD700" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
                                 android:text="Người mới"
                                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                                android:textStyle="bold"
-                                android:gravity="center"
-                                android:layout_marginTop="8dp" />
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -606,26 +606,26 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
                             android:gravity="center"
+                            android:orientation="vertical"
                             android:padding="12dp">
 
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_checklist"
                                 android:background="@drawable/circle_gradient_background"
                                 android:padding="12dp"
+                                android:src="@drawable/ic_checklist"
                                 app:tint="#4CAF50" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
                                 android:text="Chuyên gia"
                                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                                android:textStyle="bold"
-                                android:gravity="center"
-                                android:layout_marginTop="8dp" />
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -634,26 +634,26 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
                             android:gravity="center"
+                            android:orientation="vertical"
                             android:padding="12dp">
 
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_auto_awesome"
                                 android:background="@drawable/circle_gradient_background"
                                 android:padding="12dp"
+                                android:src="@drawable/ic_auto_awesome"
                                 app:tint="#9C27B0" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
                                 android:text="Siêu sao"
                                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                                android:textStyle="bold"
-                                android:gravity="center"
-                                android:layout_marginTop="8dp" />
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 

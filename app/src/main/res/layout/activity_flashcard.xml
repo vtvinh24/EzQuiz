@@ -24,11 +24,11 @@
             android:layout_height="32dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/back_button_background"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="?attr/colorOnSurface"
             android:contentDescription="Back"
-            android:layout_marginEnd="12dp" />
+            android:src="@drawable/ic_arrow_back"
+            android:tint="?attr/colorOnSurface" />
 
         <!-- Progress bar -->
         <ProgressBar
@@ -37,10 +37,10 @@
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/btn_back"
             android:layout_marginStart="12dp"
-            android:progressDrawable="@drawable/progress_drawable_enhanced"
+            android:layout_toEndOf="@id/btn_back"
             android:background="@android:color/transparent"
+            android:progressDrawable="@drawable/progress_drawable_enhanced"
             tools:progress="30" />
 
     </RelativeLayout>
@@ -55,14 +55,14 @@
         android:layout_marginTop="56dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/counter_background_enhanced"
+        android:clickable="false"
+        android:elevation="8dp"
+        android:focusable="false"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:textSize="14sp"
         android:textColor="@android:color/white"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:elevation="8dp"
-        android:clickable="false"
-        android:focusable="false"
         tools:text="4 / 6" />
 
     <!-- Hidden jump button -->
@@ -77,8 +77,8 @@
         android:id="@+id/card_stack_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/progress_container"
         android:layout_above="@+id/navigation_container"
+        android:layout_below="@id/progress_container"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp">
@@ -90,8 +90,8 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="8dp"
             android:layout_marginVertical="8dp"
-            android:background="@drawable/card_background"
             android:alpha="0.3"
+            android:background="@drawable/card_background"
             android:elevation="1dp" />
 
         <View
@@ -100,8 +100,8 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"
             android:layout_marginVertical="4dp"
-            android:background="@drawable/card_background"
             android:alpha="0.6"
+            android:background="@drawable/card_background"
             android:elevation="2dp" />
 
         <!-- Main swipeable card -->
@@ -125,18 +125,18 @@
         android:layout_above="@+id/action_container"
         android:layout_marginHorizontal="32dp"
         android:layout_marginBottom="24dp"
-        android:orientation="horizontal"
-        android:gravity="start">
+        android:gravity="start"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btn_previous_card"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/navigation_button_background"
-            android:src="@drawable/ic_undo"
-            android:tint="?attr/colorOnPrimary"
+            android:contentDescription="Undo"
             android:elevation="4dp"
-            android:contentDescription="Undo" />
+            android:src="@drawable/ic_undo"
+            android:tint="?attr/colorOnPrimary" />
 
     </LinearLayout>
 
@@ -148,46 +148,46 @@
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="24dp"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:background="@drawable/action_container_background"
-        android:paddingVertical="8dp"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:paddingHorizontal="16dp"
-        android:elevation="2dp">
+        android:paddingVertical="8dp">
 
         <TextView
             android:id="@+id/btn_dont_know"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="Don't Know"
-            android:textColor="?attr/colorError"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:gravity="center"
+            android:layout_weight="1"
             android:background="@drawable/button_dont_know_enhanced"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground" />
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Don't Know"
+            android:textAlignment="center"
+            android:textColor="?attr/colorError"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/btn_know"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Know"
-            android:textColor="#4CAF50"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:gravity="center"
+            android:layout_weight="1"
             android:background="@drawable/button_know_enhanced"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground" />
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Know"
+            android:textAlignment="center"
+            android:textColor="#4CAF50"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

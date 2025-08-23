@@ -26,12 +26,6 @@ public class MainActivity extends AppCompatActivity {
   private AuthViewModel authViewModel;
   private View loadingOverlay;
 
-  // Interface for fragment communication
-  public interface LoadingOverlayController {
-    void showLoadingOverlay();
-    void hideLoadingOverlay();
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -176,30 +170,30 @@ public class MainActivity extends AppCompatActivity {
   public void showLoadingOverlay() {
     if (loadingOverlay != null) {
       loadingOverlay.setVisibility(View.VISIBLE);
-      
+
       // Start animations for loading elements
       View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
       ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
       TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
-      
+
       if (borderCircle != null) {
-        android.view.animation.Animation rotateAnimation = 
-            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_border);
+        android.view.animation.Animation rotateAnimation =
+                android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_border);
         borderCircle.startAnimation(rotateAnimation);
       }
-      
+
       if (lightningIcon != null) {
-        android.view.animation.Animation pulseAnimation = 
-            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.pulse_lightning);
+        android.view.animation.Animation pulseAnimation =
+                android.view.animation.AnimationUtils.loadAnimation(this, R.anim.pulse_lightning);
         lightningIcon.startAnimation(pulseAnimation);
       }
-      
+
       if (textProcessing != null) {
-        android.view.animation.Animation fadeAnimation = 
-            android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_text);
+        android.view.animation.Animation fadeAnimation =
+                android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_text);
         textProcessing.startAnimation(fadeAnimation);
       }
-      
+
       // Disable navigation during loading
       viewPager.setUserInputEnabled(false);
       bottomNavigationView.setEnabled(false);
@@ -212,24 +206,31 @@ public class MainActivity extends AppCompatActivity {
       View borderCircle = loadingOverlay.findViewById(R.id.border_circle);
       ImageView lightningIcon = loadingOverlay.findViewById(R.id.lightning_icon);
       TextView textProcessing = loadingOverlay.findViewById(R.id.text_processing);
-      
+
       if (borderCircle != null) {
         borderCircle.clearAnimation();
       }
-      
+
       if (lightningIcon != null) {
         lightningIcon.clearAnimation();
       }
-      
+
       if (textProcessing != null) {
         textProcessing.clearAnimation();
       }
-      
+
       loadingOverlay.setVisibility(View.GONE);
-      
+
       // Re-enable navigation
       viewPager.setUserInputEnabled(true);
       bottomNavigationView.setEnabled(true);
     }
+  }
+
+  // Interface for fragment communication
+  public interface LoadingOverlayController {
+    void showLoadingOverlay();
+
+    void hideLoadingOverlay();
   }
 }
