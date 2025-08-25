@@ -1,47 +1,23 @@
-Screen flow:
+# EzQuiz
+An easy quiz app for Android.
 
-Splash -> Home -> CRUD sets -> CRUD quiz/flashcard
+## Features
+- [x] Create and take quizzes
+- [x] Create flashcards 
+- [x] View quiz results
+- [ ] Track progress (work in progress)
+- [x] Import from external sources, including Quizlet, Wayground, ... (via our browser extension)
+- [x] Generate quizzes using AI (require server, rework in progress)
 
-Home -> History
+## Future Plans
+- [ ] Make server optional (currently required for generating quizzes using AI)
+- [ ] Cloud sync 
+- [ ] User authentication (to support cloud sync and subscriptions)
+- [ ] More quiz types (e.g., fill-in-the-blank, matching)
+- [ ] More question types (e.g., images, audio)
+- [ ] Options when starting a practice session (e.g., time limit, number of questions, shuffle, ...)
+- [ ] More detailed progress tracking and statistics
+- [ ] More themes and customization options
 
-CRUD sets -> Import
-
-CRUD sets -> Generate
-
-CRUD sets -> Attempt
-
-Home -> Performance (collection)
-
-CRUD sets -> Performance (set)
-
-CRUD quiz/flashcard -> Performance (quiz)
-
-Attempt (quiz) -> Score
-
-Attempt (flashcard) -> Finish
-
-Assign:
-
-1. Tam:
-
-- Generate quiz logic
-- Generate
-- Splash
-- Performance (all)
-
-2. Lam Anh:
-
-- Home (CRUD collections)
-- Collection Detail (CRUD sets)
-- Set Detail (CRUD quiz)
-
-3. Vinh:
-
-- Import logic
-- Import
-- Web extension
-
-4. Hung:
-
-- Attempt
-- Score
+## Special Notes
+- Original version developed in collaboration with @Tamnhhe, @hungbeep and @anhdlhe171785 during July 2025 is available in `legacy` branch.
